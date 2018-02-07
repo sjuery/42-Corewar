@@ -154,7 +154,7 @@ void				ft_putnbr_fd(int n, int fd);
 ** Bonus
 */
 
-typedef					struct		s_list
+typedef struct		s_list
 {
 	void			*content;
 	size_t			content_size;
@@ -227,17 +227,23 @@ void				parse_l(va_list args, int *p, const char *str, int *i);
 
 void				parse_ll(va_list args, int *p, const char *str, int *i);
 
-void				parse_rightalign(int *i, const char *str, va_list args, int *p);
+void				parse_rightalign(int *i, const char *str,
+						va_list args, int *p);
 
-void				parse_leftalign(int *i, const char *str, va_list args, int *p);
+void				parse_leftalign(int *i, const char *str,
+						va_list args, int *p);
 
-void				parse_rightpalign(int *i, const char *str, va_list args, int *p);
+void				parse_rightpalign(int *i, const char *str,
+						va_list args, int *p);
 
-void				parse_leftpalign(int *i, const char *str, va_list args, int *p);
+void				parse_leftpalign(int *i, const char *str,
+						va_list args, int *p);
 
-void				parse_zero(int *i, const char *str, va_list args, int *p);
+void				parse_zero(int *i, const char *str,
+						va_list args, int *p);
 
-void				parse_pzero(int *i, const char *str, va_list args, int *p);
+void				parse_pzero(int *i, const char *str,
+						va_list args, int *p);
 
 void				flags_int(va_list args, int *p);
 
