@@ -11,8 +11,12 @@
 #* ************************************************************************** */
 
 NAME	= corewar
+ASMNAME = asm
 
 FILES	= main
+ASMFILES= assembler
+ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
+ASMOBJ 	= $(addprefix ./objects/, $(ASMSRC:.c=.o))
 SRC		= $(patsubst %, %.c, $(FILES))
 OBJ 	= $(addprefix ./objects/, $(SRC:.c=.o))
 CFLAGS	= -Wall -Wextra -Werror -g
@@ -20,11 +24,16 @@ IFLAGS	= -I libft/includes -I includes
 
 .SILENT:
 
-all: $(NAME)
+all: $(ASMNAME) $(NAME)
+
+$(ASMNAME): $(ASMOBJ)
+	make -C libft/
+	gcc $(CFLAGS) -L libft -lft $(IFLAGS) $^ -o $(ASMNAME)
+	printf '\033[32m[ ✔ ] %s\n\033[0m' "Created ASM"
 
 $(NAME): $(OBJ)
 	make -C libft/
-	gcc $(CFLAGS) -L libft -lft -I libft/includes -I includes $^ -o $(NAME)
+	gcc $(CFLAGS) -L libft -lft $(IFLAGS) $^ -o $(NAME)
 	printf '\033[32m[ ✔ ] %s\n\033[0m' "Created corewar"
 
 ./objects/%.o: ./src/%.c
@@ -40,6 +49,7 @@ clean:
 fclean: clean
 	make fclean -C libft/
 	/bin/rm -f $(NAME)
+	/bin/rm -f $(ASMNAME)
 	printf '\033[31m[ ✔ ] %s\n\033[0m' "Fcleaned corewar"
 
 re: fclean all
