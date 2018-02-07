@@ -1,0 +1,1 @@
+./corewar -1 4 -v 16 -a -n champs/examples/helltrain.cor champs/examples/turtle.cor champs/examples/zork.cor champs/examples/bigzork.cor
