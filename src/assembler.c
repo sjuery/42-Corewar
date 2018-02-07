@@ -12,7 +12,19 @@
 
 #include "asm.h"
 
-int main()
+//Be careful of "deadbeef" it might be compiled backwards
+
+int					main(int argc, char **argv)
 {
-    printf("ASM Running");
+	int			corefile;
+
+	if (argc == 2 || argc == 3)
+	{
+        if ((corefile = open(ft_strjoin(argv[argc - 1], ".cor"), O_CREAT)) == -1)
+            ft_printf("Error opening file");
+		close(corefile);
+	}
+	else
+		ft_printf("Usage: ./asm [-a] <sourcefile.s>\n\t-a : Instead of creating a .cor file, outputs a stripped and annotated version of the code to the standard output");
+	return (0);
 }
