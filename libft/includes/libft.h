@@ -25,9 +25,17 @@
 # define CASE(a, b) else if (a) b;
 # define DEFAULT(a) else a;
 
-# include <string.h>
 # include <stdlib.h>
+# include <sys/types.h>
+# include <sys/uio.h>
 # include <unistd.h>
+# include <fcntl.h>
+# include <stdio.h>
+# include <sys/stat.h>
+# include <math.h>
+# include <stdarg.h>
+# include <stdint.h>
+# include <inttypes.h>
 
 /*
  **Part 1
@@ -146,7 +154,7 @@ void				ft_putnbr_fd(int n, int fd);
 ** Bonus
 */
 
-typedef	struct		s_list
+typedef					struct		s_list
 {
 	void			*content;
 	size_t			content_size;
@@ -202,6 +210,146 @@ void				ft_strrncpy(char *dst, char *src, int len);
 long long			ft_atoll(const char *str);
 
 int					ft_general_validate(char *format, char *str);
+
+/*
+** printf
+*/
+
+int					ft_printf(const char *str, ...);
+
+void				parse_flags(int *i, const char *str, va_list args, int *p);
+
+void				parse_j(va_list args, int *p, const char *str, int *i);
+
+void				parse_z(va_list args, int *p, const char *str, int *i);
+
+void				parse_l(va_list args, int *p, const char *str, int *i);
+
+void				parse_ll(va_list args, int *p, const char *str, int *i);
+
+void				parse_rightalign(int *i, const char *str, va_list args, int *p);
+
+void				parse_leftalign(int *i, const char *str, va_list args, int *p);
+
+void				parse_rightpalign(int *i, const char *str, va_list args, int *p);
+
+void				parse_leftpalign(int *i, const char *str, va_list args, int *p);
+
+void				parse_zero(int *i, const char *str, va_list args, int *p);
+
+void				parse_pzero(int *i, const char *str, va_list args, int *p);
+
+void				flags_int(va_list args, int *p);
+
+void				flags_oct(va_list args, int *p);
+
+void				flags_uint(va_list args, int *p);
+
+void				flags_hex(va_list args, int *p);
+
+void				flags_uhex(va_list args, int *p);
+
+void				flags_inth(va_list args, int *p);
+
+void				flags_octh(va_list args, int *p);
+
+void				flags_uinth(va_list args, int *p);
+
+void				flags_hexh(va_list args, int *p);
+
+void				flags_uhexh(va_list args, int *p);
+
+void				flags_inthh(va_list args, int *p);
+
+void				flags_octhh(va_list args, int *p);
+
+void				flags_uinthh(va_list args, int *p);
+
+void				flags_hexhh(va_list args, int *p);
+
+void				flags_uhexhh(va_list args, int *p);
+
+void				flags_intl(va_list args, int *p);
+
+void				flags_octl(va_list args, int *p);
+
+void				flags_uintl(va_list args, int *p);
+
+void				flags_hexl(va_list args, int *p);
+
+void				flags_uhexl(va_list args, int *p);
+
+void				flags_intll(va_list args, int *p);
+
+void				flags_octll(va_list args, int *p);
+
+void				flags_uintll(va_list args, int *p);
+
+void				flags_hexll(va_list args, int *p);
+
+void				flags_uhexll(va_list args, int *p);
+
+void				flags_intj(va_list args, int *p);
+
+void				flags_octj(va_list args, int *p);
+
+void				flags_uintj(va_list args, int *p);
+
+void				flags_hexj(va_list args, int *p);
+
+void				flags_uhexj(va_list args, int *p);
+
+void				flags_intz(va_list args, int *p);
+
+void				flags_octz(va_list args, int *p);
+
+void				flags_uintz(va_list args, int *p);
+
+void				flags_hexz(va_list args, int *p);
+
+void				flags_uhexz(va_list args, int *p);
+
+void				flags_adr(va_list args, int *p);
+
+void				flags_per(int *p);
+
+void				flags_str(va_list args, int *p);
+
+void				flags_char(va_list args, int *p);
+
+void				flags_wchar(va_list args, int *p, const char *str, int *i);
+
+void				flags_ws(va_list args, int *p, const char *str, int *i);
+
+void				flags_plus(va_list args, int *p, const char *str, int *i);
+
+void				flags_hash(va_list args, int *p, const char *str, int *i);
+
+int					ft_strucmp(const char *s1, const char *s2);
+
+void				ft_putoct(unsigned int n, int *p);
+
+void				ft_putunbr(unsigned int n, int *p);
+
+void				ft_puthex(unsigned int n, int *p);
+
+void				ft_putuhex(unsigned int n, int *p);
+
+void				ft_putstrf(char const *s, int *p);
+
+void				ft_putnbrf(int n, int *p);
+
+size_t				ft_numulen(unsigned int n);
+
+void				ft_putadr(unsigned long n, int *p);
+
+void				ft_putull(unsigned long long n, int *p);
+
+void				ft_putld(long n, int *p);
+
+void				ft_putwstrf(wchar_t *s, int *p);
+
+size_t				ft_numlen(int n);
 
 /*
 **	Get_next_line
