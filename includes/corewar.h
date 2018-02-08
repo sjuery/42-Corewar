@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/07 16:56:38 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/07 17:22:00 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef struct  s_io
     char    header[HEADER_SIZE];
     char    body[CHAMP_MAX_SIZE + 1];
     int		bytes;
+    char    *path;
 }               t_io;
 
 typedef struct  s_vm

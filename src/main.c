@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/07 16:56:00 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/07 17:40:43 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,29 +19,36 @@ void	error()
 	exit(0);
 }
 
+void get_info(t_io *io, int fd, int i, unsigned char *test)
+{
+	int	j;
+
+	if (!read_input(fd, io))
+		error();
+	j = -1;
+	while (++j < io->bytes)
+	{
+		test[i] = io->body[j];
+		++i;
+	}
+}
+
 int main(int ac, char **av)
 {
-	(void)ac;
 	unsigned char test[4096];
 	int i = 0;
 	int x = -1;
+	int	fd;
 	t_io info[4];
 
 	ft_bzero(test, 4096);
 
-	int fd = open(av[1], O_RDONLY);
-	if (!read_input(fd, &info[0]))
-		error();
-	i = -1;
-	while (++i < info[0].bytes)
-		test[i] = info[0].body[i];
-
-	fd = open(av[2], O_RDONLY);
-	if (!read_input(fd, &info[1]))
-		error();
-	i = 1023;
-	while (++x < info[1].bytes)
-		test[++i] = info[1].body[x];
+	while (++i < ac)
+	{
+		fd = open(av[i], O_RDONLY);
+		get_info(&info[i], fd, x, test);
+		x += 1000;
+	}
 
 	i = 0;
 	while (i < 4096)
