@@ -12,19 +12,17 @@
 
 #include <corewar.h>
 
-char    *get_header(char *str)
+void	read_input(int fd, t_io *info)
 {
-	char	header[2192];
-	char	body[CHAMP_MAX_SIZE + 1];
-	int		bytes_read;
-    char    *out;
+	// char	header[2192];
+	// char	body[CHAMP_MAX_SIZE + 1];
+	// int		bytes_read;
 
-	fd = open(str, O_RDONLY);
-	if (read(fd, header, 2192) <= 0)
+	if (read(fd, info->header, 2192) <= 0)
 		exit(0);
-	if ((bytes_read = read(fd, body, CHAMP_MAX_SIZE)) <= 0)
+	// info->header = header;
+	if ((info->bytes = read(fd, info->body, CHAMP_MAX_SIZE)) <= 0)
 		exit(0);
-	body[bytes_read] = 0;
-	out = body;
-	return (out);
+	// info->body = body;
+	info->body[info->bytes] = 0;
 }

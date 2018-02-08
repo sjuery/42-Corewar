@@ -32,7 +32,8 @@
 typedef struct  s_io
 {
     char    header[HEADER_SIZE];
-    char    body[CHAMP_MAX_SIZE];
+    char    body[CHAMP_MAX_SIZE + 1];
+    int		bytes;
 }               t_io;
 
 typedef struct  s_vm
@@ -43,5 +44,9 @@ typedef struct  s_vm
     t_io    info;
 }               t_vm;
 
+/*
+** parse_file.c
+*/
+void	read_input(int fd, t_io *info);
 
 #endif
