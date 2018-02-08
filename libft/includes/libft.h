@@ -12,7 +12,7 @@
 
 #ifndef LIBFT_H
 # define LIBFT_H
-# define BUFF_SIZE 100
+# define BUFF_SIZE 1
 # define DBG_INT(str, x) ft_putstr(str); ft_putnbr(x); ft_putchar('\n');
 # define DBG_CHAR(str, x) ft_putstr(str); ft_putchar(x); ft_putchar('\n');
 # define MIN(x, y) (x < y ? x : y )
@@ -356,6 +356,8 @@ void				ft_putld(long n, int *p);
 void				ft_putwstrf(wchar_t *s, int *p);
 
 size_t				ft_numlen(int n);
+
+char		*ft_itoa_base(unsigned long long int value, int base, int lowercase);
 
 /*
 **	Get_next_line

@@ -31,7 +31,7 @@ PRINT =	parse_flags parse_moreflags flags_align ft_printf flags_palign \
 		flags_zero flags_int flags_inth flags_inthh flags_intll flags_intj \
 		flags_intz flags_adr flags_str flags_spc ft_putoct ft_putunbr \
 		ft_puthex ft_putuhex ft_putstrf ft_putnbrf ft_numulen ft_putadr \
-		ft_putull ft_putld ft_putwstrf ft_numlen flags_intl
+		ft_putull ft_putld ft_putwstrf ft_numlen flags_intl ft_itoa_base
 FILES = $(PART1) $(PART2) $(BONUS) $(ADDIT) $(PRINT)
 MAINSRC = tst/main.c
 MAINOBJ = main.o
