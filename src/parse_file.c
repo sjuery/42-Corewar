@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 16:52:00 by anazar            #+#    #+#             */
-/*   Updated: 2018/02/07 16:53:19 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/07 19:04:09 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,10 @@
 void	convert_header(t_io *info)
 {
 	int i = -1;
-	while (++i < 8)
-	{
-		info->head.magic[i] = info->header[i];
-	}
-	ft_printf("MAGIC %i - ", info->head.magic);
-	while (++i < 2192)
-	{
-		ft_printf("%c", info->header[i]);
-	}
-	ft_printf("\n");
+    info->head.magic =  (info->header[3] & 0x000000FF) << 0 |
+                        (info->header[2] & 0x000000FF) << 8 |
+                        (info->header[1] & 0x000000FF) << 16 |
+                        (info->header[0] & 0x000000FF) << 24;
 }
 
 int	read_input(int fd, t_io *info)
