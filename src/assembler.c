@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assembler.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
+/*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/07 15:07:50 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/02/07 19:56:00 by sjuery           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,6 @@ static void			handle_error(char *error_type, t_assembler *st)
 	close(st->corefile);
 	close(st->sfile);
 	exit(0);
-}
-
-static int			convert_to_hex(t_assembler *st)
-{
-	int		file_size;
-
-	while(get_next_line(st->sfile, &st->line))
-	{
-		while(st->line[st->i])
-		{
-			printf("%x", st->line[st->i]);
-			if(st->i % 8 == 0)
-				printf("\n");
-			else if(st->i % 2 == 0)
-				printf(" ");
-				st->i++;
-		}
-		st->i = 0;
-	}
-	return (1);
 }
 
 static int			validate_file(t_assembler *st)

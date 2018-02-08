@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   assembler.c                                        :+:      :+:    :+:   */
+/*   asm.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
+/*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/07 15:07:50 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/02/07 20:03:17 by sjuery           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ typedef struct				s_assembler
 	int						sfile;
     int                     corefile;
     char                    *line;
+    int                     ls;
 }							t_assembler;
+
+int			                convert_to_hex(t_assembler *st);
 
 #endif
