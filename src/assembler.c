@@ -12,19 +12,45 @@
 
 #include "asm.h"
 
-//Be careful of "deadbeef" it might be compiled backwards
+static void			handle_error(char *error_type, t_assembler *st)
+{
+	ft_printf("%s", error_type);
+	close(st->corefile);
+	close(st->sfile);
+	exit(0);
+}
+
+static int			convert_to_hex(t_assembler *st)
+{
+	return (1);
+}
+
+static int			validate_file(t_assembler *st)
+{
+	return (1);
+}
 
 int					main(int argc, char **argv)
 {
-	int			corefile;
+	t_assembler *st;
 
+	st = ft_memalloc(sizeof(t_assembler));
 	if (argc == 2 || argc == 3)
 	{
-        if ((corefile = open(ft_strjoin(argv[argc - 1], ".cor"), O_CREAT)) == -1)
-            ft_printf("Error opening file");
-		close(corefile);
+		if (!(st->sfile = open(argv[argc - 1], O_RDONLY)))
+			handle_error("Error: Couldn't read given file", st);
+		if (!validate_file(st))
+			handle_error("Error: File is invalid", st);
+		if (!(st->corefile = open(ft_strjoin(argv[argc - 1], ".cor"), O_CREAT)))
+			handle_error("Error: Cor file couldn't be created", st);
+		if (!convert_to_hex(st))
+			handle_error("Error: Couldn't finish writting to Cor file", st);
+		close(st->corefile);
+		close(st->sfile);
 	}
 	else
-		ft_printf("Usage: ./asm [-a] <sourcefile.s>\n\t-a : Instead of creating a .cor file, outputs a stripped and annotated version of the code to the standard output");
-	return (0);
+		handle_error("Usage: ./st [-a] <sourcefile.s>\n\t"
+		"-a : Instead of creating a .cor file, outputs a stripped"
+		" and annotated version of the code to the standard output", st);
+	return (1);
 }

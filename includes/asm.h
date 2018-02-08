@@ -28,4 +28,10 @@
 # include "libft.h"
 # include "op.h"
 
+typedef struct				s_assembler
+{
+	int						sfile;
+    int                     corefile;
+}							t_assembler;
+
 #endif
