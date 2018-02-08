@@ -33,6 +33,7 @@
 
 typedef struct  s_io
 {
+	t_header head;
     char    header[HEADER_SIZE];
     char    body[CHAMP_MAX_SIZE + 1];
     int		bytes;
