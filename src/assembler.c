@@ -22,6 +22,21 @@ static void			handle_error(char *error_type, t_assembler *st)
 
 static int			convert_to_hex(t_assembler *st)
 {
+	int		file_size;
+
+	while(get_next_line(st->sfile, &st->line))
+	{
+		while(st->line[st->i])
+		{
+			printf("%x", st->line[st->i]);
+			if(st->i % 8 == 0)
+				printf("\n");
+			else if(st->i % 2 == 0)
+				printf(" ");
+				st->i++;
+		}
+		st->i = 0;
+	}
 	return (1);
 }
 

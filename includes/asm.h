@@ -12,6 +12,7 @@
 
 #ifndef ASM_H
 # define ASM_H
+#define LINE_SIZE	39
 
 # include <stdlib.h>
 # include <sys/types.h>
@@ -30,8 +31,10 @@
 
 typedef struct				s_assembler
 {
+    int                     i;
 	int						sfile;
     int                     corefile;
+    char                    *line;
 }							t_assembler;
 
 #endif
