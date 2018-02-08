@@ -24,6 +24,8 @@
 # include <stdarg.h>
 # include <stdint.h>
 # include <inttypes.h>
+# include <ncurses.h>
+# include <curses.h>
 
 # include "libft.h"
 # include "op.h"
@@ -48,6 +50,6 @@ typedef struct  s_vm
 /*
 ** parse_file.c
 */
-int	read_input(int fd, t_io *info);
+int		read_input(int fd, t_io *info);
 
 #endif
