@@ -11,3 +11,11 @@
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+void	init_curses(t_io **info, char *str, int col, int row)
+{
+	getmaxyx(stdscr, col, row);
+
+	mvprintw(0, 0, "Test");
+	refresh();
+}

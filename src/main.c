@@ -26,24 +26,28 @@ void get_info(t_io *io, int fd, int *i, unsigned char *test)
 		error();
 	j = -1;
 	while (++j < io->bytes)
-		test[++*i] = io->body[j];
+	{
+		test[*i] = io->body[j];
+		*i = *i + 1;
+	}
 }
 
 int main(int ac, char **av)
 {
 	unsigned char test[4096];
 	int i = 0;
-	int x = -1;
+	int x = 0;
 	int	fd;
 	t_io info[4];
+	int size[4] = { 0, 1024, 2048, 3072 };
 
 	ft_bzero(test, 4096);
 
 	while (++i < ac)
 	{
+		x = size[i - 1];
 		fd = open(av[i], O_RDONLY);
-		get_info(&info[i], fd, &x, test);
-		x += (1024 - info[i].bytes);
+		get_info(&info[i - 1], fd, &x, test);
 	}
 
 	i = 0;
