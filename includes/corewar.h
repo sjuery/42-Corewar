@@ -31,22 +31,20 @@
 # include "op.h"
 # define  HEADER_SIZE 2192
 
-typedef struct  s_io
+typedef struct	s_io
 {
-	t_header head;
-    char    header[HEADER_SIZE];
-    char    body[CHAMP_MAX_SIZE + 1];
-    int		bytes;
-    char    *path;
-}               t_io;
+	t_header	head;
+	char		header[HEADER_SIZE];
+	char		body[CHAMP_MAX_SIZE + 1];
+}				t_io;
 
-typedef struct  s_vm
+typedef struct	s_vm
 {
-	char    regs[REG_NUMBER][REG_SIZE];
-	char    pc[REG_SIZE];
+	char	regs[REG_NUMBER][REG_SIZE];
+	char	pc[REG_SIZE];
 	int		flag;
-    t_io    info;
-}               t_vm;
+	t_io	info;
+}				t_vm;
 
 /*
 ** parse_file.c
