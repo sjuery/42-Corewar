@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/07 17:50:15 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/07 18:21:50 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,14 @@ int main(int ac, char **av)
 	int x = 0;
 	int	fd;
 	t_io info[4];
-	int size[4] = { 0, 1024, 2048, 3072 };
 
 	ft_bzero(test, 4096);
 
 	while (++i < ac)
 	{
-		x = size[i - 1];
 		fd = open(av[i], O_RDONLY);
 		get_info(&info[i - 1], fd, &x, test);
+		x += (1024 - info[i - 1].bytes);
 	}
 
 	i = 0;
