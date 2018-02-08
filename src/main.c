@@ -13,6 +13,12 @@
 #include "corewar.h"
 #define BUF_SIZE 1
 
+void	error()
+{
+	ft_printf("YOU DUN GOOFED\n");
+	exit(0);
+}
+
 int main(int ac, char **av)
 {
 	(void)ac;
@@ -24,13 +30,15 @@ int main(int ac, char **av)
 	ft_bzero(test, 4096);
 
 	int fd = open(av[1], O_RDONLY);
-	read_input(fd, &info[0]);
+	if (!read_input(fd, &info[0]))
+		error();
 	i = -1;
 	while (++i < info[0].bytes)
 		test[i] = info[0].body[i];
 
 	fd = open(av[2], O_RDONLY);
-	read_input(fd, &info[1]);
+	if (!read_input(fd, &info[1]))
+		error();
 	i = 1023;
 	while (++x < info[1].bytes)
 		test[++i] = info[1].body[x];

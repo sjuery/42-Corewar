@@ -47,6 +47,6 @@ typedef struct  s_vm
 /*
 ** parse_file.c
 */
-void	read_input(int fd, t_io *info);
+int	read_input(int fd, t_io *info);
 
 #endif
