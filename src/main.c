@@ -6,12 +6,11 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/07 17:42:37 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/07 17:45:40 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
-#define BUF_SIZE 1
 
 void	error()
 {
@@ -27,10 +26,7 @@ void get_info(t_io *io, int fd, int i, unsigned char *test)
 		error();
 	j = -1;
 	while (++j < io->bytes)
-	{
-		test[i] = io->body[j];
-		++i;
-	}
+		test[++i] = io->body[j];
 }
 
 int main(int ac, char **av)
@@ -47,7 +43,7 @@ int main(int ac, char **av)
 	{
 		fd = open(av[i], O_RDONLY);
 		get_info(&info[i], fd, x, test);
-		x += 1000;
+		x += 1024;
 	}
 
 	i = 0;
