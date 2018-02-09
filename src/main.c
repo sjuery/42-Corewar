@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/07 18:21:50 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/08 16:27:21 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,36 @@ void	print_core(unsigned char *test, int i)
 	}
 }
 
+void 	get_n_players(int ac, char **av, t_vm *vm)
+{
+	int	i;
+
+	i = 0;
+	vm->num_players = ac - 1;
+	while (++i < ac)
+	{
+		vm->players[i - 1] = av[i];
+	}
+}
+
+void 	init_vm(t_vm *vm)
+{
+	int	i;
+	int	x;
+	int	fd;
+
+	i = -1;
+	x = 0;
+	ft_bzero(vm->core, 4096);
+	while (++i < vm->num_players)
+	{
+		fd = open(vm->players[i], O_RDONLY);
+		write_info(&vm->info[i], fd, &x, vm->core);
+		x += (1024 - vm->info[i].head.prog_size);
+	}
+	print_core(vm->core, -1);
+}
+
 int		main(int ac, char **av)
 {
 	unsigned char	test[4096];
@@ -52,8 +82,13 @@ int		main(int ac, char **av)
 	int				fd;
 	t_io			info[4];
 
+	t_vm			vm;
+
 	i = 0;
 	x = 0;
+	get_n_players(ac, av, &vm);
+	init_vm(&vm);
+/*
 	ft_bzero(test, 4096);
 	while (++i < ac)
 	{
@@ -61,6 +96,7 @@ int		main(int ac, char **av)
 		write_info(&info[i - 1], fd, &x, test);
 		x += (1024 - info[i - 1].head.prog_size);
 	}
-	print_core(test, -1);
+*/
+	//print_core(test, -1);
 	return (0);
 }
