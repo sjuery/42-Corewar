@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/08 19:59:35 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/09 13:09:03 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,24 @@ void	print_core(unsigned char *test, int i)
 	}
 }
 
+int		blank_pos(char **av)
+{
+	int	i;
+
+	i = 0;
+	while (av[i] && i < 4)
+		++i;
+	return (i);
+}
+
 int		get_n_players(int ac, char **av, t_vm *vm, int n_start)
 {
 	int	n;
 	int	i;
 
+	i = -1;
+	while (++i < 4)
+		vm->players[i] = 0;
 	i = 0;
 	while (++n_start < ac)
 	{
@@ -58,9 +71,7 @@ int		get_n_players(int ac, char **av, t_vm *vm, int n_start)
 			n_start += 2;
 		}
 		else
-		{
-			vm->players[i] = av[n_start];
-		}
+			vm->players[blank_pos(vm->players)] = av[n_start];
 		++n;
 		++i;
 	}
