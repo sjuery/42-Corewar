@@ -1,19 +1,19 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: Invalid date        by _| |_|\__|        #+#    #+#              #
-#    Updated: 2018/02/07 20:11:33 by sjuery           ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+#* ************************************************************************** */
+#*                                                                            */
+#*    Makefile               _             _              :::      ::::::::   */
+#*    By: mlu, anazar, ihodge, sjuery     | |           :+:      :+:    :+:   */
+#*     ___  __ _  __ _ _ __ | | __ _ _ __ | |_        +:+ +:+         +:+     */
+#*    / _ \/ _` |/ _` | '_ \| |/ _` | '_ \| __|     +#+  +:+       +#+        */
+#*   |  __/ (_| | (_| | |_) | | (_| | | | | |_    +#+#+#+#+#+   +#+           */
+#*    \___|\__, |\__, | .__/|_|\__,_|_| |_|\__|       #+#   #+#               */
+#*          __/ | __/ | |                            ###  ########.fr         */
+#*         |___/ |___/|_|                                                     */
+#* ************************************************************************** */
 
 NAME	= corewar
 ASMNAME = asm
 
-FILES	= main parse_file
+FILES	= main parse_file ncurses
 ASMFILES= assembler convert_to_hex
 ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
 ASMOBJ 	= $(addprefix ./objects/, $(ASMSRC:.c=.o))
@@ -21,6 +21,7 @@ SRC		= $(patsubst %, %.c, $(FILES))
 OBJ 	= $(addprefix ./objects/, $(SRC:.c=.o))
 CFLAGS	= -Wall -Wextra -Werror -g
 IFLAGS	= -I libft/includes -I includes
+LFLAGS	= -L libft -lft -lncurses
 
 .SILENT:
 
@@ -28,12 +29,12 @@ all: $(ASMNAME) $(NAME)
 
 $(ASMNAME): $(ASMOBJ)
 	make -C libft/
-	gcc $(CFLAGS) -L libft -lft -lncurses $(IFLAGS) $^ -o $(ASMNAME)
+	gcc $(CFLAGS) $(LFLAGS) $(IFLAGS) $^ -o $(ASMNAME)
 	printf '\033[32m[ ✔ ] %s\n\033[0m' "Created ASM"
 
 $(NAME): $(OBJ)
 	make -C libft/
-	gcc $(CFLAGS) -L libft -lft $(IFLAGS) $^ -o $(NAME)
+	gcc $(CFLAGS) $(LFLAGS) $(IFLAGS) $^ -o $(NAME)
 	printf '\033[32m[ ✔ ] %s\n\033[0m' "Created Corewar"
 
 ./objects/%.o: ./src/%.c

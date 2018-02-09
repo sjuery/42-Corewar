@@ -88,6 +88,7 @@ int		main(int ac, char **av)
 	x = 0;
 	get_n_players(ac, av, &vm);
 	init_vm(&vm);
+	init_curses(&vm);
 /*
 	ft_bzero(test, 4096);
 	while (++i < ac)

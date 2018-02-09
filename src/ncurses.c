@@ -12,10 +12,12 @@
 
 #include "corewar.h"
 
-void	init_curses(t_io **info, char *str, int col, int row)
+void	init_curses(t_vm *vm)
 {
-	getmaxyx(stdscr, col, row);
-
+	initscr();
+	curs_set(false);
 	mvprintw(0, 0, "Test");
 	refresh();
+	sleep(5);
+	endwin();
 }

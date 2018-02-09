@@ -54,4 +54,9 @@ typedef struct		s_vm
 */
 int			read_input(int fd, t_io *info);
 
+/*
+** ncurses.c
+*/
+void		init_curses(t_vm *vm);
+
 #endif
