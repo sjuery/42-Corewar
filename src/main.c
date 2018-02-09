@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/08 19:42:09 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/08 19:54:30 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int		get_n_players(int ac, char **av, t_vm *vm, int n_start)
 	i = 0;
 	while (++n_start < ac)
 	{
-		if (av[n_start][1] == 'n')
+		if (av[n_start][0] == '-' && av[n_start][1] == 'n')
 		{
 			vm->players[ft_atoi(av[n_start + 1])] = av[n_start + 2];
 			n_start += 2;
