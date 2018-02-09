@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/08 18:54:25 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/08 19:42:09 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,15 +82,7 @@ void 	init_players(int ac, char **av, t_vm *vm)
 		n_start = 2;
 	}
 	vm->num_players = get_n_players(ac, av, vm, n_start);
-	/*
-	vm->num_players = ac - (1 + n_start);
-	i = 0;
-	while (++n_start < ac)
-	{
-		vm->players[i] = av[n_start];
-		++i;
-	}
-	*/
+	ft_printf("%zu\n", vm->num_players);
 }
 
 void 	init_vm(t_vm *vm)
