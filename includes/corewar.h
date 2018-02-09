@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/08 19:11:23 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/08 19:31:57 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct		s_vm
 	char			*players[4];
  	int				num_players;
 	unsigned char	core[4096];
+	size_t			dump_cycle;
 }					t_vm;
 
 /*
