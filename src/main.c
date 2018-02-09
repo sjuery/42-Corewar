@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/08 16:27:21 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/08 16:49:10 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,28 +76,10 @@ void 	init_vm(t_vm *vm)
 
 int		main(int ac, char **av)
 {
-	unsigned char	test[4096];
-	int				i;
-	int				x;
-	int				fd;
-	t_io			info[4];
-
 	t_vm			vm;
 
-	i = 0;
-	x = 0;
 	get_n_players(ac, av, &vm);
 	init_vm(&vm);
-	init_curses(&vm);
-/*
-	ft_bzero(test, 4096);
-	while (++i < ac)
-	{
-		fd = open(av[i], O_RDONLY);
-		write_info(&info[i - 1], fd, &x, test);
-		x += (1024 - info[i - 1].head.prog_size);
-	}
-*/
-	//print_core(test, -1);
+	print_core(vm.core, -1);
 	return (0);
 }
