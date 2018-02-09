@@ -12,11 +12,59 @@
 
 #include "corewar.h"
 
+int		setcolor(int i, t_vm *vm)
+{
+	if (i >= 0 && i <= vm->info[0].head.prog_size)
+		return (1);
+	else if (i >= 1024 && i <= vm->info[1].head.prog_size + 1024)
+		return (2);
+	else if (i >= 2048 && i <= vm->info[2].head.prog_size + 2048)
+		return (3);
+	else if (i >= 3076 && i <= vm->info[3].head.prog_size + 3076)
+		return (4);
+	else
+		return (0);
+}
+
 void	init_curses(t_vm *vm)
 {
+	int i = -1;
+	int x = 0;
+	int y = 0;
+	int color = 0;
+
 	initscr();
 	curs_set(false);
-	mvprintw(0, 0, "Test");
+
+	start_color();
+	init_pair(1, COLOR_CYAN, COLOR_BLACK);
+	init_pair(2, COLOR_RED, COLOR_BLACK);
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(4, COLOR_GREEN, COLOR_BLACK);
+
+	while (++i < 4096)
+	{
+		color = setcolor(i, vm);
+		attron(COLOR_PAIR(color));
+		if (i % 64 == 0)
+		{
+			x++;
+			y = 0;
+		}
+		if (vm->core[i] < 16 && vm->core[i] >= 0)
+		{
+			mvprintw(x, y++, "0");
+			mvprintw(x, y++, "%hhx", vm->core[i]);
+		}
+		else
+		{
+			mvprintw(x, y, "%hhx", vm->core[i]);
+			y += 2;
+		}
+		mvprintw(x, y++, " ");
+		attroff(COLOR_PAIR(2));
+	}
+
 	refresh();
 	sleep(5);
 	endwin();
