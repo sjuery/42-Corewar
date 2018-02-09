@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/08 16:49:10 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/08 18:54:25 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,53 @@ void	print_core(unsigned char *test, int i)
 	}
 }
 
-void 	get_n_players(int ac, char **av, t_vm *vm)
+int		get_n_players(int ac, char **av, t_vm *vm, int n_start)
 {
+	int	n;
 	int	i;
 
 	i = 0;
-	vm->num_players = ac - 1;
-	while (++i < ac)
+	while (++n_start < ac)
 	{
-		vm->players[i - 1] = av[i];
+		if (av[n_start][1] == 'n')
+		{
+			vm->players[ft_atoi(av[n_start + 1])] = av[n_start + 2];
+			n_start += 2;
+		}
+		else
+		{
+			vm->players[i] = av[n_start];
+		}
+		++n;
+		++i;
 	}
+	return (n);
+}
+
+void 	init_players(int ac, char **av, t_vm *vm)
+{
+	int	i;
+	int	n_start;
+
+	n_start = 0;
+	if (!ft_strcmp(av[1], "-dump"))
+	{
+		if (av[2][0] != '-')
+			vm->dump_cycle = ft_atoz(av[2]);
+		else
+			error();
+		n_start = 2;
+	}
+	vm->num_players = get_n_players(ac, av, vm, n_start);
+	/*
+	vm->num_players = ac - (1 + n_start);
+	i = 0;
+	while (++n_start < ac)
+	{
+		vm->players[i] = av[n_start];
+		++i;
+	}
+	*/
 }
 
 void 	init_vm(t_vm *vm)
@@ -71,14 +108,13 @@ void 	init_vm(t_vm *vm)
 		write_info(&vm->info[i], fd, &x, vm->core);
 		x += (1024 - vm->info[i].head.prog_size);
 	}
-	print_core(vm->core, -1);
 }
 
 int		main(int ac, char **av)
 {
 	t_vm			vm;
 
-	get_n_players(ac, av, &vm);
+	init_players(ac, av, &vm);
 	init_vm(&vm);
 	print_core(vm.core, -1);
 	return (0);
