@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/08 16:57:23 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/08 19:11:23 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,31 +33,30 @@
 
 typedef struct		s_io
 {
-	t_header	head;
-	char		header[HEADER_SIZE];
-	char		body[CHAMP_MAX_SIZE + 1];
-}			t_io;
+	t_header		head;
+	char			header[HEADER_SIZE];
+	char			body[CHAMP_MAX_SIZE + 1];
+}					t_io;
 
 typedef struct		s_vm
 {
-	char		regs[REG_NUMBER][REG_SIZE];
-	char		pc[REG_SIZE];
-	int		flag;
-	t_io		info[4];
-	char		*players[4];
- 	int		num_players;
-	size_t			dump_cycle;
+	char			regs[REG_NUMBER][REG_SIZE];
+	char			pc[REG_SIZE];
+	int				flag;
+	t_io			info[4];
+	char			*players[4];
+ 	int				num_players;
 	unsigned char	core[4096];
-}			t_vm;
+}					t_vm;
 
 /*
 ** parse_file.c
 */
-int			read_input(int fd, t_io *info);
+int					read_input(int fd, t_io *info);
 
 /*
 ** ncurses.c
 */
-void		init_curses(t_vm *vm);
+void				init_curses(t_vm *vm);
 
 #endif

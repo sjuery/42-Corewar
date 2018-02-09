@@ -116,6 +116,7 @@ int		main(int ac, char **av)
 
 	init_players(ac, av, &vm);
 	init_vm(&vm);
+	init_curses(&vm);
 	print_core(vm.core, -1);
 	return (0);
 }
