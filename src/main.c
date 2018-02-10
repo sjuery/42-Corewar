@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/09 13:09:03 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/09 19:09:13 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,11 @@ int		get_n_players(int ac, char **av, t_vm *vm, int n_start)
 	{
 		if (!ft_strcmp(av[n_start], "-n"))
 		{
-			vm->players[ft_atoi(av[n_start + 1])] = av[n_start + 2];
+			if (ft_general_validate("%d", av[n_start + 1])
+					&& ft_atoi(av[n_start + 1]) < 4)
+				vm->players[ft_atoi(av[n_start + 1])] = av[n_start + 2];
+			else
+				error();
 			n_start += 2;
 		}
 		else
@@ -84,16 +88,16 @@ void 	init_players(int ac, char **av, t_vm *vm)
 	int	n_start;
 
 	n_start = 0;
+	vm->dump_cycle = -1;
 	if (!ft_strcmp(av[1], "-dump"))
 	{
-		if (av[2][0] != '-')
+		if (ft_general_validate("%d", av[2]) && av[2][0] != '-')
 			vm->dump_cycle = ft_atoz(av[2]);
 		else
 			error();
 		n_start = 2;
 	}
 	vm->num_players = get_n_players(ac, av, vm, n_start);
-	ft_printf("%zu\n", vm->num_players);
 }
 
 void 	init_vm(t_vm *vm)
