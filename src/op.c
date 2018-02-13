@@ -6,11 +6,12 @@
 /*   By: zaz <marvin@42.fr>                         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2013/10/04 11:43:01 by zaz               #+#    #+#             */
-/*   Updated: 2018/02/07 15:12:44 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/02/12 22:09:23 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "op.h"
+//#include "op.h" <-gives multiple include error
+#include "asm.h"
 
 t_op	g_op_tab[17] =
 {
