@@ -6,13 +6,13 @@
 /*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/07 19:56:00 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/02/18 16:26:17 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static void			handle_error(char *error_type, t_assembler *st)
+void				handle_error(char *error_type, t_assembler *st)
 {
 	ft_printf("%s", error_type);
 	close(st->corefile);

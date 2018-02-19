@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 19:55:29 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/07 23:18:06 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/02/12 18:26:28 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ static void convert_description(t_assembler *st)
     while(st->line[st->i] != '"')
         st->i++;
     st->i++;
-    ft_printf("03ff ");
     while(st->line[st->i] != '"')
     {
         ft_printf("%s", ft_itoa_base(st->line[st->i], 16, 1));
@@ -58,13 +57,20 @@ static void convert_description(t_assembler *st)
 int			convert_to_hex(t_assembler *st)
 {
 	int		file_size;
+	char	*line;
 
 	while(get_next_line(st->sfile, &st->line))
 	{
-		if(ft_strstr(st->line, NAME_CMD_STRING))
+		if (ft_strstr(st->line, NAME_CMD_STRING))
 			convert_name(st);
-        else if(ft_strstr(st->line, COMMENT_CMD_STRING))
+        else if (ft_strstr(st->line, COMMENT_CMD_STRING))
             convert_description(st);
+		else
+		{
+			line = ft_strtrim(st->line);
+			if (line[0] != '\0')
+				parse_instructions(st);
+		}
 		// while(st->line[st->i])
 		// {
 		// 	// if(ft_strlen(ft_itoa_base(st->line[st->i], 16, 1)) < 2)
@@ -77,6 +83,11 @@ int			convert_to_hex(t_assembler *st)
 		// 	st->i++;
 		// }
         st->i++;
+	}
+	while (st->label)
+	{
+		ft_printf("label name = %s, label offset = %i\n", st->label->name, st->label->offset);
+		st->label = st->label->next;
 	}
 	return (1);
 }

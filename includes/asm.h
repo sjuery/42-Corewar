@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/07 20:03:17 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/02/18 16:14:49 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,31 @@ typedef struct				s_assembler
     int                     corefile;
     char                    *line;
     int                     ls;
+	int						offset;
+	struct s_label			*label;
 }							t_assembler;
 
-int			                convert_to_hex(t_assembler *st);
+typedef struct				s_label
+{
+	struct s_label			*next;
+	char					*name;
+	int						offset;
+}							t_label;
 
+typedef struct				s_op
+{
+	char					*opstr;
+	int						params;
+	int						ptype[MAX_ARGS_NUMBER];
+	int						opcode;
+	int						cycles;
+	char					*description;
+	int						acb;
+	int						index;
+}							t_op;
+
+t_op						g_optab[17];
+void						parse_instructions(t_assembler *st);
+int			                convert_to_hex(t_assembler *st);
+void						handle_error(char *error_type, t_assembler *st);
 #endif
