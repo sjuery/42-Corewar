@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 19:55:29 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/12 18:26:28 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/02/19 16:30:21 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ static void convert_name(t_assembler *st)
     while(st->line[st->i] != '"')
         st->i++;
     st->i++;
-    ft_printf("00ea 83f3 ");
+    ft_printf_fd(st->corefile, "00ea 83f3 ");
     while(st->line[st->i] != '"')
     {
-        ft_printf("%s", ft_itoa_base(st->line[st->i], 16, 1));
+        ft_printf_fd(st->corefile, "%s", ft_itoa_base(st->line[st->i], 16, 1));
         if(name_len % 12 == 0)
-            ft_printf("\n");
+            ft_printf_fd(st->corefile, "\n");
         else if(name_len % 2 == 0 && st->line[st->i+2])
-            ft_printf(" ");
+            ft_printf_fd(st->corefile, " ");
 		st->i++;
         name_len++;
     }
@@ -44,11 +44,11 @@ static void convert_description(t_assembler *st)
     st->i++;
     while(st->line[st->i] != '"')
     {
-        ft_printf("%s", ft_itoa_base(st->line[st->i], 16, 1));
+        ft_printf_fd(st->corefile, "%s", ft_itoa_base(st->line[st->i], 16, 1));
         if(desc_len % 12 == 0)
-            ft_printf("\n");
+            ft_printf_fd(st->corefile, "\n");
         else if(desc_len % 2 == 0 && st->line[st->i+2])
-            ft_printf(" ");
+            ft_printf_fd(st->corefile, " ");
 		st->i++;
         desc_len++;
     }
@@ -71,17 +71,6 @@ int			convert_to_hex(t_assembler *st)
 			if (line[0] != '\0')
 				parse_instructions(st);
 		}
-		// while(st->line[st->i])
-		// {
-		// 	// if(ft_strlen(ft_itoa_base(st->line[st->i], 16, 1)) < 2)
-		// 	// 	printf("0");
-		// 	printf("%x", st->line[st->i]);
-		// 	if(st->i % 8 == 0)
-		// 		printf("\n");
-		// 	else if(st->i % 2 == 0)
-		// 		printf(" ");
-		// 	st->i++;
-		// }
         st->i++;
 	}
 	while (st->label)

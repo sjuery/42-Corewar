@@ -6,7 +6,7 @@
 /*   By: ihodge <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 18:03:50 by ihodge            #+#    #+#             */
-/*   Updated: 2018/02/18 16:16:42 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/02/18 19:32:44 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static void	save_labels(t_label **labels, char *name, int offset)
 	head = (*labels);
 	if (head)
 	{
-		printf("head = %p\n", head);//should not exist the first time arround
 		while (head->next)
 			head = head->next;
 		head->next = (t_label*)ft_memalloc(sizeof(t_label));
@@ -41,7 +40,6 @@ static void	save_labels(t_label **labels, char *name, int offset)
 
 static int	parameter_type(char *param, int i, int param_num, t_assembler *st)
 {
-	ft_printf("param[0] = %c, ptype = %i\n", param[0], g_optab[i].ptype[param_num]);
 	if (g_optab[i].ptype[param_num] == 3)
 	{
 		if (param[0] == 'r')
@@ -107,7 +105,7 @@ static void	convert_instruction(char **instruction, t_assembler *st)
 	}
 	ft_printf("line offset: %i\n", st->offset);
 }
-
+//
 void	parse_instructions(t_assembler *st)
 {
 	int i = 0;

@@ -6,7 +6,7 @@
 #    By: anazar <anazar@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/06/05 10:07:33 by anazar            #+#    #+#              #
-#    Updated: 2018/02/08 17:30:54 by anazar           ###   ########.fr        #
+#    Updated: 2018/02/19 14:30:30 by ihodge           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,11 +27,8 @@ ADDIT = ft_iswhitespace ft_split_by_function ft_split_by_delims ft_swap \
 		ft_isupper ft_islower ft_find_and_replace ft_find ft_trim_by_function \
 		ft_trim_by_delims ft_atoll get_next_line ft_strjoinfree \
 		ft_is_in ft_countif ft_strfncpy ft_strrncpy ft_validate ft_atoz
-PRINT =	parse_flags parse_moreflags flags_align ft_printf flags_palign \
-		flags_zero flags_int flags_inth flags_inthh flags_intll flags_intj \
-		flags_intz flags_adr flags_str flags_spc ft_putoct ft_putunbr \
-		ft_puthex ft_putuhex ft_putstrf ft_putnbrf ft_numulen ft_putadr \
-		ft_putull ft_putld ft_putwstrf ft_numlen flags_intl ft_itoa_base
+PRINT = create_lists dispatcher flags ft_lltoa ft_printf ft_printf_fd \
+		ft_ultoa_base is_flag_conv_len mfw_prec string ft_itoa_base
 FILES = $(PART1) $(PART2) $(BONUS) $(ADDIT) $(PRINT)
 MAINSRC = tst/main.c
 MAINOBJ = main.o

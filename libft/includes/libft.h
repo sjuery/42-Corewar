@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/05 10:14:28 by anazar            #+#    #+#             */
-/*   Updated: 2018/02/08 17:30:35 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/19 16:14:22 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,147 +217,93 @@ int					ft_general_validate(char *format, char *str);
 ** printf
 */
 
+typedef	struct		s_format
+{
+	char			conv;
+	char			length;
+	int				space;
+	int				plus;
+	int				minus;
+	int				alternate;
+	int				zero;
+	int				mfw;
+	int				precision;
+	int				strlength;
+	int				fd;
+}					t_format;
+
+union				u_data_union
+{
+	unsigned int	uint;
+	unsigned char	uchar;
+	unsigned short	ushort;
+	unsigned long	ulong;
+	size_t			usizet;
+	uintmax_t		uintmaxt;
+};
+
+typedef char		*(*t_ufptr)(union u_data_union du, t_format *format,
+		unsigned int base);
+
 int					ft_printf(const char *str, ...);
 
-void				parse_flags(int *i, const char *str, va_list args, int *p);
+int					ft_printf_fd(int fd, const char *str, ...);
 
-void				parse_j(va_list args, int *p, const char *str, int *i);
+t_format			*create_format(void);
 
-void				parse_z(va_list args, int *p, const char *str, int *i);
+char				*dispatcher(t_format *format, long long data);
 
-void				parse_l(va_list args, int *p, const char *str, int *i);
+char				*u_dispatcher(t_format *format, unsigned long data);
 
-void				parse_ll(va_list args, int *p, const char *str, int *i);
+char				*plus_flag(char *str, long long data);
 
-void				parse_rightalign(int *i, const char *str,
-						va_list args, int *p);
+char				*space_flag(char *str, long long data);
 
-void				parse_leftalign(int *i, const char *str,
-						va_list args, int *p);
+char				*min_field_wid(char *str, t_format *format);
 
-void				parse_rightpalign(int *i, const char *str,
-						va_list args, int *p);
+void				fill_after(char *str, char **result, int fill);
 
-void				parse_leftpalign(int *i, const char *str,
-						va_list args, int *p);
+void				fill_before(char *str, char **result, int fill,
+		char character);
 
-void				parse_zero(int *i, const char *str,
-						va_list args, int *p);
+char				*int_precision(char *str, int precision, int data);
 
-void				parse_pzero(int *i, const char *str,
-						va_list args, int *p);
+char				*negative_int(char *str, long long data);
 
-void				flags_int(va_list args, int *p);
+char				*ft_lltoa(long long n);
 
-void				flags_oct(va_list args, int *p);
+char				*ft_ultoa_base(union u_data_union du, t_format *format,
+		unsigned int base);
 
-void				flags_uint(va_list args, int *p);
+char				*fptr_with_length(char c, char l, long long *data);
 
-void				flags_hex(va_list args, int *p);
+char				*ufptr_with_length(t_format *format, unsigned long *data);
 
-void				flags_uhex(va_list args, int *p);
+char				*alt_flag(char *str, t_format *format);
 
-void				flags_inth(va_list args, int *p);
+int					is_flag(char c);
 
-void				flags_octh(va_list args, int *p);
+int					is_conv(char c);
 
-void				flags_uinth(va_list args, int *p);
+int					is_length(char *str, t_format *format);
 
-void				flags_hexh(va_list args, int *p);
+char				*string_conv(t_format *format, char *str);
 
-void				flags_uhexh(va_list args, int *p);
+char				*str_precision(char *str, int precision);
 
-void				flags_inthh(va_list args, int *p);
+char				*mfw_char(char *str, t_format *format);
 
-void				flags_octhh(va_list args, int *p);
+void				write_arg(va_list ap, t_format *format, char conv);
 
-void				flags_uinthh(va_list args, int *p);
+void				write_arg_fd(va_list ap, t_format *format, char conv);
 
-void				flags_hexhh(va_list args, int *p);
+void				char_conv(t_format *format, unsigned char c);
 
-void				flags_uhexhh(va_list args, int *p);
+void				change_conv(t_format *format);
 
-void				flags_intl(va_list args, int *p);
+void				save_signs(t_format *format, char c);
 
-void				flags_octl(va_list args, int *p);
-
-void				flags_uintl(va_list args, int *p);
-
-void				flags_hexl(va_list args, int *p);
-
-void				flags_uhexl(va_list args, int *p);
-
-void				flags_intll(va_list args, int *p);
-
-void				flags_octll(va_list args, int *p);
-
-void				flags_uintll(va_list args, int *p);
-
-void				flags_hexll(va_list args, int *p);
-
-void				flags_uhexll(va_list args, int *p);
-
-void				flags_intj(va_list args, int *p);
-
-void				flags_octj(va_list args, int *p);
-
-void				flags_uintj(va_list args, int *p);
-
-void				flags_hexj(va_list args, int *p);
-
-void				flags_uhexj(va_list args, int *p);
-
-void				flags_intz(va_list args, int *p);
-
-void				flags_octz(va_list args, int *p);
-
-void				flags_uintz(va_list args, int *p);
-
-void				flags_hexz(va_list args, int *p);
-
-void				flags_uhexz(va_list args, int *p);
-
-void				flags_adr(va_list args, int *p);
-
-void				flags_per(int *p);
-
-void				flags_str(va_list args, int *p);
-
-void				flags_char(va_list args, int *p);
-
-void				flags_wchar(va_list args, int *p, const char *str, int *i);
-
-void				flags_ws(va_list args, int *p, const char *str, int *i);
-
-void				flags_plus(va_list args, int *p, const char *str, int *i);
-
-void				flags_hash(va_list args, int *p, const char *str, int *i);
-
-int					ft_strucmp(const char *s1, const char *s2);
-
-void				ft_putoct(unsigned int n, int *p);
-
-void				ft_putunbr(unsigned int n, int *p);
-
-void				ft_puthex(unsigned int n, int *p);
-
-void				ft_putuhex(unsigned int n, int *p);
-
-void				ft_putstrf(char const *s, int *p);
-
-void				ft_putnbrf(int n, int *p);
-
-size_t				ft_numulen(unsigned int n);
-
-void				ft_putadr(unsigned long n, int *p);
-
-void				ft_putull(unsigned long long n, int *p);
-
-void				ft_putld(long n, int *p);
-
-void				ft_putwstrf(wchar_t *s, int *p);
-
-size_t				ft_numlen(int n);
+void				save_flag(t_format *format, char *str);
 
 char		*ft_itoa_base(unsigned long long int value, int base, int lowercase);
 

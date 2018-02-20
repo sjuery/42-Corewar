@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/18 16:26:17 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/02/19 16:29:46 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ int					main(int argc, char **argv)
 			handle_error("Error: Couldn't read given file", st);
 		if (!validate_file(st))
 			handle_error("Error: File is invalid", st);
-		if (!(st->corefile = open(ft_strjoin(argv[argc - 1], ".cor"), O_CREAT)))
+		if ((st->corefile = open(ft_strjoin(ft_strsub(argv[argc - 1], 0,
+				ft_strlen(argv[argc - 1]) - 1), "test"),
+						O_CREAT | O_WRONLY, S_IRWXU)) < 0)
 			handle_error("Error: Cor file couldn't be created", st);
 		if (!convert_to_hex(st))
 			handle_error("Error: Couldn't finish writting to Cor file", st);
