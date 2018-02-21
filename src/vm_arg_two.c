@@ -14,27 +14,27 @@
 
 void	vm_and(void)
 {
-	(void);
+	printf("and called");
 }
 
 void	vm_xor(void)
 {
-	(void);
+	printf("xor called");
 }
 
 
 void	vm_aff(void)
 {
-	(void);
+	printf("aff called");
 }
 
 void	vm_add(void)
 {
-	(void);
+	printf("add called");
 }
 
 
 void	vm_sub(void)
 {
-	(void);
+	printf("sub called");
 }

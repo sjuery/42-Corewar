@@ -14,26 +14,26 @@
 
 void	vm_live(void)
 {
-	(void);
+	printf("live called");
 }
 
 void	vm_zjmp(void)
 {
-	(void);
+	printf("zjmp called");
 }
 
 
 void	vm_sti(void)
 {
-	(void);
+	printf("sti called");
 }
 
 void	vm_lfork(void)
 {
-	(void);
+	printf("lfork called");
 }
 
 void	vm_fork(void)
 {
-	(void);
+	printf("fork called");
 }

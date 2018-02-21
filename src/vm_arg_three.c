@@ -14,27 +14,27 @@
 
 void	vm_lld(void)
 {
-	(void);
+	printf("lld called");
 }
 
 
 void	vm_lldi(void)
 {
-	(void);
+	printf("lldi called");
 }
 
 void	vm_ldi(void)
 {
-	(void);
+	printf("ldi called");
 }
 
 
 void	vm_ld(void)
 {
-	(void);
+	printf("ld called");
 }
 
 void	vm_st(void)
 {
-	(void);
+	printf("st called");
 }
