@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/19 16:37:22 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/02/20 18:06:27 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,13 @@ typedef struct				s_assembler
     char                    *line;
     int                     ls;
 	int						offset;
+	int						instruct_offset;
+	int						instruct_num;
+	int						*prog_name;
+	int						*comment;
 	struct s_label			*label;
+	struct s_label_ref		*label_ref;
+	struct s_instruction	**arr;//array of instructions that will be printed out
 }							t_assembler;
 
 typedef struct				s_label
@@ -46,6 +52,22 @@ typedef struct				s_label
 	char					*name;
 	int						offset;
 }							t_label;
+
+typedef struct				s_label_ref
+{
+	struct s_label_ref		*next;
+	char					*name;
+	int						param_num;
+	int						instruct_num;
+	int						instruct_offset;
+}							t_label_ref;
+
+typedef struct				s_instruction
+{
+	int						op;
+	int						acb;
+	char					**params;//use op - 1 to determine param type and print correctly?; use int ** instead?
+}							t_instruction;
 
 typedef struct				s_op
 {
@@ -62,5 +84,7 @@ typedef struct				s_op
 t_op						g_optab[17];
 void						parse_instructions(t_assembler *st);
 int			                convert_to_hex(t_assembler *st);
+int							check_param_type(char *param, int i, int param_num);
+void						write_shit(t_assembler *st);
 void						handle_error(char *error_type, t_assembler *st);
 #endif
