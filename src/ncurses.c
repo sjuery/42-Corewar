@@ -20,7 +20,7 @@ int		setcolor(int i, t_vm *vm)
 		return (2);
 	else if (i >= 2048 && i <= vm->info[2].head.prog_size + 2048)
 		return (3);
-	else if (i >= 3076 && i <= vm->info[3].head.prog_size + 3076)
+	else if (i >= 3072 && i <= vm->info[3].head.prog_size + 3072)
 		return (4);
 	else
 		return (0);
