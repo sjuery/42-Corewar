@@ -6,7 +6,7 @@
 /*   By: ihodge <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 18:03:50 by ihodge            #+#    #+#             */
-/*   Updated: 2018/02/20 17:51:36 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/02/21 19:27:29 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,15 @@ static int	parameter_type(char *param, int i, int param_num, t_assembler *st)
 
 	param_type = 0;
 	label_ref = NULL;
-	ft_printf("param[0] = %c, ptype = %i, instruction_num = %i\n", param[0], g_optab[i].ptype[param_num], st->instruct_num);
 	param_type = check_param_type(param, i, param_num);
 	if (param_type > 0)
 	{
-		if (param_type == DIR_CODE && param[1] == LABEL_CHAR)
+
+		if (param[0] == LABEL_CHAR || param[1] == LABEL_CHAR)
 		{
 			label_ref = save_label_refs(&st->label_ref);
-			label_ref->name = param + 2;
+			label_ref->name = param[0] == DIRECT_CHAR ? param + 2: param + 1;
+			param[0] == DIRECT_CHAR ? label_ref->dir = 1 : 0;
 			label_ref->param_num = param_num;
 			label_ref->instruct_num = st->instruct_num;
 			label_ref->instruct_offset = st->instruct_offset;
@@ -115,12 +116,12 @@ static void	create_acb(char **instruction, int i, t_assembler *st)
 	int	acb = 0;
 	int param_type = 0;
 
-	st->offset++;//add one byte for acb
+	st->offset++;
 	while (j <= g_optab[i].params) 
 	{
 		param_type = parameter_type(instruction[j], i, j - 1, st);
 		st->offset += param_type;
-		if (param_type == 2 && !g_optab[i].index)//correct for dir_code with no index, +2 bytes
+		if (param_type == 2 && !g_optab[i].index)
 			st->offset += 2;
 		j == 1 ? acb = param_type << 6 : 0;
 		j == 2 ? param_type = param_type << 4 : 0; 
@@ -130,7 +131,6 @@ static void	create_acb(char **instruction, int i, t_assembler *st)
 		j++;
 	}
 	st->arr[st->instruct_num]->acb = acb;
-	ft_printf("acb = %x\n", acb);
 	if (instruction[j] && instruction[j][0] != COMMENT_CHAR)
 		handle_error("Error: Instruction has too many parameters", st);
 }
@@ -149,10 +149,10 @@ static void	convert_instruction(char **instruction, t_assembler *st)
 	st->arr[st->instruct_num]->params = ft_memalloc(sizeof(char*) * MAX_ARGS_NUMBER);
 	st->arr[st->instruct_num]->op = g_optab[i].opcode;
 	st->instruct_offset = st->offset;
-	st->offset++;//add one byte for opcode
+	st->offset++;
 	if (g_optab[i].acb)
 		create_acb(instruction, i, st);
-	else//if no acb that means we only have one parameter for the instruction
+	else
 	{
 		if (instruction[2] && instruction[2][0] != COMMENT_CHAR)
 			handle_error("Error: Instruction has too many parameters", st);
@@ -160,7 +160,6 @@ static void	convert_instruction(char **instruction, t_assembler *st)
 		if (!g_optab[i].index)
 			st->offset += 2;
 	}
-	ft_printf("line offset: %i\n", st->offset);
 	st->instruct_num++;
 }
 
@@ -185,7 +184,6 @@ void	parse_instructions(t_assembler *st)
 			i++;
 		}
 		name = ft_strsub(st->line, 0, i);
-		ft_printf("label: %s\n", name);
 		i++;
 	}
 	while (ft_iswhitespace(st->line[i]))
@@ -193,13 +191,6 @@ void	parse_instructions(t_assembler *st)
 	if (st->line[i] == COMMENT_CHAR)
 		return ;
 	instruction = ft_split_by_delims(st->line + i, "\t ,");
-	i = 0;
-	while (instruction[i])
-	{
-		ft_printf("%s ", instruction[i]);
-		i++;
-	}
-	ft_putchar('\n');
 	if (name)
 		save_labels(&st->label, name, st->offset);
 	convert_instruction(instruction, st);
