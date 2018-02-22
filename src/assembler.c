@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/20 16:57:24 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/02/21 19:13:16 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,8 @@ void				handle_error(char *error_type, t_assembler *st)
 	exit(0);
 }
 
-static int			validate_file(t_assembler *st)
-{
-	return (1);
-}
-//change convert to hex to void function. remove validate_file function, open .cor file and print after convert to hex function. handle_error function should free everything that was mallloced. make sure to free everything after printing
+//change convert to hex to void function? handle_error function should free everything that was mallloced. make sure to free everything after printing
+
 int					main(int argc, char **argv)
 {
 	t_assembler *st;
@@ -35,15 +32,13 @@ int					main(int argc, char **argv)
 	{
 		if (!(st->sfile = open(argv[argc - 1], O_RDONLY)))
 			handle_error("Error: Couldn't read given file", st);
-		if (!validate_file(st))
-			handle_error("Error: File is invalid", st);
 		if (!convert_to_hex(st))
 			handle_error("Error: Couldn't finish writting to Cor file", st);
 		if ((st->corefile = open(ft_strjoin(ft_strsub(argv[argc - 1], 0,
 				ft_strlen(argv[argc - 1]) - 1), "test"),
 						O_CREAT | O_WRONLY, S_IRWXU)) < 0)
 			handle_error("Error: Cor file couldn't be created", st);
-		write_shit(st);
+		print_shit(st);
 		close(st->corefile);
 		close(st->sfile);
 	}
