@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/09 19:09:13 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/21 16:04:35 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,13 +117,41 @@ void 	init_vm(t_vm *vm)
 	}
 }
 
+
+
+//void jumptable(t_vm *vm)
+void jumptable(int a)
+{
+	void (*jt[16])(void);
+
+	jt[0] = vm_live;
+	jt[1] = vm_ld;
+	jt[2] = vm_st;
+	jt[3] = vm_add;
+	jt[4] = vm_sub;
+	jt[5] = vm_and;
+	jt[6] = vm_or;
+	jt[7] = vm_xor;
+	jt[8] = vm_zjmp;
+	jt[9] = vm_ldi;
+	jt[10] = vm_sti;
+	jt[11] = vm_fork;
+	jt[12] = vm_lld;
+	jt[13] = vm_lldi;
+	jt[14] = vm_lfork;
+	jt[15] = vm_aff;
+	jt[a]();
+}
+
 int		main(int ac, char **av)
 {
 	t_vm			vm;
 
 	init_players(ac, av, &vm);
 	init_vm(&vm);
-	init_curses(&vm);
+	//init_curses(&vm);
 	print_core(vm.core, -1);
+	if (ac == 2)
+		jumptable(ft_atoi(av[1]));
 	return (0);
 }
