@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/08 19:31:57 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/21 16:00:12 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	vm_ldi(void);
 void	vm_ld(void);
 void	vm_st(void);
 void	vm_and(void);
+void	vm_or(void);
 void	vm_xor(void);
 void	vm_aff(void);
 void	vm_add(void);
