@@ -122,10 +122,9 @@ void 	init_vm(t_vm *vm)
 
 
 //void jumptable(t_vm *vm)
-void jumptable(int a, t_vm *vm)
+void jumptable(int a, t_vm *vm, int i)
 {
-	(void)vm;
-	void (*jt[16])(void);
+	void (*jt[16])(t_vm *vm, int i);
 
 	jt[0] = vm_live;
 	jt[1] = vm_ld;
@@ -143,7 +142,7 @@ void jumptable(int a, t_vm *vm)
 	jt[13] = vm_lldi;
 	jt[14] = vm_lfork;
 	jt[15] = vm_aff;
-	jt[a]();
+	jt[a](vm, i);
 }
 
 int		main(int ac, char **av)

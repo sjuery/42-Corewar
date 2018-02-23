@@ -48,6 +48,7 @@ typedef struct		s_io
 	char			body[CHAMP_MAX_SIZE + 1];
 	int				index; // to track where the instruction reading is currently at
 	int				alive; // this is to check if the process is alive or not
+	int				live; // # of time it calls live
 }					t_io;
 
 typedef struct		s_vm
@@ -76,24 +77,24 @@ void				init_curses(t_vm *vm);
 /*
 ** vm arguments
 */
-void	vm_live(void);
-void	vm_zjmp(void);
-void	vm_sti(void);
-void	vm_lfork(void);
-void	vm_fork(void);
-void	vm_lld(void);
-void	vm_lldi(void);
-void	vm_ldi(void);
-void	vm_ld(void);
-void	vm_st(void);
-void	vm_and(void);
-void	vm_or(void);
-void	vm_xor(void);
-void	vm_aff(void);
-void	vm_add(void);
-void	vm_sub(void);
+void	vm_live(t_vm *vm, int i);
+void	vm_zjmp(t_vm *vm, int i);
+void	vm_sti(t_vm *vm, int i);
+void	vm_lfork(t_vm *vm, int i);
+void	vm_fork(t_vm *vm, int i);
+void	vm_lld(t_vm *vm, int i);
+void	vm_lldi(t_vm *vm, int i);
+void	vm_ldi(t_vm *vm, int i);
+void	vm_ld(t_vm *vm, int i);
+void	vm_st(t_vm *vm, int i);
+void	vm_and(t_vm *vm, int i);
+void	vm_or(t_vm *vm, int i);
+void	vm_xor(t_vm *vm, int i);
+void	vm_aff(t_vm *vm, int i);
+void	vm_add(t_vm *vm, int i);
+void	vm_sub(t_vm *vm, int i);
 
-void jumptable(int a, t_vm *vm);
+void jumptable(int a, t_vm *vm, int i);
 
 /*
 ** read_bytes.c

@@ -18,8 +18,8 @@ void	read_bytes(t_vm *vm, int i)
 	{
 		if (vm->info[i].alive == 1)
 		{
-			ft_printf("\nByte Read [%hhx] ", vm->info[i].body[0]);
-			jumptable(vm->info[i].body[0], vm);
+			ft_printf("\nByte Read [%hhx] ", vm->info[i].body[vm->info[i].index]);
+			jumptable(vm->info[i].body[0], vm, i);
 		}
 	}
 }

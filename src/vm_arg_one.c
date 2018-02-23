@@ -12,28 +12,40 @@
 
 #include "corewar.h"
 
-void	vm_live(void)
+void	vm_live(t_vm *vm, int i)
 {
+	vm->info[i].index += 5;
+	if (vm->info[i].index > vm->info[i].head.prog_size) // double check, if index passes prog_size, we reduce to 0
+		vm->info[i].index = 0;
+	vm->info[i].live++;
 	ft_printf("live called");
 }
 
-void	vm_zjmp(void)
+void	vm_zjmp(t_vm *vm, int i)
 {
+	(void)vm;
+	(void)i;
 	ft_printf("zjmp called");
 }
 
 
-void	vm_sti(void)
+void	vm_sti(t_vm *vm, int i)
 {
+	(void)vm;
+	(void)i;
 	ft_printf("sti called");
 }
 
-void	vm_lfork(void)
+void	vm_lfork(t_vm *vm, int i)
 {
+	(void)vm;
+	(void)i;
 	ft_printf("lfork called");
 }
 
-void	vm_fork(void)
+void	vm_fork(t_vm *vm, int i)
 {
+	(void)vm;
+	(void)i;
 	ft_printf("fork called");
 }

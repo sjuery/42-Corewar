@@ -12,33 +12,45 @@
 
 #include "corewar.h"
 
-void	vm_and(void)
+void	vm_and(t_vm *vm, int i)
 {
+	(void)vm;
+	(void)i;
 	ft_printf("and called");
 }
 
-void	vm_xor(void)
+void	vm_xor(t_vm *vm, int i)
 {
+	(void)vm;
+	(void)i;
 	ft_printf("xor called");
 }
 
 
-void	vm_aff(void)
+void	vm_aff(t_vm *vm, int i)
 {
+	(void)vm;
+	(void)i;
 	ft_printf("aff called");
 }
 
-void	vm_add(void)
+void	vm_add(t_vm *vm, int i)
 {
+	(void)vm;
+	(void)i;
 	ft_printf("add called");
 }
 
-void	vm_or(void)
+void	vm_or(t_vm *vm, int i)
 {
+	(void)vm;
+	(void)i;
 	ft_printf("or called");
 }
 
-void	vm_sub(void)
+void	vm_sub(t_vm *vm, int i)
 {
+	(void)vm;
+	(void)i;
 	ft_printf("sub called");
 }
