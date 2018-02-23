@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vm_arg_three.c                                     :+:      :+:    :+:   */
+/*   read_bytes.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,29 +12,17 @@
 
 #include "corewar.h"
 
-void	vm_lld(void)
+void	read_bytes(t_vm *vm, int i)
 {
-	ft_printf("lld called");
+	while (++i < vm->process_count)
+	{
+		if (vm->info[i].alive == 1)
+		{
+			ft_printf("\nByte Read [%hhx] ", vm->info[i].body[0]);
+			jumptable(vm->info[i].body[0], vm);
+		}
+	}
 }
 
 
-void	vm_lldi(void)
-{
-	ft_printf("lldi called");
-}
-
-void	vm_ldi(void)
-{
-	ft_printf("ldi called");
-}
-
-
-void	vm_ld(void)
-{
-	ft_printf("ld called");
-}
-
-void	vm_st(void)
-{
-	ft_printf("st called");
-}
+// ./corewar resources/champs/examples/zork.cor resources/champs/examples/bigzork.cor resources/champs/examples/helltrain.cor resources/champs/examples/turtle.cor

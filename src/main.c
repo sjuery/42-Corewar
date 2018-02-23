@@ -108,9 +108,11 @@ void 	init_vm(t_vm *vm)
 
 	i = -1;
 	x = 0;
+	vm->process_count = 0;
 	ft_bzero(vm->core, 4096);
 	while (++i < vm->num_players)
 	{
+		vm->process_count++;
 		fd = open(vm->players[i], O_RDONLY);
 		write_info(&vm->info[i], fd, &x, vm->core);
 		x += (1024 - vm->info[i].head.prog_size);
@@ -120,8 +122,9 @@ void 	init_vm(t_vm *vm)
 
 
 //void jumptable(t_vm *vm)
-void jumptable(int a)
+void jumptable(int a, t_vm *vm)
 {
+	(void)vm;
 	void (*jt[16])(void);
 
 	jt[0] = vm_live;
@@ -147,11 +150,14 @@ int		main(int ac, char **av)
 {
 	t_vm			vm;
 
+	if (ac < 2)
+		error();
 	init_players(ac, av, &vm);
 	init_vm(&vm);
 	//init_curses(&vm);
 	print_core(vm.core, -1);
-	if (ac == 2)
-		jumptable(ft_atoi(av[1]));
+	read_bytes(&vm, -1);
+	// if (ac == 2)
+	// 	jumptable(ft_atoi(av[1]));
 	return (0);
 }

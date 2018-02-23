@@ -38,5 +38,6 @@ int		read_input(int fd, t_io *info)
 	if ((info->head.prog_size = read(fd, info->body, CHAMP_MAX_SIZE)) <= 0)
 		return (0);
 	info->body[info->head.prog_size] = 0;
+	info->alive = 1;
 	return (1);
 }

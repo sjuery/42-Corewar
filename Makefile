@@ -13,7 +13,7 @@
 NAME	= corewar
 ASMNAME = asm
 
-FILES	= main parse_file ncurses vm_arg_one vm_arg_two vm_arg_three
+FILES	= main parse_file ncurses vm_arg_one vm_arg_two vm_arg_three read_bytes
 ASMFILES= assembler convert_to_hex op parse
 ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
 ASMOBJ 	= $(addprefix ./objects/, $(ASMSRC:.c=.o))
