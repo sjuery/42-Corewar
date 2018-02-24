@@ -142,7 +142,7 @@ void jumptable(int a, t_vm *vm, int i)
 	jt[13] = vm_lldi;
 	jt[14] = vm_lfork;
 	jt[15] = vm_aff;
-	jt[a](vm, i);
+	jt[a - 1](vm, i);
 }
 
 int		main(int ac, char **av)

@@ -12,6 +12,22 @@
 
 #include "corewar.h"
 
+int		read_acb(int a)
+{
+	int ret;
+
+	ret = 0;
+	a += 226;
+	while (a >= 2)
+	{
+		ret = ret * 10 + (a % 2);
+		a = a / 2;
+	}
+	ret = ret * 10 + a;
+	ft_printf("\nRET %i\n", ret);
+	return (ret);
+}
+
 void	read_bytes(t_vm *vm, int i)
 {
 	while (++i < vm->process_count)
@@ -19,7 +35,7 @@ void	read_bytes(t_vm *vm, int i)
 		if (vm->info[i].alive == 1)
 		{
 			ft_printf("\nByte Read [%hhx] ", vm->info[i].body[vm->info[i].index]);
-			jumptable(vm->info[i].body[0], vm, i);
+			jumptable(vm->info[i].body[vm->info[i].index], vm, i);
 		}
 	}
 }

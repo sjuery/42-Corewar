@@ -37,9 +37,8 @@ void	vm_ldi(t_vm *vm, int i)
 
 void	vm_ld(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
-	ft_printf("ld called");
+	read_acb(vm->info[i].body[vm->info[i].index + 1]);
+	ft_printf("ld called %i", vm->info[i].body[vm->info[i].index + 1]);
 }
 
 void	vm_st(t_vm *vm, int i)

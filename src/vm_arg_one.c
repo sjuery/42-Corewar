@@ -18,7 +18,7 @@ void	vm_live(t_vm *vm, int i)
 	if (vm->info[i].index > vm->info[i].head.prog_size) // double check, if index passes prog_size, we reduce to 0
 		vm->info[i].index = 0;
 	vm->info[i].live++;
-	ft_printf("live called");
+	ft_printf("live called, num of lives called %i", vm->info[i].live);
 }
 
 void	vm_zjmp(t_vm *vm, int i)
@@ -45,7 +45,8 @@ void	vm_lfork(t_vm *vm, int i)
 
 void	vm_fork(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
-	ft_printf("fork called");
+	int a;
+
+	a = vm->info[i].body[vm->info[i].index + 1];
+	ft_printf("fork called, label location %i", a);
 }
