@@ -6,7 +6,7 @@
 /*   By: ihodge <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 18:03:50 by ihodge            #+#    #+#             */
-/*   Updated: 2018/02/21 19:27:29 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/02/23 17:15:07 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int			check_param_type(char *param, int i, int param_num)
 	else if (param[0] == DIRECT_CHAR && g_optab[i].ptype[param_num] & DIR_CODE)
 			return (DIR_CODE);
 	else if (g_optab[i].ptype[param_num] & IND_CODE)
-		return (IND_CODE);
+		return (IND_SIZE);
 	return (0);
 }
 
@@ -121,8 +121,10 @@ static void	create_acb(char **instruction, int i, t_assembler *st)
 	{
 		param_type = parameter_type(instruction[j], i, j - 1, st);
 		st->offset += param_type;
-		if (param_type == 2 && !g_optab[i].index)
+		if (instruction[j][0] == DIRECT_CHAR && !g_optab[i].index)
 			st->offset += 2;
+		if (param_type == 2 && !(instruction[j][0] == DIRECT_CHAR))
+			param_type++;
 		j == 1 ? acb = param_type << 6 : 0;
 		j == 2 ? param_type = param_type << 4 : 0; 
 		j == 2 ? acb = param_type | acb : 0;

@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 19:55:29 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/21 19:24:49 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/02/23 17:15:09 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ void		print_parameters(t_assembler *st, int i, int *y)
 	j = 0;
 	while (st->arr[i]->params[j])
 	{
-		if (check_param_type(st->arr[i]->params[j], st->arr[i]->op - 1, j) == DIR_CODE)
+		if (check_param_type(st->arr[i]->params[j], st->arr[i]->op - 1, j) == DIR_CODE && st->arr[i]->params[j][0] == DIRECT_CHAR)
 		{
 			res = ft_atoi(st->arr[i]->params[j] + 1);
 			if (g_optab[st->arr[i]->op - 1].index)
@@ -163,7 +163,6 @@ void		print_shit(t_assembler *st)
 		print_parameters(st, i, &y);
 		i++;
 	}
-	ft_printf("0a\n");//no idea why this is always at the end
 }
 
 //am I accounting for labels with instructions on the same line and next line?
@@ -171,19 +170,22 @@ void		print_shit(t_assembler *st)
 static void	set_label_addresses(t_assembler *st)
 {
 	t_label_ref *tmp;
+	t_label *tmp_label;
 	int ref = 0;
-	while (st->label)
+	tmp_label = st->label;
+	while (tmp_label)
 	{
 		tmp = st->label_ref;
 		while (tmp)
 		{
-			if (ft_strequ(tmp->name, st->label->name))
+			if (ft_strequ(tmp->name, tmp_label->name))
 			{
-				ref = st->label->offset - tmp->instruct_offset;
-				st->arr[tmp->instruct_num]->params[tmp->param_num] = tmp->dir ? ft_strjoin("%", ft_itoa(ref)) : ft_itoa(ref);		}
+				ref = tmp_label->offset - tmp->instruct_offset;
+				st->arr[tmp->instruct_num]->params[tmp->param_num] = tmp->dir ? ft_strjoin("%", ft_itoa(ref)) : ft_itoa(ref);
+			}
 			tmp = tmp->next;
 		}
-		st->label = st->label->next;
+		tmp_label = tmp_label->next;
 	}
 }
 
@@ -207,5 +209,19 @@ int			convert_to_hex(t_assembler *st)
         st->i++;
 	}
 	set_label_addresses(st);
+	t_label_ref *tmp_ref;
+	tmp_ref = st->label_ref;
+	while (tmp_ref)
+	{
+		ft_printf("label_ref = %s; instruct_offset = %i\n", tmp_ref->name, tmp_ref->instruct_offset);
+		tmp_ref = tmp_ref->next;
+	}
+	t_label *tmp;
+	tmp = st->label;
+	while (tmp)
+	{
+		ft_printf("label = %s; offset = %i\n", tmp->name, tmp->offset);
+		tmp = tmp->next;
+	}
 	return (1);
 }
