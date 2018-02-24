@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/23 19:31:31 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/24 13:51:24 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@
 # include "libft.h"
 # include "op.h"
 # define  HEADER_SIZE 2192
+
+# define ACB1(a) ((a >> 6) % 4)
+# define ACB2(a) ((a >> 4) % 4)
+# define ACB3(a) ((a >> 2) % 4)
 
 /*
 ** typedef struct					s_header
