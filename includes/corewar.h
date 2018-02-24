@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/21 16:00:12 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/23 19:31:31 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 ** 		char						prog_name[PROG_NAME_LENGTH + 1]; <-- process name
 ** 		unsigned int				prog_size; <-- bytes to be read
 ** 		char						comment[COMMENT_LENGTH + 1]; <-- process comment
-** }	
+** }
 */
 
 typedef struct		s_io
@@ -99,6 +99,6 @@ void jumptable(int a, t_vm *vm, int i);
 /*
 ** read_bytes.c
 */
-int		read_acb(int a);
+int		*read_acb(unsigned char a);
 void	read_bytes(t_vm *vm, int i);
 #endif
