@@ -99,6 +99,6 @@ void jumptable(int a, t_vm *vm, int i);
 /*
 ** read_bytes.c
 */
-
+int		read_acb(int a);
 void	read_bytes(t_vm *vm, int i);
 #endif
