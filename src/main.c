@@ -115,7 +115,10 @@ void 	init_vm(t_vm *vm)
 		vm->process_count++;
 		fd = open(vm->players[i], O_RDONLY);
 		write_info(&vm->info[i], fd, &x, vm->core);
-		x += (1024 - vm->info[i].head.prog_size);
+		vm->info[i].location = i * (4096 / vm->num_players);
+		vm->info[i].start = vm->info[i].location;
+		ft_printf("\n location %i \n", vm->info[i].location);
+		x += ((4096 / vm->num_players) - vm->info[i].head.prog_size);
 	}
 }
 
@@ -153,7 +156,7 @@ int		main(int ac, char **av)
 		error();
 	init_players(ac, av, &vm);
 	init_vm(&vm);
-	//init_curses(&vm);
+	// init_curses(&vm);
 	print_core(vm.core, -1);
 	read_bytes(&vm, -1);
 	// if (ac == 2)

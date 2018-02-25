@@ -68,12 +68,17 @@ void	read_bytes(t_vm *vm, int i)
 {
 	while (++i < vm->process_count)
 	{
-		if (vm->info[i].alive == 1)
+		if (vm->info[i].alive >= 1)
 		{
-			ft_printf("\nByte Read [%#0.2hhx] ", vm->info[i].body[vm->info[i].index]);
-			jumptable(vm->info[i].body[vm->info[i].index], vm, i);
+			ft_printf("\nByte Read [%#0.2hhx] ", vm->core[vm->info[i].start + vm->info[i].index]);
+			jumptable(vm->core[vm->info[i].start + vm->info[i].index], vm, i);
 		}
 	}
+	// execute game rules, check the current cycle, check to see if we need ot kill stuff
+	// if we dont need to kill stuff, call read_bytes again, otherwise, call function
+	// that will kill processes, etc. and than call read_bytes again
+	// when we execute game rule, if all processes are dead, instead of going back to read_bytes
+	// it will go to game over to display winner
 }
 
 

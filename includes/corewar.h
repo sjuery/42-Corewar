@@ -53,9 +53,11 @@ typedef struct		s_io
 	int				index; // to track where the instruction reading is currently at
 	int				alive; // this is to check if the process is alive or not
 	int				live; // # of time it calls live
-	char			regs[REG_NUMBER][REG_SIZE];
-	char			pc[REG_SIZE];
-	int				flag;
+	char			regs[REG_NUMBER][REG_SIZE]; // registers, # of reg + its size
+	char			pc[REG_SIZE]; // program counter
+	int				flag; // carry flag
+	int				location; // load location
+	int				start; // start location on the core
 }					t_io;
 
 typedef struct		s_vm
