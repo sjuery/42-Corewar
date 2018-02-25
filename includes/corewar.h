@@ -53,13 +53,13 @@ typedef struct		s_io
 	int				index; // to track where the instruction reading is currently at
 	int				alive; // this is to check if the process is alive or not
 	int				live; // # of time it calls live
+	char			regs[REG_NUMBER][REG_SIZE];
+	char			pc[REG_SIZE];
+	int				flag;
 }					t_io;
 
 typedef struct		s_vm
 {
-	char			regs[REG_NUMBER][REG_SIZE];
-	char			pc[REG_SIZE];
-	int				flag;
 	t_io			info[1024]; // holds all the process
 	int				process_count; // helps us keep track of total # of process
 	char			*players[4]; // player names
