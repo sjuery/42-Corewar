@@ -28,6 +28,16 @@ void	vm_zjmp(t_vm *vm, int i)
 	ft_printf("zjmp called");
 }
 
+/*
+ZJMP.cor
+0900 0a09 000a 0900 0a
+
+09 = opcode for jump
+000a = location (direct value)
+reason this direct is 2 bytes is because in op.c it has a index value of 1 (very last value)
+if there is a index value, its 2 bytes for direct, otherwise its 4
+*/
+
 
 void	vm_sti(t_vm *vm, int i)
 {

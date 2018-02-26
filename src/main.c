@@ -166,5 +166,6 @@ int		main(int ac, char **av)
 	read_bytes(&vm, -1);
 	// if (ac == 2)
 	// 	jumptable(ft_atoi(av[1]));
+	ft_printf("\n");
 	return (0);
 }
