@@ -37,7 +37,24 @@ void	vm_ldi(t_vm *vm, int i)
 
 void	vm_ld(t_vm *vm, int i)
 {
-	read_acb(vm->info[i].body[vm->info[i].index + 1]);
+	char acb[4];
+	acb = read_acb(vm->info[i].body[vm->info[i].index + 1]);
+	if (acb[0] == 2)
+	{
+		vm->info[i].index++;
+		vm->info[i].reg[acb[1]][0] = vm->core[vm->info[i].start + vm->info[i].index++];
+		vm->info[i].reg[acb[1]][1] = vm->core[vm->info[i].start + vm->info[i].index++];
+		vm->info[i].reg[acb[1]][2] = vm->core[vm->info[i].start + vm->info[i].index++];
+		vm->info[i].reg[acb[1]][3] = vm->core[vm->info[i].start + vm->info[i].index++];
+	}
+	else if (acb[0] == 3)
+	{
+		vm->info[i].index++;
+		vm->info[i].reg[acb[1]][0] = vm->core[vm->info[i].start + vm->info[i].index++];
+		vm->info[i].reg[acb[1]][1] = vm->core[vm->info[i].start + vm->info[i].index++];
+	}
+	else
+		ft_printf("Ignore, need to immplement this later");
 	ft_printf("ld called %i", vm->info[i].body[vm->info[i].index + 1]);
 }
 
