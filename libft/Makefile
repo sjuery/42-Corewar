@@ -6,7 +6,7 @@
 #    By: anazar <anazar@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/06/05 10:07:33 by anazar            #+#    #+#              #
-#    Updated: 2018/02/19 14:30:30 by ihodge           ###   ########.fr        #
+#    Updated: 2018/02/25 17:23:53 by ihodge           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ ADDIT = ft_iswhitespace ft_split_by_function ft_split_by_delims ft_swap \
 		ft_isupper ft_islower ft_find_and_replace ft_find ft_trim_by_function \
 		ft_trim_by_delims ft_atoll get_next_line ft_strjoinfree \
 		ft_is_in ft_countif ft_strfncpy ft_strrncpy ft_validate ft_atoz
-PRINT = create_lists dispatcher flags ft_lltoa ft_printf ft_printf_fd \
+PRINT = create_lists dispatcher flags ft_lltoa ft_printf ft_dprintf \
 		ft_ultoa_base is_flag_conv_len mfw_prec string ft_itoa_base
 FILES = $(PART1) $(PART2) $(BONUS) $(ADDIT) $(PRINT)
 MAINSRC = tst/main.c

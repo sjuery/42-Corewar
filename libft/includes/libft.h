@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/05 10:14:28 by anazar            #+#    #+#             */
-/*   Updated: 2018/02/19 16:14:22 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/02/25 17:23:37 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,7 +247,7 @@ typedef char		*(*t_ufptr)(union u_data_union du, t_format *format,
 
 int					ft_printf(const char *str, ...);
 
-int					ft_printf_fd(int fd, const char *str, ...);
+int					ft_dprintf(int fd, const char *str, ...);
 
 t_format			*create_format(void);
 
