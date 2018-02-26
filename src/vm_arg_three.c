@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/25 20:20:40 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/25 20:24:01 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,21 +67,28 @@ void	vm_ld(t_vm *vm, int i)
 	//read_acb(vm->info[i].body[vm->info[i].index + 1]);
 	//ft_printf("ld called %i", vm->info[i].body[vm->info[i].index + 1]);
 }
-/*
+
 void	vm_st(t_vm *vm, int i)
 {
 	char	acb;
 
 	acb = vm->info[i].body[vm->info[i].index + 1];
-	if (valid_acb(acb, 1, 1, 0) || valid_acb(acb, 1, 2, 0) || valid_acb(acb, 1, 3, 0))
+	if (valid_acb(acb, 1, 1, 0))
+	{
+		// copy from reg to reg
+	}
+	else if (valid_acb(acb, 1, 3, 0))
+	{
 		// st
+	}
 	else
+		ft_printf("Burn!\n");
 		// burn cycle
 	//(void)vm;
 	//(void)i;
 	//ft_printf("st called");
 }
-
+/*
 void	vm_ld(t_vm *vm, int i)
 {
 	char acb[4];
@@ -92,9 +99,11 @@ void	vm_ld(t_vm *vm, int i)
 	ft_printf("ld called %i", vm->info[i].body[vm->info[i].index + 1]);
 }
 */
+/*
 void	vm_st(t_vm *vm, int i)
 {
 	(void)vm;
 	(void)i;
 	ft_printf("st called");
 }
+*/
