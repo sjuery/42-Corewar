@@ -6,7 +6,7 @@
 /*   By: ihodge <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/04 12:06:54 by ihodge            #+#    #+#             */
-/*   Updated: 2018/02/19 14:51:07 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/02/25 17:23:28 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int		process_arg_fd(va_list ap, char *str, int *length, t_format *format)
 	return (i);
 }
 
-int		ft_printf_fd(int fd, const char *str, ...)
+int		ft_dprintf(int fd, const char *str, ...)
 {
 	va_list		ap;
 	t_format	*format;
