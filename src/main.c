@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/21 16:04:35 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/25 18:23:26 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,11 @@ void jumptable(int a, t_vm *vm, int i)
 	jt[14] = vm_lfork;
 	jt[15] = vm_aff;
 	jt[a - 1](vm, i);
+}
+
+int		valid_acb(unsigned char acb, int b1, int b2, int b3)
+{
+	return (ACB1(acb) == b1 && ACB2(acb) == b2 && ACB3(acb) == b3);
 }
 
 int		main(int ac, char **av)

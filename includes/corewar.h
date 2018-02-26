@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/24 13:51:24 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/25 19:08:33 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	vm_add(t_vm *vm, int i);
 void	vm_sub(t_vm *vm, int i);
 
 void jumptable(int a, t_vm *vm, int i);
-
+int		valid_acb(unsigned char acb, int b1, int b2, int b3);
 /*
 ** read_bytes.c
 */
