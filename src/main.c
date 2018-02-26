@@ -161,7 +161,7 @@ int		main(int ac, char **av)
 		error();
 	init_players(ac, av, &vm);
 	init_vm(&vm);
-	// init_curses(&vm);
+	init_curses(&vm);
 	print_core(vm.core, -1);
 	read_bytes(&vm, -1);
 	// if (ac == 2)

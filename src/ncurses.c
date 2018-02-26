@@ -16,11 +16,11 @@ int		setcolor(int i, t_vm *vm)
 {
 	if (i >= 0 && i <= vm->info[0].head.prog_size)
 		return (1);
-	else if (i >= (1 * (4096 / vm->num_players)) && i <= vm->info[1].head.prog_size + 1024)
+	else if (i >= (1 * (4096 / vm->num_players)) && i <= vm->info[1].head.prog_size + (1 * (4096 / vm->num_players)))
 		return (2);
-	else if (i >= (2 * (4096 / vm->num_players)) && i <= vm->info[2].head.prog_size + 2048)
+	else if (i >= (2 * (4096 / vm->num_players)) && i <= vm->info[2].head.prog_size + (2 * (4096 / vm->num_players)))
 		return (3);
-	else if (i >= (3 * (4096 / vm->num_players)) && i <= vm->info[3].head.prog_size + 3072)
+	else if (i >= (3 * (4096 / vm->num_players)) && i <= vm->info[3].head.prog_size + (3 * (4096 / vm->num_players)))
 		return (4);
 	else
 		return (0);
