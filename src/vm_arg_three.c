@@ -49,7 +49,8 @@ void	vm_ld(t_vm *vm, int i)
 		vm->info[i].regs[vm->core[pos + 5]][1] = vm->core[vm->info[i].start + vm->info[i].index++];
 		vm->info[i].regs[vm->core[pos + 5]][2] = vm->core[vm->info[i].start + vm->info[i].index++];
 		vm->info[i].regs[vm->core[pos + 5]][3] = vm->core[vm->info[i].start + vm->info[i].index++];
-		ft_printf("%hhx %hhx %hhx %hhx\n", vm->info[i].regs[vm->core[pos + 5]][0], vm->info[i].regs[vm->core[pos + 5]][1], vm->info[i].regs[vm->core[pos + 5]][2], vm->info[i].regs[vm->core[pos + 5]][3]);
+		ft_printf("ld direct %hhx %hhx %hhx %hhx\n", vm->info[i].regs[vm->core[pos + 5]][0], vm->info[i].regs[vm->core[pos + 5]][1], vm->info[i].regs[vm->core[pos + 5]][2], vm->info[i].regs[vm->core[pos + 5]][3]);
+		vm->info[i].carry++;
 	}
 	else if (valid_acb(acb, 3, 1, 0))
 	{
@@ -59,10 +60,11 @@ void	vm_ld(t_vm *vm, int i)
 		vm->info[i].regs[vm->core[pos + 3]][1] = vm->core[vm->info[i].start + vm->info[i].index - 2 + ind++];
 		vm->info[i].regs[vm->core[pos + 3]][2] = vm->core[vm->info[i].start + vm->info[i].index - 2 + ind++];
 		vm->info[i].regs[vm->core[pos + 3]][3] = vm->core[vm->info[i].start + vm->info[i].index - 2 + ind++];
-		ft_printf("%hhx %hhx %hhx %hhx\n", vm->info[i].regs[vm->core[pos + 3]][0], vm->info[i].regs[vm->core[pos + 3]][1], vm->info[i].regs[vm->core[pos + 3]][2], vm->info[i].regs[vm->core[pos + 3]][3]);
+		ft_printf("ld indirect %hhx %hhx %hhx %hhx\n", vm->info[i].regs[vm->core[pos + 3]][0], vm->info[i].regs[vm->core[pos + 3]][1], vm->info[i].regs[vm->core[pos + 3]][2], vm->info[i].regs[vm->core[pos + 3]][3]);
+		vm->info[i].carry++;
 	}
 	else
-		ft_printf("Burn!\n");
+		ft_printf("ld Burn!\n");
 		// burn cycle
 	//read_acb(vm->info[i].body[vm->info[i].index + 1]);
 	//ft_printf("ld called %i", vm->info[i].body[vm->info[i].index + 1]);
@@ -85,7 +87,7 @@ void	vm_st(t_vm *vm, int i)
 		vm->info[i].regs[vm->core[pos + 2]][1] = vm->info[i].regs[vm->core[pos + 1]][1];
 		vm->info[i].regs[vm->core[pos + 2]][2] = vm->info[i].regs[vm->core[pos + 1]][2];
 		vm->info[i].regs[vm->core[pos + 2]][3] = vm->info[i].regs[vm->core[pos + 1]][3];
-		ft_printf("%hhx %hhx %hhx %hhx\n", vm->info[i].regs[vm->core[pos + 2]][0], vm->info[i].regs[vm->core[pos + 2]][1], vm->info[i].regs[vm->core[pos + 2]][2], vm->info[i].regs[vm->core[pos + 2]][3]);
+		ft_printf("st reg %hhx %hhx %hhx %hhx\n", vm->info[i].regs[vm->core[pos + 2]][0], vm->info[i].regs[vm->core[pos + 2]][1], vm->info[i].regs[vm->core[pos + 2]][2], vm->info[i].regs[vm->core[pos + 2]][3]);
 	
 	}
 	else if (valid_acb(acb, 1, 3, 0))
@@ -96,11 +98,11 @@ void	vm_st(t_vm *vm, int i)
 		vm->core[vm->info[i].start + vm->info[i].index - 2 + ind++] = vm->info[i].regs[vm->core[pos + 1]][1];
 		vm->core[vm->info[i].start + vm->info[i].index - 2 + ind++] = vm->info[i].regs[vm->core[pos + 1]][2];
 		vm->core[vm->info[i].start + vm->info[i].index - 2 + ind++] = vm->info[i].regs[vm->core[pos + 1]][3];
-		ft_printf("%hhx %hhx %hhx %hhx\n", vm->core[vm->info[i].start + vm->info[i].index - 2 + ind - 4], vm->core[vm->info[i].start + vm->info[i].index - 2 + ind - 3], vm->core[vm->info[i].start + vm->info[i].index - 2 + ind - 2], vm->core[vm->info[i].start + vm->info[i].index - 2 + ind - 1]);
+		ft_printf("st indirect %hhx %hhx %hhx %hhx\n", vm->core[vm->info[i].start + vm->info[i].index - 2 + ind - 4], vm->core[vm->info[i].start + vm->info[i].index - 2 + ind - 3], vm->core[vm->info[i].start + vm->info[i].index - 2 + ind - 2], vm->core[vm->info[i].start + vm->info[i].index - 2 + ind - 1]);
 		// st
 	}
 	else
-		ft_printf("Burn!\n");
+		ft_printf("st Burn!\n");
 		// burn cycle
 	//(void)vm;
 	//(void)i;

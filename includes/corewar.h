@@ -55,7 +55,7 @@ typedef struct		s_io
 	int				live; // # of time it calls live
 	char			regs[REG_NUMBER][REG_SIZE]; // registers, # of reg + its size
 	char			pc[REG_SIZE]; // program counter
-	int				flag; // carry flag
+	int				carry; // carry flag
 	int				location; // load location
 	int				start; // start location on the core
 }					t_io;
