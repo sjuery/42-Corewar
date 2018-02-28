@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/25 19:08:33 by anazar           ###   ########.fr       */
+/*   Updated: 2018/02/26 16:12:28 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ typedef struct		s_io
 	int				index; // to track where the instruction reading is currently at
 	int				alive; // this is to check if the process is alive or not
 	int				live; // # of time it calls live
-	char			regs[REG_NUMBER][REG_SIZE]; // registers, # of reg + its size
-	char			pc[REG_SIZE]; // program counter
+	unsigned char	regs[REG_NUMBER][REG_SIZE]; // registers, # of reg + its size
+	unsigned char	pc[REG_SIZE]; // program counter
 	int				carry; // carry flag
 	int				location; // load location
 	int				start; // start location on the core
