@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/25 18:23:26 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/02 16:54:34 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ int		main(int ac, char **av)
 		error();
 	init_players(ac, av, &vm);
 	init_vm(&vm);
-	init_curses(&vm);
+	//init_curses(&vm);
 	print_core(vm.core, -1);
 	read_bytes(&vm, -1);
 	// if (ac == 2)
