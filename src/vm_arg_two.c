@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/26 17:34:23 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/02 16:00:06 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,64 @@ void	vm_xor(t_vm *vm, int i)
 	ft_printf("xor called");
 }
 
+int		indirect(t_vm *vm, int i)
+{
+	return (vm->core[vm->info[i].start + vm->info[i].index] * 0x100 + vm->core[vm->info[i].start + vm->info[i].index + 1]);
+}
+
+void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l)
+{
+	*l = NULL;
+	if (acb == 1)
+	{
+		*l = vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index + 1]];
+		vm->info[i].index += 1;
+	}
+	else if (acb == 2)
+	{
+		*l = &vm->core[vm->info[i].start + vm->info[i].index];
+		vm->info[i].index += 4;
+	}
+	else if (acb == 3)
+	{
+		*l = &vm->core[indirect(vm, i)];
+		vm->info[i].index += 2;
+	}
+}
+
+void get_offsets(t_vm *vm, int i, unsigned char **l1, unsigned char **l2, unsigned char **l3)
+{
+	unsigned char	acb;
+
+	acb = vm->core[ACB];
+	if (ACB1(acb))
+		get_offset(vm, i, ACB1(acb), l1);
+	if (ACB2(acb))
+		get_offset(vm, i, ACB2(acb), l1);
+	if (ACB3(acb))
+		get_offset(vm, i, ACB3(acb), l1);
+}
+
+void	vm_or(t_vm *vm, int i)
+{
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	unsigned char	acb;
+
+	vm->info[i].index+=2;
+	acb = vm->core[ACB];
+	if (ACB3(acb) != 1)
+	{
+		ft_printf("Burn!\n");
+		return ;
+	}
+	get_offset(vm, i, ACB1(acb), &l1);
+	get_offset(vm, i, ACB2(acb), &l2);
+	get_offset(vm, i, ACB3(acb), &l3);
+	reg_or(l1, l2, l3);
+	ft_printf("or called");
+}
 
 void	vm_aff(t_vm *vm, int i)
 {
@@ -39,48 +97,26 @@ void	vm_aff(t_vm *vm, int i)
 	ft_printf("aff called");
 }
 
-void 	put_in_reg(unsigned char *reg, unsigned char *value)
-{
-	reg[0] = value[0];
-	reg[1] = value[1];
-	reg[2] = value[2];
-	reg[3] = value[3];
-}
-
-unsigned int		char_add(unsigned char v1, unsigned char v2)
-{
-	int	v3;
-
-	v3 = (unsigned int)v1 + (unsigned int)v2;
-	return (v3);
-}
-
 void	vm_add(t_vm *vm, int i)
 {
-	vm->info[i].index+=2;
-	if (!valid_acb(vm->core[ACB], 1, 1, 1))
-		ft_printf("Burn!\n"); return ;
-	// we can skip ACB because its always 01010100
-	 // skips 2 forward to the first registry
-	// may need aneesh to double check this, using the same functionality we used in st/ld to copy the values stored inside registry
-	unsigned char output[4];
-	unsigned int	carry;
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	unsigned char	acb;
 
-	// this is taking value in first registry * second registry
-	carry = char_add(vm->info[i].regs[PARAM1][3], vm->info[i].regs[PARAM2][3]);
-	output[3] = carry % 0xFF;
-	output[2] = (carry >> 8) + (carry = char_add(vm->info[i].regs[PARAM1][2], vm->info[i].regs[PARAM2][2]));
-	output[1] = (carry >> 8) + (carry = char_add(vm->info[i].regs[PARAM1][1], vm->info[i].regs[PARAM2][1]));
-	output[0] = (carry >> 8) + (carry = char_add(vm->info[i].regs[PARAM1][0], vm->info[i].regs[PARAM2][0]));
-
-	put_in_reg(vm->info[i].regs[PARAM3], output);
-	//output[0] = (vm->core[vm->info[i].start + vm->info[i].index] * 256) + (vm->core[vm->info[i].start + vm->info[i].index + 1] * 256);
-	// this below part is wrong, will have aneesh fix this up so the output works since its bit wise operands
-	//vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index + 2]][0] = output;
-	//vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index + 2]][1] = output;
-	//vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index + 2]][2] = output;
-	//vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index + 2]][3] = output;
+	vm->info[i].index += 2;
+	acb = vm->core[ACB];
+	if (!valid_acb(acb, 1, 1, 1))
+	{
+		ft_printf("Burn!\n");
+		return ;
+	}
+	get_offset(vm, i, ACB1(acb), &l1);
+	get_offset(vm, i, ACB2(acb), &l2);
+	get_offset(vm, i, ACB3(acb), &l3);
+	reg_add(l1, l2, l3);
 	ft_printf("add called");
+	//vm->info[i].index += 3;
 }
 
 /*
@@ -101,16 +137,24 @@ ADD .cor
 04 = output
 */
 
-void	vm_or(t_vm *vm, int i)
-{
-	(void)vm;
-	(void)i;
-	ft_printf("or called");
-}
-
 void	vm_sub(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	unsigned char	acb;
+
+	vm->info[i].index += 2;
+	acb = vm->core[ACB];
+	if (!valid_acb(acb, 1, 1, 1))
+	{
+		ft_printf("Burn!\n");
+		return ;
+	}
+	get_offset(vm, i, ACB1(acb), &l1);
+	get_offset(vm, i, ACB2(acb), &l2);
+	get_offset(vm, i, ACB3(acb), &l3);
+	reg_sub(l1, l2, l3);
 	ft_printf("sub called");
+	//vm->info[i].index += 3;
 }

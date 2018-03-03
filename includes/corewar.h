@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/26 16:12:28 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/02 16:02:13 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,23 @@ void	vm_sub(t_vm *vm, int i);
 
 void jumptable(int a, t_vm *vm, int i);
 int		valid_acb(unsigned char acb, int b1, int b2, int b3);
+
 /*
 ** read_bytes.c
 */
+
 int		*read_acb(unsigned char a);
 void	read_bytes(t_vm *vm, int i);
+
+/*
+** reg_ops.c
+*/
+
+void 	into_reg(unsigned int val, unsigned char *reg);
+int		reg_add(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
+int		reg_sub(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
+int		reg_xor(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
+int		reg_or(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
+int		reg_and(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
+
 #endif
