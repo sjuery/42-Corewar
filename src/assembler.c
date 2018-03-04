@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   assembler.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/21 19:13:16 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/03 19:16:47 by sjuery           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,12 @@ int					main(int argc, char **argv)
 	t_assembler *st;
 
 	st = ft_memalloc(sizeof(t_assembler));
-	st->arr = ft_memalloc(sizeof(t_instruction*)  * CHAMP_MAX_SIZE);
+	st->arr = ft_memalloc(sizeof(t_instruction*) * CHAMP_MAX_SIZE);
 	if (argc == 2 || argc == 3)
 	{
-		if (!(st->sfile = open(argv[argc - 1], O_RDONLY)))
+		if ((st->sfile = open(argv[argc - 1], O_RDONLY)) < 0 ||
+			argv[argc - 1][ft_strlen(argv[argc - 1]) - 2] != '.' ||
+			argv[argc - 1][ft_strlen(argv[argc - 1]) - 1] != 's')
 			handle_error("Error: Couldn't read given file", st);
 		if (!convert_to_hex(st))
 			handle_error("Error: Couldn't finish writting to Cor file", st);

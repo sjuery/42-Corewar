@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   asm.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/21 19:36:30 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/03 15:49:40 by sjuery           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct				s_assembler
 	int						offset;
 	int						instruct_offset;
 	int						instruct_num;
+	int						final_offset;
 	int						*prog_name;
 	int						*comment;
 	struct s_label			*label;

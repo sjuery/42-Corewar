@@ -1,7 +1,6 @@
-.name		"Octobre Rouge V4.2"
-.comment	"And the winner is ..."
+.name		"Octobre Rouge V4.2 longer"
+.comment	""
 
-		st	r1,19
 		ld	%0,r15
 		fork	%:xxx
 		zjmp	%:torp
@@ -35,8 +34,8 @@ zork4:		live	%42
 		st	r1,13
 		ld	%0,r15
 zork4_:		live	%42
-		zjmp	%-5		
-			
+		zjmp	%-5	
+	
 back_wall:      live	%42	
 		st	r8,-400
 		st	r8,-400

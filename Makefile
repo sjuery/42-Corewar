@@ -40,7 +40,7 @@ $(NAME): $(OBJ)
 
 ./objects/%.o: ./src/%.c
 	mkdir -p objects
-	gcc $(IFLAGS) -c $< -o $@
+	gcc $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 clean:
 	make fclean -C libft/

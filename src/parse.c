@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ihodge <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: ihodge <ihodge@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 18:03:50 by ihodge            #+#    #+#             */
-/*   Updated: 2018/02/23 17:15:07 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/03 15:49:53 by sjuery           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ static void	create_acb(char **instruction, int i, t_assembler *st)
 	int param_type = 0;
 
 	st->offset++;
-	while (j <= g_optab[i].params) 
+	while (j <= g_optab[i].params)
 	{
 		param_type = parameter_type(instruction[j], i, j - 1, st);
 		st->offset += param_type;
@@ -126,9 +126,9 @@ static void	create_acb(char **instruction, int i, t_assembler *st)
 		if (param_type == 2 && !(instruction[j][0] == DIRECT_CHAR))
 			param_type++;
 		j == 1 ? acb = param_type << 6 : 0;
-		j == 2 ? param_type = param_type << 4 : 0; 
+		j == 2 ? param_type = param_type << 4 : 0;
 		j == 2 ? acb = param_type | acb : 0;
-		j == 3 ? param_type = param_type << 2 : 0; 
+		j == 3 ? param_type = param_type << 2 : 0;
 		j == 3 ? acb = param_type | acb: 0;
 		j++;
 	}
@@ -170,7 +170,7 @@ void	parse_instructions(t_assembler *st)
 	int i = 0;
 	char **instruction;
 	char *name;
-	
+
 	name = NULL;
 	if (!ft_iswhitespace(st->line[0]))
 	{
@@ -196,4 +196,5 @@ void	parse_instructions(t_assembler *st)
 	if (name)
 		save_labels(&st->label, name, st->offset);
 	convert_instruction(instruction, st);
+	st->final_offset = st->offset;
 }
