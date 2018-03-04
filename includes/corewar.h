@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/02 16:02:13 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/03 13:21:57 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define ACB1(a) ((a >> 6) % 4)
 # define ACB2(a) ((a >> 4) % 4)
 # define ACB3(a) ((a >> 2) % 4)
+# define ACB			vm->info[i].start + vm->info[i].index - 1
 
 /*
 ** typedef struct					s_header
@@ -99,6 +100,8 @@ void	vm_xor(t_vm *vm, int i);
 void	vm_aff(t_vm *vm, int i);
 void	vm_add(t_vm *vm, int i);
 void	vm_sub(t_vm *vm, int i);
+
+void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l);
 
 void jumptable(int a, t_vm *vm, int i);
 int		valid_acb(unsigned char acb, int b1, int b2, int b3);
