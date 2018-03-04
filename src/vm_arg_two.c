@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/03 15:08:02 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/04 02:35:46 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 	*l = NULL;
 	if (acb == 1)
 	{
-		*l = vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index + 1]];
+		*l = vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index]];
 		vm->info[i].index += 1;
 	}
 	else if (acb == 2)
@@ -56,7 +56,7 @@ void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 	}
 	else if (acb == 3)
 	{
-		*l = &vm->core[indirect(vm, i, vm->core[vm->info[i].start + vm->info[i].index - 2])];
+		*l = &vm->core[vm->info[i].start + vm->info[i].index + indirect(vm, i, vm->core[vm->info[i].start + vm->info[i].index - 2])];
 		vm->info[i].index += 2;
 	}
 }
