@@ -12,12 +12,18 @@
 
 NAME	= corewar
 ASMNAME = asm
+DASMNAME = dasm
 
-FILES	= main parse_file ncurses vm_arg_one vm_arg_two vm_arg_three read_bytes \
-			reg_ops
-ASMFILES= assembler convert_to_hex op parse
+FILES	= 	vm/main vm/parse_file vm/ncurses vm/vm_arg_one vm/vm_arg_two \
+			vm/vm_arg_three vm/read_bytes vm/reg_ops
+ASMFILES= 	assembler/assembler assembler/convert_to_hex assembler/op \
+			assembler/parse
+DASMFILES= 	dassembler/disassembler dassembler/convert_to_asmbly dassembler/op \
+			dassembler/parse
 ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
 ASMOBJ 	= $(addprefix ./objects/, $(ASMSRC:.c=.o))
+DASMSRC	= $(patsubst %, %.c, $(DASMFILES))
+DASMOBJ = $(addprefix ./objects/, $(DASMSRC:.c=.o))
 SRC		= $(patsubst %, %.c, $(FILES))
 OBJ 	= $(addprefix ./objects/, $(SRC:.c=.o))
 CFLAGS	= -Wall -Wextra -Werror -g
@@ -26,7 +32,12 @@ LFLAGS	= -L libft -lft -lncurses
 
 .SILENT:
 
-all: $(ASMNAME) $(NAME)
+all: $(ASMNAME) $(NAME) $(DASMNAME)
+
+$(DASMNAME): $(DASMOBJ)
+	make -C libft/
+	gcc $(CFLAGS) $(LFLAGS) $(IFLAGS) $^ -o $(DASMNAME)
+	printf '\033[32m[ ✔ ] %s\n\033[0m' "Created DASM"
 
 $(ASMNAME): $(ASMOBJ)
 	make -C libft/
