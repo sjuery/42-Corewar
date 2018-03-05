@@ -57,12 +57,16 @@ clean:
 	make fclean -C libft/
 	/bin/rm -f *.o
 	/bin/rm -rf ./objects/*.o
+	/bin/rm -rf ./objects/assembler/*.o
+	/bin/rm -rf ./objects/dassembler/*.o
+	/bin/rm -rf ./objects/vm/*.o
 	printf '\033[31m[ ✔ ] %s\n\033[0m' "Cleaned Corewar & ASM"
 
 fclean: clean
 	make fclean -C libft/
 	/bin/rm -f $(NAME)
 	/bin/rm -f $(ASMNAME)
+	/bin/rm -f $(DASMNAME)
 	printf '\033[31m[ ✔ ] %s\n\033[0m' "Fcleaned Corewar & ASM"
 
 re: fclean all
