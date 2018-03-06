@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/04 02:35:46 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/05 18:06:52 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,43 @@
 
 void	vm_and(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	unsigned char	acb;
+
+	vm->info[i].index+=2;
+	acb = vm->core[ACB];
+	if (ACB3(acb) != 1)
+	{
+		ft_printf("Burn!\n");
+		return ;
+	}
+	get_offset(vm, i, ACB1(acb), &l1);
+	get_offset(vm, i, ACB2(acb), &l2);
+	get_offset(vm, i, ACB3(acb), &l3);
+	reg_and(l1, l2, l3);
 	ft_printf("and called");
 }
 
 void	vm_xor(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	unsigned char	acb;
+
+	vm->info[i].index+=2;
+	acb = vm->core[ACB];
+	if (ACB3(acb) != 1)
+	{
+		ft_printf("Burn!\n");
+		return ;
+	}
+	get_offset(vm, i, ACB1(acb), &l1);
+	get_offset(vm, i, ACB2(acb), &l2);
+	get_offset(vm, i, ACB3(acb), &l3);
+	reg_xor(l1, l2, l3);
 	ft_printf("xor called");
 }
 

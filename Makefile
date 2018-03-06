@@ -14,19 +14,24 @@ NAME	= corewar
 ASMNAME = asm
 DASMNAME = dasm
 
-FILES	= 	vm/main vm/parse_file vm/ncurses vm/vm_arg_one vm/vm_arg_two \
-			vm/vm_arg_three vm/read_bytes vm/reg_ops
-ASMFILES= 	assembler/assembler assembler/convert_to_hex assembler/op \
-			assembler/parse
-DASMFILES= 	dassembler/disassembler dassembler/convert_to_asmbly dassembler/op \
-			dassembler/parse
-ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
-ASMOBJ 	= $(addprefix ./objects/, $(ASMSRC:.c=.o))
-DASMSRC	= $(patsubst %, %.c, $(DASMFILES))
-DASMOBJ = $(addprefix ./objects/, $(DASMSRC:.c=.o))
-SRC		= $(patsubst %, %.c, $(FILES))
-OBJ 	= $(addprefix ./objects/, $(SRC:.c=.o))
-CFLAGS	= -Wall -Wextra -Werror -g
+FILES	= 	main parse_file ncurses vm_arg_one vm_arg_two \
+			vm_arg_three read_bytes reg_ops
+ASMFILES= 	assembler convert_to_hex op \
+			parse
+DASMFILES= 	disassembler convert_to_asmbly op \
+			parse
+#ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
+#ASMOBJ 	= $(addprefix ./objects/, $(ASMSRC:.c=.o))
+#DASMSRC	= $(patsubst %, %.c, $(DASMFILES))
+#DASMOBJ = $(addprefix ./objects/, $(DASMSRC:.c=.o))
+SRC		= $(addprefix ./src/vm/, $(patsubst %, %.c, $(FILES)))
+OBJ 	= $(addprefix ./objects/vm/, $(patsubst %, %.o, $(FILES)))
+ASMSRC	= $(addprefix ./src/assembler/, $(patsubst %, %.c, $(ASMFILES)))
+ASMOBJ 	= $(addprefix ./objects/assembler/, $(patsubst %, %.o, $(ASMFILES)))
+DASMSRC		= $(addprefix ./src/dassembler/, $(patsubst %, %.c, $(DASMFILES)))
+DASMOBJ 	= $(addprefix ./objects/dassembler/, $(patsubst %, %.o, $(DASMFILES)))
+#CFLAGS	= -Wall -Wextra -Werror -g
+CFLAGS	= -g
 IFLAGS	= -I libft/includes -I includes
 LFLAGS	= -L libft -lft -lncurses
 
@@ -51,6 +56,9 @@ $(NAME): $(OBJ)
 
 ./objects/%.o: ./src/%.c
 	mkdir -p objects
+	mkdir -p objects/vm
+	mkdir -p objects/assembler
+	mkdir -p objects/dassembler
 	gcc $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 clean:
