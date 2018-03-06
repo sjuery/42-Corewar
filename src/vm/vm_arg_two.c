@@ -113,6 +113,7 @@ void	vm_or(t_vm *vm, int i)
 
 void	vm_aff(t_vm *vm, int i)
 {
+	vm->info[i].index += 3;
 	(void)vm;
 	(void)i;
 	ft_printf("aff called");

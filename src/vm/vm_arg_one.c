@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/07 17:43:29 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/05 18:56:53 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,37 @@
 
 void	vm_live(t_vm *vm, int i)
 {
+	//this if statement is fucking things up. reseting index to 0 even though index doesn't pass the prog_size
+	//if (vm->info[i].index > vm->info[i].head.prog_size) // double check, if index passes prog_size, we reduce to 0
+	//	vm->info[i].index = 0;
 	vm->info[i].index += 5;
-	if (vm->info[i].index > vm->info[i].head.prog_size) // double check, if index passes prog_size, we reduce to 0
-		vm->info[i].index = 0;
 	vm->info[i].live++;
+	vm->info[i].alive = 1;
 	ft_printf("live called, num of lives called %i", vm->info[i].live);
 }
 
 void	vm_zjmp(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
-	ft_printf("zjmp called");
+	int pc;
+	int first_byte;
+	int second_byte;
+
+	if (!vm->info[i].carry)
+	{
+		vm->info[i].index += 3;
+		return ;
+	}
+	first_byte = vm->core[vm->info[i].start + vm->info[i].index + 1];
+	second_byte = vm->core[vm->info[i].start + vm->info[i].index + 2];
+	first_byte = first_byte << 8;
+	pc = first_byte | second_byte;
+	//two's complement; do we only need to do this if the sign bit is 1?
+	pc = pc ^ 0xFFFF;
+	pc++;
+	pc *= -1;
+	vm->info[i].index += pc;
+	vm->info[i].carry = 0;
+	ft_printf("zjmp called;");
 }
 
 /*
@@ -41,8 +60,21 @@ if there is a index value, its 2 bytes for direct, otherwise its 4
 
 void	vm_sti(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
+	int acb;
+	int param;
+
+	acb = vm->info[i].body[vm->info[i].index + 1];//might have to read acb from core instead of body
+	vm->info[i].index += 3;//opcode, acb, reg
+	param = acb >> 4 & 3;
+	if (param == T_REG)
+		vm->info[i].index += 1;
+	else
+		vm->info[i].index += 2;
+	param = acb >> 2 & 3;
+	if (param == T_REG)
+		vm->info[i].index += 1;
+	else
+		vm->info[i].index += 2;
 	ft_printf("sti called");
 }
 
