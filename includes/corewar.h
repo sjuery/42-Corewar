@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/05 14:22:28 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/06 15:20:16 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	vm_aff(t_vm *vm, int i);
 void	vm_add(t_vm *vm, int i);
 void	vm_sub(t_vm *vm, int i);
 
-void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l);
+void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l); // maybe concatenate acb pair and whether or not it' uses idx mod
 
 void jumptable(int a, t_vm *vm, int i);
 int		valid_acb(unsigned char acb, int b1, int b2, int b3);
