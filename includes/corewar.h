@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/02 16:02:13 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/05 14:22:28 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,16 @@ typedef struct		s_io
 	char			header[HEADER_SIZE]; // store stuff being read
 	char			body[CHAMP_MAX_SIZE + 1];
 	int				index; // to track where the instruction reading is currently at
-	int				alive; // this is to check if the process is alive or not
+	int				alive; // this is to check if the process has called live every CYCLE_TO_DIE cycles
+	int				executing;//will be false if process hasn't called live in CYCLE_TO_DIE cycles/ game ends when all processes no longer executing
 	int				live; // # of time it calls live
 	unsigned char	regs[REG_NUMBER][REG_SIZE]; // registers, # of reg + its size
 	unsigned char	pc[REG_SIZE]; // program counter
 	int				carry; // carry flag
 	int				location; // load location
 	int				start; // start location on the core
+	int				cycles;//each process has to keep track of how many cycles it's been executing
+	int				wait_cycle;//each instruction has different amount of cycles it has to wait before executing
 }					t_io;
 
 typedef struct		s_vm
@@ -67,8 +70,12 @@ typedef struct		s_vm
 	char			*players[4]; // player names
  	int				num_players; // number of player
 	unsigned char	core[4096]; // the vm board
+	int				cycles;//might change this to every process having keeping track of their own cycles
+
 	size_t			dump_cycle;
 }					t_vm;
+
+void				print_core(unsigned char *test, int i);
 
 /*
 ** parse_file.c

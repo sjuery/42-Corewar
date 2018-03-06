@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 16:52:00 by anazar            #+#    #+#             */
-/*   Updated: 2018/02/07 19:04:09 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/05 18:56:58 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int		read_input(int fd, t_io *info)
 	if ((info->head.prog_size = read(fd, info->body, CHAMP_MAX_SIZE)) <= 0)
 		return (0);
 	info->body[info->head.prog_size] = 0;
-	info->alive = 1;
+	//info->alive = 1;//info->executing = 1 instead of assuming program will call live
+	info->executing = 1;
 	return (1);
 }

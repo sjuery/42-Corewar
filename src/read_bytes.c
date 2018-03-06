@@ -6,11 +6,12 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/24 13:54:15 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/05 17:31:00 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+#include "asm.h"
 
 void printbits(unsigned char octet)
 {
@@ -64,9 +65,12 @@ int		*read_acb(unsigned char a)
 	return (ret);
 }
 
-void	read_bytes(t_vm *vm, int i)
+//define MAX_PROCESSES 1024
+
+/*void	read_bytes(t_vm *vm, int i)
 {
-	while (++i < vm->process_count)
+	//while (++i < vm->process_count)
+	while (++i < 1024)
 	{
 		if (vm->info[i].alive >= 1)
 		{
@@ -79,7 +83,92 @@ void	read_bytes(t_vm *vm, int i)
 	// that will kill processes, etc. and than call read_bytes again
 	// when we execute game rule, if all processes are dead, instead of going back to read_bytes
 	// it will go to game over to display winner
+}*/
+
+/*void	reset_alive(t_vm *vm)//should only be called for a specific process when it has reached CYCLES_TO_DIE cycles
+{
+	int i = 0;
+
+	//ft_printf("\nreset alive\n");
+	while (i <= 1023)
+	{
+		if (vm->info[i].alive == 0)
+			vm->info[i].executing = 0;
+		vm->info[i].alive = 0;
+		i++;
+	}
+}*/
+
+void	reset_alive(t_vm *vm, int i)
+{
+	//ft_printf("\nreset alive\n");
+	if (vm->info[i].alive == 0)
+		vm->info[i].executing = 0;
+	vm->info[i].alive = 0;
 }
 
+void	check_executing_processes(t_vm *vm, int *game_end)
+{//this function checks if all processes have finished executing
+	int i;
 
+	i = 0;
+	while (i < 1022)
+	{
+		if (vm->info[i].executing == 1)
+			*game_end = 0;
+		i++;
+	}
+}
+
+//question: can a process execute other processes instructions? or can they only execute their own and their parents?
+//implement decrease of CYCLE_TO_DIE
+void	read_bytes(t_vm *vm, int i)
+{
+	int game_end;
+	int op;
+
+	game_end = 1;
+	while (1)//game engine
+	{
+		i = 1021;// processes 1022, 1023 overflow	
+		while (i >= 0)//must execute processes from the last born to first
+		{
+			if (vm->info[i].executing == 1)
+			{
+				//ft_printf("\nProcess number[%i], Byte Read [%#0.2hhx], Index [%i]", i, vm->core[vm->info[i].start + vm->info[i].index], vm->info[i].index);
+				if (vm->info[i].start + vm->info[i].index > 4095)//wrapping around the core
+					vm->info[i].index = vm->info[i].start * -1;
+				op = vm->core[vm->info[i].start + vm->info[i].index];
+				if (op > 0 && vm->info[i].wait_cycle == g_optab[op - 1].cycles)
+				{
+					jumptable(op, vm, i);
+					ft_putchar('\n');
+					vm->info[i].wait_cycle = 0;
+				}
+				else if (op > 0)
+					vm->info[i].wait_cycle++;
+				else//not an intruction, increase program counter/index
+					vm->info[i].index++;
+				vm->info[i].cycles++;
+				if (vm->info[i].cycles % CYCLE_TO_DIE == 0)//if process is alive (has called live) -->reset alive; else, it can no longer execute
+					reset_alive(vm, i);
+			}
+			i--;
+		}
+		vm->cycles++;
+		ft_printf("cycle [%i]\n", vm->cycles);
+		check_executing_processes(vm, &game_end);//sets flag for whether the game will end
+		if (game_end)//this means all processes have stopped executing
+			break ;
+		game_end = 1;
+		//else
+		//	print_core(vm->core, -1);//preferably, here we would update ncurses and display
+	}
+}
+
+	// execute game rules, check the current cycle, check to see if we need to kill stuff
+	// if we dont need to kill stuff, call read_bytes again, otherwise, call function
+	// that will kill processes, etc. and than call read_bytes again
+	// when we execute game rule, if all processes are dead, instead of going back to read_bytes
+	// it will go to game over to display winner
 // ./corewar resources/champs/examples/zork.cor resources/champs/examples/bigzork.cor resources/champs/examples/helltrain.cor resources/champs/examples/turtle.cor

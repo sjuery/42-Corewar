@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/02 16:00:06 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/04 15:55:49 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,24 @@
 
 void	vm_and(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
+	int acb;
+	int param;
+
+	acb = vm->core[vm->info[i].start + vm->info[i].index + 1];
+	vm->info[i].index += 3;//opcode, acd, reg
+	param = acb >> 6 & 3;
+	if (param == T_REG)
+		vm->info[i].index += 1;
+	else
+		vm->info[i].index += 2;
+	param == T_DIR ? vm->info[i].index += 2: 0;
+	param = acb >> 4 & 3;
+	if (param == T_REG)
+		vm->info[i].index += 1;
+	else
+		vm->info[i].index += 2;
+	param == T_DIR ? vm->info[i].index += 2: 0;
+	vm->info[i].carry = 1;
 	ft_printf("and called");
 }
 
@@ -92,6 +108,7 @@ void	vm_or(t_vm *vm, int i)
 
 void	vm_aff(t_vm *vm, int i)
 {
+	vm->info[i].index += 3;
 	(void)vm;
 	(void)i;
 	ft_printf("aff called");

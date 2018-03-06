@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/02 16:54:34 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/05 18:57:07 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ void 	init_vm(t_vm *vm)
 	x = 0;
 	vm->process_count = 0;
 	ft_bzero(vm->core, 4096);
+	ft_printf("vm->num_players [%i]\n", vm->num_players);
 	while (++i < vm->num_players)
 	{
 		vm->process_count++;
@@ -117,7 +118,6 @@ void 	init_vm(t_vm *vm)
 		write_info(&vm->info[i], fd, &x, vm->core);
 		vm->info[i].location = i * (4096 / vm->num_players);
 		vm->info[i].start = vm->info[i].location;
-		ft_printf("\n location %i \n", vm->info[i].location);
 		x += ((4096 / vm->num_players) - vm->info[i].head.prog_size);
 	}
 }
@@ -161,6 +161,7 @@ int		main(int ac, char **av)
 		error();
 	init_players(ac, av, &vm);
 	init_vm(&vm);
+	ft_printf("prog size: [%i]\n", vm.info[0].head.prog_size);
 	//init_curses(&vm);
 	print_core(vm.core, -1);
 	read_bytes(&vm, -1);
