@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   convert_to_hex.c                                   :+:      :+:    :+:   */
+/*   convert_to_asmbly.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sjuery <sjuery@student.42.fr>              +#+  +:+       +#+        */
+/*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 19:55:29 by sjuery            #+#    #+#             */
-/*   Updated: 2018/02/23 17:15:09 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/05 13:19:00 by sjuery           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "asm.h"
+#include "dasm.h"
 
 //endiannesssssss
 //somehow im 16 bytes off, actual assembler printing 2192 bytes, I'm printing 2176 bytes (prog_name length + comment_length) for header + corewar_exec_magic (+ 4 bytes); prog_name is actual header is 138 bytes
 //comments are 2154 bytes
 //labels can be 4 bytes or 2 (index)
-static void convert_name(t_assembler *st)
+static void convert_name(t_disassembler *st)
 {
     int name_len;
 	int i = 0;
@@ -35,7 +35,7 @@ static void convert_name(t_assembler *st)
     }
 }
 
-static void convert_description(t_assembler *st)
+static void convert_description(t_disassembler *st)
 {
     int desc_len;
 	int i = 0;
@@ -55,16 +55,16 @@ static void convert_description(t_assembler *st)
     }
 }
 
-void		print_sp_nl(int *y)
+void		print_sp_nl(t_disassembler *st, int *y)
 {
 	if (*y % 2 == 0 && *y % 16)
-		ft_putchar(' ');
+		ft_dprintf(st->corefile, " ");
 	if (*y % 16 == 0)
-		ft_putchar('\n');
+		ft_dprintf(st->corefile, "\n");
 	(*y)++;
 }
 
-void		break_shit_up(int size, int res, int *y)
+void		break_shit_up(t_disassembler *st, int size, int res, int *y)
 {
 	int i;
 	int byte;
@@ -74,45 +74,52 @@ void		break_shit_up(int size, int res, int *y)
 	while (i >= 0)
 	{
 		byte = res >> (i * 8);
-		ft_printf("%02hhx", byte);
-		print_sp_nl(y);
+		ft_dprintf(st->corefile, "%02hhx", byte);
+		print_sp_nl(st, y);
 		i--;
 	}
 }
 
-void		print_header(t_assembler *st, int *y)
+void		print_header(t_disassembler *st, int *y)
 {
 	int i = 0;
 	int j = 0;
 
-	ft_putstr("00ea 83f3 ");
+	ft_dprintf(st->corefile, "00ea 83f3 ");
 	while (i < PROG_NAME_LENGTH)
 	{
-		ft_printf("%02x", st->prog_name[i]);
-		print_sp_nl(y);
+		ft_dprintf(st->corefile, "%02x", st->prog_name[i]);
+		print_sp_nl(st, y);
 		i++;
 	}
-	while (i < PROG_NAME_LENGTH + 8)//random ass bytes outta nowhere
+	while (i < PROG_NAME_LENGTH + 8)//8 bytes for the size in bytes of commands
 	{
-		ft_printf("%02x", 0);
-		print_sp_nl(y);
+		if(1 >= PROG_NAME_LENGTH + 8 - i)
+		{
+			if(ft_strlen(ft_itoa_base(st->final_offset, 16, 1)) < 2)
+				ft_dprintf(st->corefile, "%02x", 0);
+			ft_dprintf(st->corefile, "%04x", st->final_offset);
+		}
+		else if (1 < PROG_NAME_LENGTH + 7 - i)
+			ft_dprintf(st->corefile, "%02x", 0);
+		print_sp_nl(st, y);
 		i++;
 	}
 	while (j < COMMENT_LENGTH)
 	{
-		ft_printf("%02x", st->comment[j]);
-		print_sp_nl(y);
+		ft_dprintf(st->corefile, "%02x", st->comment[j]);
+		print_sp_nl(st, y);
 		j++;
 	}
 	while (j < COMMENT_LENGTH + 4)//?????????
 	{
-		ft_printf("%02x", 0);
-		print_sp_nl(y);
+		ft_dprintf(st->corefile, "%02x", 0);
+		print_sp_nl(st, y);
 		j++;
 	}
 }
 
-void		print_parameters(t_assembler *st, int i, int *y)
+void		print_parameters(t_disassembler *st, int i, int *y)
 {
 	int j;
 	int res;
@@ -124,26 +131,26 @@ void		print_parameters(t_assembler *st, int i, int *y)
 		{
 			res = ft_atoi(st->arr[i]->params[j] + 1);
 			if (g_optab[st->arr[i]->op - 1].index)
-				break_shit_up(IND_SIZE, res, y);
+				break_shit_up(st, IND_SIZE, res, y);
 			else
-				break_shit_up(DIR_SIZE, res, y);
+				break_shit_up(st, DIR_SIZE, res, y);
 		}
 		else if (check_param_type(st->arr[i]->params[j], st->arr[i]->op - 1, j) == REG_CODE)
 		{
 			res = ft_atoi(st->arr[i]->params[j] + 1);
-			ft_printf("%02x", res);
-			print_sp_nl(y);
+			ft_dprintf(st->corefile, "%02x", res);
+			print_sp_nl(st, y);
 		}
 		else
 		{
 			res = ft_atoi(st->arr[i]->params[j]);
-			break_shit_up(IND_SIZE, res, y);
+			break_shit_up(st, IND_SIZE, res, y);
 		}
 		j++;
 	}
 }
 
-void		print_shit(t_assembler *st)
+void		print_shit(t_disassembler *st)
 {
 	int i;
 	int y;
@@ -153,12 +160,12 @@ void		print_shit(t_assembler *st)
 	print_header(st, &y);
 	while (st->arr[i])
 	{
-		ft_printf("%02x", st->arr[i]->op);
-		print_sp_nl(&y);
+		ft_dprintf(st->corefile, "%02x", st->arr[i]->op);
+		print_sp_nl(st, &y);
 		if (st->arr[i]->acb)
 		{
-			ft_printf("%02x", st->arr[i]->acb);
-			print_sp_nl(&y);
+			ft_dprintf(st->corefile, "%02x", st->arr[i]->acb);
+			print_sp_nl(st, &y);
 		}
 		print_parameters(st, i, &y);
 		i++;
@@ -167,7 +174,7 @@ void		print_shit(t_assembler *st)
 
 //am I accounting for labels with instructions on the same line and next line?
 
-static void	set_label_addresses(t_assembler *st)
+static void	set_label_addresses(t_disassembler *st)
 {
 	t_label_ref *tmp;
 	t_label *tmp_label;
@@ -189,11 +196,9 @@ static void	set_label_addresses(t_assembler *st)
 	}
 }
 
-int			convert_to_hex(t_assembler *st)
+int			convert_to_hex(t_disassembler *st)
 {
-	int		file_size;
 	char	*line;
-
 	while(get_next_line(st->sfile, &st->line))
 	{
 		if (ft_strstr(st->line, NAME_CMD_STRING))

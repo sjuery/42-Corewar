@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   asm.h                                              :+:      :+:    :+:   */
+/*   dasm.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/03/04 20:25:14 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/05 13:19:24 by sjuery           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 # include "libft.h"
 # include "op.h"
 
-typedef struct				s_assembler
+typedef struct				s_disassembler
 {
     int                     i;
 	int						sfile;
@@ -45,7 +45,7 @@ typedef struct				s_assembler
 	struct s_label			*label;
 	struct s_label_ref		*label_ref;
 	struct s_instruction	**arr;
-}							t_assembler;
+}							t_disassembler;
 
 typedef struct				s_label
 {
@@ -84,9 +84,9 @@ typedef struct				s_op
 }							t_op;
 
 t_op						g_optab[17];
-void						parse_instructions(t_assembler *st);
-int			                convert_to_hex(t_assembler *st);
+void						parse_instructions(t_disassembler *st);
+int			                convert_to_hex(t_disassembler *st);
 int							check_param_type(char *param, int i, int param_num);
-void						print_shit(t_assembler *st);
-void						handle_error(char *error_type, t_assembler *st);
+void						print_shit(t_disassembler *st);
+void						handle_error(char *error_type, t_disassembler *st);
 #endif

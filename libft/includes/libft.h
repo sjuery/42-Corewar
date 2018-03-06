@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
+/*   By: anazar <anazar@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/05 10:14:28 by anazar            #+#    #+#             */
-/*   Updated: 2018/02/25 17:23:37 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/03 19:17:07 by sjuery           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <sys/types.h>
 # include <sys/uio.h>
 # include <unistd.h>
+# include <errno.h>
 # include <fcntl.h>
 # include <stdio.h>
 # include <sys/stat.h>
@@ -212,6 +213,8 @@ long long			ft_atoll(const char *str);
 size_t				ft_atoz(const char *str);
 
 int					ft_general_validate(char *format, char *str);
+
+size_t				ft_numcount(int n);
 
 /*
 ** printf

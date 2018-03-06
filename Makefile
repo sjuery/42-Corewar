@@ -12,21 +12,37 @@
 
 NAME	= corewar
 ASMNAME = asm
+DASMNAME = dasm
 
-FILES	= main parse_file ncurses vm_arg_one vm_arg_two vm_arg_three read_bytes \
-			reg_ops
-ASMFILES= assembler convert_to_hex op parse
-ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
-ASMOBJ 	= $(addprefix ./objects/, $(ASMSRC:.c=.o))
-SRC		= $(patsubst %, %.c, $(FILES))
-OBJ 	= $(addprefix ./objects/, $(SRC:.c=.o))
-CFLAGS	= -Wall -Wextra -Werror -g
+FILES	= 	main parse_file ncurses vm_arg_one vm_arg_two \
+			vm_arg_three read_bytes reg_ops
+ASMFILES= 	assembler convert_to_hex op \
+			parse
+DASMFILES= 	disassembler convert_to_asmbly op \
+			parse
+#ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
+#ASMOBJ 	= $(addprefix ./objects/, $(ASMSRC:.c=.o))
+#DASMSRC	= $(patsubst %, %.c, $(DASMFILES))
+#DASMOBJ = $(addprefix ./objects/, $(DASMSRC:.c=.o))
+SRC		= $(addprefix ./src/vm/, $(patsubst %, %.c, $(FILES)))
+OBJ 	= $(addprefix ./objects/vm/, $(patsubst %, %.o, $(FILES)))
+ASMSRC	= $(addprefix ./src/assembler/, $(patsubst %, %.c, $(ASMFILES)))
+ASMOBJ 	= $(addprefix ./objects/assembler/, $(patsubst %, %.o, $(ASMFILES)))
+DASMSRC		= $(addprefix ./src/dassembler/, $(patsubst %, %.c, $(DASMFILES)))
+DASMOBJ 	= $(addprefix ./objects/dassembler/, $(patsubst %, %.o, $(DASMFILES)))
+#CFLAGS	= -Wall -Wextra -Werror -g
+CFLAGS	= -g
 IFLAGS	= -I libft/includes -I includes
 LFLAGS	= -L libft -lft -lncurses
 
 .SILENT:
 
-all: $(ASMNAME) $(NAME)
+all: $(ASMNAME) $(NAME) $(DASMNAME)
+
+$(DASMNAME): $(DASMOBJ)
+	make -C libft/
+	gcc $(CFLAGS) $(LFLAGS) $(IFLAGS) $^ -o $(DASMNAME)
+	printf '\033[32m[ ✔ ] %s\n\033[0m' "Created DASM"
 
 $(ASMNAME): $(ASMOBJ)
 	make -C libft/
@@ -40,18 +56,25 @@ $(NAME): $(OBJ)
 
 ./objects/%.o: ./src/%.c
 	mkdir -p objects
-	gcc $(IFLAGS) -c $< -o $@
+	mkdir -p objects/vm
+	mkdir -p objects/assembler
+	mkdir -p objects/dassembler
+	gcc $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 clean:
 	make fclean -C libft/
 	/bin/rm -f *.o
 	/bin/rm -rf ./objects/*.o
+	/bin/rm -rf ./objects/assembler/*.o
+	/bin/rm -rf ./objects/dassembler/*.o
+	/bin/rm -rf ./objects/vm/*.o
 	printf '\033[31m[ ✔ ] %s\n\033[0m' "Cleaned Corewar & ASM"
 
 fclean: clean
 	make fclean -C libft/
 	/bin/rm -f $(NAME)
 	/bin/rm -f $(ASMNAME)
+	/bin/rm -f $(DASMNAME)
 	printf '\033[31m[ ✔ ] %s\n\033[0m' "Fcleaned Corewar & ASM"
 
 re: fclean all

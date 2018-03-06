@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anazar <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: anazar <anazar@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/07/13 01:08:51 by anazar            #+#    #+#             */
-/*   Updated: 2017/09/27 13:53:59 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/03 23:05:31 by sjuery           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	resize(int fd, t_gnl *str)
 	char	*to_del;
 
 	ft_bzero(tmp, BUFF_SIZE + 1);
-	str->bytes_read = read(fd, tmp, BUFF_SIZE);
+	if((str->bytes_read = read(fd, tmp, BUFF_SIZE)) < 0)
+		exit(-1);
 	to_del = str->str;
 	str->str = ft_strjoin(str->str, tmp);
 	free(to_del);

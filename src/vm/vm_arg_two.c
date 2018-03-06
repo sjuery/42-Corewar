@@ -6,50 +6,67 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/04 15:55:49 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/05 18:06:52 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-#define ACB			vm->info[i].start + vm->info[i].index - 1
 #define PARAM1 		vm->info[i].start + vm->info[i].index
 #define PARAM2		vm->info[i].start + vm->info[i].index + 1
 #define PARAM3		vm->info[i].start + vm->info[i].index + 2
 
 void	vm_and(t_vm *vm, int i)
 {
-	int acb;
-	int param;
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	unsigned char	acb;
 
-	acb = vm->core[vm->info[i].start + vm->info[i].index + 1];
-	vm->info[i].index += 3;//opcode, acd, reg
-	param = acb >> 6 & 3;
-	if (param == T_REG)
-		vm->info[i].index += 1;
-	else
-		vm->info[i].index += 2;
-	param == T_DIR ? vm->info[i].index += 2: 0;
-	param = acb >> 4 & 3;
-	if (param == T_REG)
-		vm->info[i].index += 1;
-	else
-		vm->info[i].index += 2;
-	param == T_DIR ? vm->info[i].index += 2: 0;
-	vm->info[i].carry = 1;
+	vm->info[i].index+=2;
+	acb = vm->core[ACB];
+	if (ACB3(acb) != 1)
+	{
+		ft_printf("Burn!\n");
+		return ;
+	}
+	get_offset(vm, i, ACB1(acb), &l1);
+	get_offset(vm, i, ACB2(acb), &l2);
+	get_offset(vm, i, ACB3(acb), &l3);
+	reg_and(l1, l2, l3);
 	ft_printf("and called");
 }
 
 void	vm_xor(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	unsigned char	acb;
+
+	vm->info[i].index+=2;
+	acb = vm->core[ACB];
+	if (ACB3(acb) != 1)
+	{
+		ft_printf("Burn!\n");
+		return ;
+	}
+	get_offset(vm, i, ACB1(acb), &l1);
+	get_offset(vm, i, ACB2(acb), &l2);
+	get_offset(vm, i, ACB3(acb), &l3);
+	reg_xor(l1, l2, l3);
 	ft_printf("xor called");
 }
 
-int		indirect(t_vm *vm, int i)
+int		indirect(t_vm *vm, int i, unsigned char opcode)
 {
-	return (vm->core[vm->info[i].start + vm->info[i].index] * 0x100 + vm->core[vm->info[i].start + vm->info[i].index + 1]);
+	if (opcode == 0x2 || opcode == 0x3 ||
+		opcode == 0x9 || opcode == 0xA || opcode == 0xC)
+		return ((vm->core[vm->info[i].start + vm->info[i].index] * 0x100 +
+				vm->core[vm->info[i].start + vm->info[i].index + 1]) % IDX_MOD);
+	else
+		return (vm->core[vm->info[i].start + vm->info[i].index] * 0x100 +
+				vm->core[vm->info[i].start + vm->info[i].index + 1]);
 }
 
 void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l)
@@ -57,7 +74,7 @@ void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 	*l = NULL;
 	if (acb == 1)
 	{
-		*l = vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index + 1]];
+		*l = vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index]];
 		vm->info[i].index += 1;
 	}
 	else if (acb == 2)
@@ -67,22 +84,9 @@ void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 	}
 	else if (acb == 3)
 	{
-		*l = &vm->core[indirect(vm, i)];
+		*l = &vm->core[vm->info[i].start + vm->info[i].index + indirect(vm, i, vm->core[vm->info[i].start + vm->info[i].index - 2])];
 		vm->info[i].index += 2;
 	}
-}
-
-void get_offsets(t_vm *vm, int i, unsigned char **l1, unsigned char **l2, unsigned char **l3)
-{
-	unsigned char	acb;
-
-	acb = vm->core[ACB];
-	if (ACB1(acb))
-		get_offset(vm, i, ACB1(acb), l1);
-	if (ACB2(acb))
-		get_offset(vm, i, ACB2(acb), l1);
-	if (ACB3(acb))
-		get_offset(vm, i, ACB3(acb), l1);
 }
 
 void	vm_or(t_vm *vm, int i)
