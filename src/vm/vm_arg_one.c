@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/05 18:56:53 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/06 19:39:45 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,37 @@ void	vm_live(t_vm *vm, int i)
 	ft_printf("live called, num of lives called %i", vm->info[i].live);
 }
 
+int		get_index_one(unsigned char *l)
+{
+	return (l[0] * 0x100 + l[1]);
+}
+
+int		get_index_two(unsigned char *l1, unsigned char *l2)
+{
+	unsigned char l3[4];
+
+	reg_add(l1, l2, l3);
+	return (l3[0] * 0x1000000 + l3[1] * 0x10000 + l3[2] * 0x100 + l3[3]);
+}
+
 void	vm_zjmp(t_vm *vm, int i)
 {
-	int pc;
-	int first_byte;
-	int second_byte;
 
 	if (!vm->info[i].carry)
 	{
 		vm->info[i].index += 3;
 		return ;
 	}
-	first_byte = vm->core[vm->info[i].start + vm->info[i].index + 1];
-	second_byte = vm->core[vm->info[i].start + vm->info[i].index + 2];
-	first_byte = first_byte << 8;
-	pc = first_byte | second_byte;
+	vm->info[i].index += get_index_one(&vm->core[vm->info[i].start + vm->info[i].index + 1]);
+//	first_byte = vm->core[vm->info[i].start + vm->info[i].index + 1];
+//	second_byte = vm->core[vm->info[i].start + vm->info[i].index + 2];
+//	first_byte = first_byte << 8;
+//	pc = first_byte | second_byte;
 	//two's complement; do we only need to do this if the sign bit is 1?
-	pc = pc ^ 0xFFFF;
-	pc++;
-	pc *= -1;
-	vm->info[i].index += pc;
+//	pc = pc ^ 0xFFFF;
+//	pc++;
+//	pc *= -1;
+//	vm->info[i].index += pc;
 	vm->info[i].carry = 0;
 	ft_printf("zjmp called;");
 }

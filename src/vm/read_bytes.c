@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/05 17:31:00 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/06 21:11:57 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	read_bytes(t_vm *vm, int i)
 	game_end = 1;
 	while (1)//game engine
 	{
-		i = 1021;// processes 1022, 1023 overflow	
+		i = 1021;// processes 1022, 1023 overflow
 		while (i >= 0)//must execute processes from the last born to first
 		{
 			if (vm->info[i].executing == 1)
@@ -139,7 +139,7 @@ void	read_bytes(t_vm *vm, int i)
 				if (vm->info[i].start + vm->info[i].index > 4095)//wrapping around the core
 					vm->info[i].index = vm->info[i].start * -1;
 				op = vm->core[vm->info[i].start + vm->info[i].index];
-				if (op > 0 && vm->info[i].wait_cycle == g_optab[op - 1].cycles)
+				if ((op > 0 && op <= 16) && vm->info[i].wait_cycle == g_optab[op - 1].cycles)
 				{
 					jumptable(op, vm, i);
 					ft_putchar('\n');
