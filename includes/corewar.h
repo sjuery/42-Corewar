@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/05 14:22:28 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/07 23:44:57 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct		s_io
 	char			header[HEADER_SIZE]; // store stuff being read
 	char			body[CHAMP_MAX_SIZE + 1];
 	int				index; // to track where the instruction reading is currently at
-	int				alive; // this is to check if the process has called live every CYCLE_TO_DIE cycles
+	int				alive; // this is to check if the process has called live
 	int				executing;//will be false if process hasn't called live in CYCLE_TO_DIE cycles/ game ends when all processes no longer executing
 	int				live; // # of time it calls live
 	unsigned char	regs[REG_NUMBER][REG_SIZE]; // registers, # of reg + its size
@@ -71,8 +71,10 @@ typedef struct		s_vm
 	char			*players[4]; // player names
  	int				num_players; // number of player
 	unsigned char	core[4096]; // the vm board
-	int				cycles;//might change this to every process having keeping track of their own cycles
-
+	int				cycle_to_die;//initalized to CYCLE_TO_DIE
+	int				checks;//checks to see if cycle_to_die has been decreased
+	int				cycles;
+	int				counter;
 	size_t			dump_cycle;
 }					t_vm;
 
@@ -107,6 +109,8 @@ void	vm_xor(t_vm *vm, int i);
 void	vm_aff(t_vm *vm, int i);
 void	vm_add(t_vm *vm, int i);
 void	vm_sub(t_vm *vm, int i);
+
+int		indirect(t_vm *vm, int i, unsigned char opcode);
 
 void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l);
 

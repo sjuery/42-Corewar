@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/05 18:57:07 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/07 21:57:20 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,15 +100,31 @@ void 	init_players(int ac, char **av, t_vm *vm)
 	vm->num_players = get_n_players(ac, av, vm, n_start);
 }
 
+void	assign_player_num(t_vm *vm, int i, unsigned char **reg)
+{
+
+	/**reg[0] = 255;
+	*reg[1] = 255;
+	*reg[2] = 255;
+	*reg[3] = 255 - i;*/
+	*reg = vm->info[i].regs[1];
+	(*reg)[0] = 255;
+	(*reg)[1] = 255;
+	(*reg)[2] = 255;
+	(*reg)[3] = 255 - i;
+}
+
 void 	init_vm(t_vm *vm)
 {
 	int	i;
 	int	x;
 	int	fd;
+	unsigned char *reg;
 
 	i = -1;
 	x = 0;
 	vm->process_count = 0;
+	vm->cycle_to_die = CYCLE_TO_DIE;
 	ft_bzero(vm->core, 4096);
 	ft_printf("vm->num_players [%i]\n", vm->num_players);
 	while (++i < vm->num_players)
@@ -118,6 +134,8 @@ void 	init_vm(t_vm *vm)
 		write_info(&vm->info[i], fd, &x, vm->core);
 		vm->info[i].location = i * (4096 / vm->num_players);
 		vm->info[i].start = vm->info[i].location;
+		//*reg = vm->info[i].regs[1];
+		assign_player_num(vm, i, &reg);
 		x += ((4096 / vm->num_players) - vm->info[i].head.prog_size);
 	}
 }

@@ -6,21 +6,38 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/05 18:56:53 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/07 23:23:45 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
+void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l)
+{
+	*l = NULL;
+	if (acb == 1)
+	{
+		*l = vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index]];
+		vm->info[i].index += 1;
+	}
+	else if (acb == 2)
+	{
+		*l = &vm->core[vm->info[i].start + vm->info[i].index];
+		vm->info[i].index += 2;
+	}
+	else if (acb == 3)
+	{
+		*l = &vm->core[vm->info[i].start + vm->info[i].index + indirect(vm, i, vm->core[vm->info[i].start + vm->info[i].index - 2])];
+		vm->info[i].index += 2;
+	}
+}
+
 void	vm_live(t_vm *vm, int i)
 {
-	//this if statement is fucking things up. reseting index to 0 even though index doesn't pass the prog_size
-	//if (vm->info[i].index > vm->info[i].head.prog_size) // double check, if index passes prog_size, we reduce to 0
-	//	vm->info[i].index = 0;
 	vm->info[i].index += 5;
 	vm->info[i].live++;
 	vm->info[i].alive = 1;
-	ft_printf("live called, num of lives called %i", vm->info[i].live);
+	ft_printf("live called");
 }
 
 void	vm_zjmp(t_vm *vm, int i)
@@ -60,21 +77,24 @@ if there is a index value, its 2 bytes for direct, otherwise its 4
 
 void	vm_sti(t_vm *vm, int i)
 {
-	int acb;
-	int param;
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	int				acb;
+	short			index;
+	int				instruct_index;
 
-	acb = vm->info[i].body[vm->info[i].index + 1];//might have to read acb from core instead of body
-	vm->info[i].index += 3;//opcode, acb, reg
-	param = acb >> 4 & 3;
-	if (param == T_REG)
-		vm->info[i].index += 1;
-	else
-		vm->info[i].index += 2;
-	param = acb >> 2 & 3;
-	if (param == T_REG)
-		vm->info[i].index += 1;
-	else
-		vm->info[i].index += 2;
+	instruct_index = vm->info[i].index;
+	vm->info[i].index += 2;
+	acb = vm->core[ACB];
+	get_offset_index(vm, i, ACB1(acb), &l1);
+	get_offset_index(vm, i, ACB2(acb), &l2);
+	get_offset_index(vm, i, ACB3(acb), &l3);
+	index = (l2[0] << 8 | l2[1]) + (l3[0] << 8 | l3[1]);
+	vm->core[vm->info[i].start + instruct_index + index] = l1[0];
+	vm->core[vm->info[i].start + instruct_index + index + 1] = l1[1];
+	vm->core[vm->info[i].start + instruct_index + index + 2] = l1[2];
+	vm->core[vm->info[i].start + instruct_index + index + 3] = l1[3];
 	ft_printf("sti called");
 }
 
