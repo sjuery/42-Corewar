@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/06 15:23:25 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/07 17:53:04 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,9 +125,18 @@ void	vm_or(t_vm *vm, int i)
 
 void	vm_aff(t_vm *vm, int i)
 {
-	vm->info[i].index += 3;
-	(void)vm;
-	(void)i;
+	unsigned char	*l1;
+	unsigned char	acb;
+
+	vm->info[i].index += 1;
+	acb = vm->core[ACB];
+	if (!valid_acb(acb, 1, 0, 0))
+	{
+		ft_printf("Burn!\n");
+		return ;
+	}
+	get_offset(vm, i, ACB1(acb), &l);
+	ft_printf("%c\n", l[3]);
 	ft_printf("aff called");
 }
 
