@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/08 00:19:08 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/08 18:28:54 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,24 @@ int		*read_acb(unsigned char a)
 	return (ret);
 }
 
+void	reset_alive_all(t_vm *vm)
+{
+	int i;
+
+	i = 0;
+	ft_printf("RESETING ALIVE cycle[%i] todie[%i]\n", vm->cycles, vm->cycle_to_die);
+	while (i < vm->process_count)
+	{
+		if (vm->info[i].alive == 0)
+		{
+			ft_printf("IM DED! cycle[%i] process[%i]\n", vm->cycles, i);
+			vm->info[i].executing = 0;
+		}
+		vm->info[i].alive = 0;
+		i++;
+	}
+}
+
 void	reset_alive(t_vm *vm, int i)
 {
 	ft_printf("RESETING ALIVE cycle[%i] todie[%i]\n", vm->cycles, vm->cycle_to_die);
@@ -103,7 +121,6 @@ void	process_update(t_vm *vm, int i)
 	if (op > 0 && op < 17 && vm->info[i].wait_cycle == g_optab[op - 1].cycles)
 	{
 		ft_printf("cycles[%i] op[%02hhx]\n", vm->cycles, op);
-		//ft_printf("op[%02hhx]\n", op);
 		jumptable(op, vm, i);
 		ft_putchar('\n');
 		vm->info[i].wait_cycle = 0;
@@ -124,8 +141,9 @@ void	process_update(t_vm *vm, int i)
 void	read_bytes(t_vm *vm, int i)
 {
 	int game_end;
+	int	counter;
 
-	vm->counter = 1;
+	counter = 1;
 	game_end = 1;
 	while (1)
 	{
@@ -139,17 +157,12 @@ void	read_bytes(t_vm *vm, int i)
 		vm->cycles++;
 		//ft_printf("cycle [%i] cycle_to_die [%i]\n", vm->cycles, vm->cycle_to_die);
 		check_executing_processes(vm, &game_end);
-		if (vm->counter == 0)
+		if (counter == 0)
 		{
 			vm->checks++;
-			reset_alive(vm, 0);
-			reset_alive(vm, 1);
-			reset_alive(vm, 2);
+			reset_alive_all(vm);
 		}
-		vm->counter = (vm->counter + 1) % vm->cycle_to_die;;
-		//ft_printf("vm->counter [%i]\n", vm->counter);
-		//if (vm->cycles % vm->cycle_to_die == 0)
-		//	vm->checks++;
+		counter = (counter + 1) % vm->cycle_to_die;;
 		if (vm->checks == MAX_CHECKS)
 		{
 			vm->cycle_to_die -= CYCLE_DELTA;

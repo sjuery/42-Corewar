@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/07 21:57:20 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/08 18:20:52 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,11 +102,6 @@ void 	init_players(int ac, char **av, t_vm *vm)
 
 void	assign_player_num(t_vm *vm, int i, unsigned char **reg)
 {
-
-	/**reg[0] = 255;
-	*reg[1] = 255;
-	*reg[2] = 255;
-	*reg[3] = 255 - i;*/
 	*reg = vm->info[i].regs[1];
 	(*reg)[0] = 255;
 	(*reg)[1] = 255;
@@ -134,15 +129,11 @@ void 	init_vm(t_vm *vm)
 		write_info(&vm->info[i], fd, &x, vm->core);
 		vm->info[i].location = i * (4096 / vm->num_players);
 		vm->info[i].start = vm->info[i].location;
-		//*reg = vm->info[i].regs[1];
 		assign_player_num(vm, i, &reg);
 		x += ((4096 / vm->num_players) - vm->info[i].head.prog_size);
 	}
 }
 
-
-
-//void jumptable(t_vm *vm)
 void jumptable(int a, t_vm *vm, int i)
 {
 	void (*jt[16])(t_vm *vm, int i);
@@ -183,8 +174,6 @@ int		main(int ac, char **av)
 	//init_curses(&vm);
 	print_core(vm.core, -1);
 	read_bytes(&vm, -1);
-	// if (ac == 2)
-	// 	jumptable(ft_atoi(av[1]));
 	ft_printf("\n");
 	return (0);
 }
