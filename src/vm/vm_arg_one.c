@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/07 23:23:45 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/08 18:42:07 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,40 +40,31 @@ void	vm_live(t_vm *vm, int i)
 	ft_printf("live called");
 }
 
+int		get_index_one(unsigned char *l)
+{
+	return (l[0] * 0x100 + l[1]);
+}
+
+int		get_index_two(unsigned char *l1, unsigned char *l2)
+{
+	unsigned char l3[4];
+
+	reg_add(l1, l2, l3);
+	return (l3[0] * 0x1000000 + l3[1] * 0x10000 + l3[2] * 0x100 + l3[3]);
+}
+
 void	vm_zjmp(t_vm *vm, int i)
 {
-	int pc;
-	int first_byte;
-	int second_byte;
 
 	if (!vm->info[i].carry)
 	{
 		vm->info[i].index += 3;
 		return ;
 	}
-	first_byte = vm->core[vm->info[i].start + vm->info[i].index + 1];
-	second_byte = vm->core[vm->info[i].start + vm->info[i].index + 2];
-	first_byte = first_byte << 8;
-	pc = first_byte | second_byte;
-	//two's complement; do we only need to do this if the sign bit is 1?
-	pc = pc ^ 0xFFFF;
-	pc++;
-	pc *= -1;
-	vm->info[i].index += pc;
+	vm->info[i].index += get_index_one(&vm->core[vm->info[i].start + vm->info[i].index + 1]);
 	vm->info[i].carry = 0;
 	ft_printf("zjmp called;");
 }
-
-/*
-ZJMP.cor
-0900 0a09 000a 0900 0a
-
-09 = opcode for jump
-000a = location (direct value)
-reason this direct is 2 bytes is because in op.c it has a index value of 1 (very last value)
-if there is a index value, its 2 bytes for direct, otherwise its 4
-*/
-
 
 void	vm_sti(t_vm *vm, int i)
 {

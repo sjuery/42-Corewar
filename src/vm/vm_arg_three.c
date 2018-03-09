@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/03 18:52:52 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/06 21:05:17 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,52 @@ void	vm_lld(t_vm *vm, int i)
 
 void	vm_lldi(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
-	ft_printf("lldi called");
+	unsigned char	acb;
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	unsigned char	*s;
+
+	vm->info[i].index += 2;
+	acb = vm->core[ACB];
+	if (ACB2(acb) == 3 || ACB3(acb) != 1)
+	{
+		ft_printf("Burn!\n");
+		return ;
+	}
+	get_offset(vm, i, ACB1(acb), &l1);
+	get_offset(vm, i, ACB2(acb), &l2);
+	get_offset(vm, i, ACB3(acb), &l3);
+	s = &vm->core[(vm->info[i].start + vm->info[i].index + get_index_two(l1, l2)) % 4096];
+	reg_copy(l3, s);
+	ft_printf("lldi called: %0.2hhx%0.2hhx%0.2hhx%0.2hhx", l2[0], l2[1], l2[2], l2[3]);
+	vm->info[i].carry = 1;
 }
+
+
 
 void	vm_ldi(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
-	ft_printf("ldi called");
+	unsigned char	acb;
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	unsigned char	*s;
+
+	vm->info[i].index += 2;
+	acb = vm->core[ACB];
+	if (ACB2(acb) == 3 || ACB3(acb) != 1)
+	{
+		ft_printf("Burn!\n");
+		return ;
+	}
+	get_offset(vm, i, ACB1(acb) | 0b100, &l1);
+	get_offset(vm, i, ACB2(acb), &l2);
+	get_offset(vm, i, ACB3(acb), &l3);
+	s = &vm->core[(vm->info[i].start + vm->info[i].index + get_index_two(l1, l2)) % 4096];
+	reg_copy(l3, s);
+	ft_printf("ldi called: %0.2hhx%0.2hhx%0.2hhx%0.2hhx", l2[0], l2[1], l2[2], l2[3]);
+	vm->info[i].carry = 1;
 }
 
 void	vm_ld(t_vm *vm, int i)
@@ -104,7 +140,7 @@ void	vm_ld(t_vm *vm, int i)
 		ft_printf("Burn!\n");
 		return ;
 	}
-	get_offset(vm, i, ACB1(acb), &l1);
+	get_offset(vm, i, ACB1(acb) | 0b100, &l1);
 	get_offset(vm, i, ACB2(acb), &l2);
 	reg_copy(l2, l1);
 	ft_printf("ld called: %0.2hhx%0.2hhx%0.2hhx%0.2hhx", l2[0], l2[1], l2[2], l2[3]);
@@ -125,7 +161,7 @@ void	vm_st(t_vm *vm, int i)
 		return ;
 	}
 	get_offset(vm, i, ACB1(acb), &l1);
-	get_offset(vm, i, ACB2(acb), &l2);
+	get_offset(vm, i, ACB2(acb) | 0b100, &l2);
 	reg_copy(l2, l1);
 	ft_printf("st called: %0.2hhx%0.2hhx%0.2hhx%0.2hhx", l2[0], l2[1], l2[2], l2[3]);
 }
