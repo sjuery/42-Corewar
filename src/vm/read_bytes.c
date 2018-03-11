@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/08 18:38:58 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/10 17:11:28 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,21 +114,28 @@ void	process_update(t_vm *vm, int i)
 {
 	int op;
 
-	//ft_printf("\nProcess number[%i], Byte Read [%#0.2hhx], Index [%i]", i, vm->core[vm->info[i].start + vm->info[i].index], vm->info[i].index);
 	if (vm->info[i].start + vm->info[i].index > 4095)//wrapping around the core
-		vm->info[i].index = vm->info[i].start * -1;
+        //vm->info[i].index = vm->info[i].start;
+        vm->info[i].index = vm->info[i].start * -1;
 	op = vm->core[vm->info[i].start + vm->info[i].index];
-	if (op > 0 && op < 17 && vm->info[i].wait_cycle == g_optab[op - 1].cycles)
+    ft_printf("[%d] [%d] [%d][%d]\n",vm->cycles, vm->info[i].start + vm->info[i].index, vm->info[i].wait_cycle, op);
+	if ((op > 0 && op < 17) && vm->info[i].wait_cycle == g_optab[op - 1].cycles - 1)
 	{
-		ft_printf("cycles[%i] op[%02hhx]\n", vm->cycles, op);
+		ft_printf("[%i] cycles[%i] op[%02hhx]\n", i, vm->cycles, op);
 		jumptable(op, vm, i);
 		ft_putchar('\n');
 		vm->info[i].wait_cycle = 0;
 	}
-	else if (op > 0 && op < 17)
-		vm->info[i].wait_cycle++;
+	//else if ((op > 0 && op < 17) && (vm->info[i].wait_cycle < g_optab[op - 1].cycles))
+    else if (op > 0 && op < 17)
+    //else if ((vm->info[i].wait_cycle < g_optab[op - 1].cycles))
+	{
+        vm->info[i].wait_cycle++;
+    }
 	else
+    {
 		vm->info[i].index++;
+    }
 	vm->info[i].cycles++;
 	//if (vm->info[i].cycles % vm->cycle_to_die == 0)
 	//	reset_alive(vm, i);
@@ -151,10 +158,13 @@ void	read_bytes(t_vm *vm, int i)
 		while (i >= 0)
 		{
 			if (vm->info[i].executing == 1)
+            {
 				process_update(vm, i);
+            }
 			i--;
 		}
 		vm->cycles++;
+        //ft_putchar('\n');
 		//ft_printf("cycle [%i] cycle_to_die [%i]\n", vm->cycles, vm->cycle_to_die);
 		check_executing_processes(vm, &game_end);
 		if (counter == 0)

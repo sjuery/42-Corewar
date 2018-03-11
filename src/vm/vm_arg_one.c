@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/08 18:42:07 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/10 18:21:39 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,24 +82,52 @@ void	vm_sti(t_vm *vm, int i)
 	get_offset_index(vm, i, ACB2(acb), &l2);
 	get_offset_index(vm, i, ACB3(acb), &l3);
 	index = (l2[0] << 8 | l2[1]) + (l3[0] << 8 | l3[1]);
+	reg_copy(&vm->core[vm->info[i].start + instruct_index + index], l1);
+/*
 	vm->core[vm->info[i].start + instruct_index + index] = l1[0];
 	vm->core[vm->info[i].start + instruct_index + index + 1] = l1[1];
 	vm->core[vm->info[i].start + instruct_index + index + 2] = l1[2];
 	vm->core[vm->info[i].start + instruct_index + index + 3] = l1[3];
+*/
 	ft_printf("sti called");
+}
+
+void copy_io(t_vm *vm, int dest, int src)
+{
+	ft_memcpy(&vm->info[dest], &vm->info[src], sizeof(t_io));
 }
 
 void	vm_lfork(t_vm *vm, int i)
 {
-	(void)vm;
-	(void)i;
+	int j;
+	unsigned char *l1;
+
+	j = 0;
+	while (vm->info[j].alive)
+		++j;
+	get_offset_index(vm, i, 2, &l1);
+	copy_io(vm, j, i);
+	vm->info[j].start = (l1[0] << 8 | l1[1]);
+	vm->info[j].index = 0;
+	vm->info[i].index += 3;
 	ft_printf("lfork called");
 }
 
 void	vm_fork(t_vm *vm, int i)
 {
-	int a;
+	int j;
+	unsigned char *l1;
 
-	a = vm->info[i].body[vm->info[i].index + 1];
-	ft_printf("fork called, label location %i", a);
+	j = 0;
+	while (vm->info[j].alive)
+		++j;
+	get_offset_index(vm, i, 2, &l1);
+	copy_io(vm, j, i);
+	vm->info[j].start = (l1[0] << 8 | l1[1]) % IDX_MOD;
+	vm->info[j].index = 0;
+	vm->info[i].index += 3;
+//	int a;
+
+	//a = vm->info[i].body[vm->info[i].index + 1];
+	ft_printf("fork called");
 }

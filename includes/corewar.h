@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/08 18:40:20 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/10 17:48:16 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,5 +135,6 @@ int		reg_sub(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
 int		reg_xor(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
 int		reg_or(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
 int		reg_and(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
+void reg_copy(unsigned char *dest, unsigned char *src);
 
 #endif
