@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/10 17:11:28 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/10 18:49:35 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ void	process_update(t_vm *vm, int i)
         //vm->info[i].index = vm->info[i].start;
         vm->info[i].index = vm->info[i].start * -1;
 	op = vm->core[vm->info[i].start + vm->info[i].index];
-    ft_printf("[%d] [%d] [%d][%d]\n",vm->cycles, vm->info[i].start + vm->info[i].index, vm->info[i].wait_cycle, op);
 	if ((op > 0 && op < 17) && vm->info[i].wait_cycle == g_optab[op - 1].cycles - 1)
 	{
 		ft_printf("[%i] cycles[%i] op[%02hhx]\n", i, vm->cycles, op);

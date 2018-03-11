@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/10 18:21:39 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/10 19:01:52 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,15 +102,16 @@ void	vm_lfork(t_vm *vm, int i)
 	int j;
 	unsigned char *l1;
 
-	j = 0;
-	while (vm->info[j].alive)
+	j = vm->process_count;
+	while (vm->info[j].alive && vm->info[j].executing)
 		++j;
+	vm->process_count++;
 	get_offset_index(vm, i, 2, &l1);
 	copy_io(vm, j, i);
-	vm->info[j].start = (l1[0] << 8 | l1[1]);
+	vm->info[j].start = (l1[1] << 8 | l1[0]);
 	vm->info[j].index = 0;
 	vm->info[i].index += 3;
-	ft_printf("lfork called");
+	ft_printf("lfork called, process created at %i", j);
 }
 
 void	vm_fork(t_vm *vm, int i)
@@ -118,16 +119,17 @@ void	vm_fork(t_vm *vm, int i)
 	int j;
 	unsigned char *l1;
 
-	j = 0;
-	while (vm->info[j].alive)
+	j = vm->process_count;
+	while (vm->info[j].alive && vm->info[j].executing)
 		++j;
+	vm->process_count++;
 	get_offset_index(vm, i, 2, &l1);
 	copy_io(vm, j, i);
-	vm->info[j].start = (l1[0] << 8 | l1[1]) % IDX_MOD;
+	vm->info[j].start = (l1[1] << 8 | l1[0]) % IDX_MOD;
 	vm->info[j].index = 0;
 	vm->info[i].index += 3;
 //	int a;
 
 	//a = vm->info[i].body[vm->info[i].index + 1];
-	ft_printf("fork called");
+	ft_printf("fork called, process created at %i, [%i]", j, vm->info[j].start);
 }
