@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/08 18:40:20 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/10 22:32:27 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ typedef struct		s_io
 	t_header		head; // header in comment from op.h to see what it contains
 	char			header[HEADER_SIZE]; // store stuff being read
 	char			body[CHAMP_MAX_SIZE + 1];
+	unsigned char	player_num[4];//FF FF, FF FE, etc
+	int				player_int;//player 1, 2, 3 or 4
 	int				index; // to track where the instruction reading is currently at
 	int				alive; // this is to check if the process has called live
 	int				executing;//will be false if process hasn't called live in CYCLE_TO_DIE cycles/ game ends when all processes no longer executing
@@ -69,8 +71,9 @@ typedef struct		s_vm
 	t_io			info[1024]; // holds all the process
 	int				process_count; // helps us keep track of total # of process
 	char			*players[4]; // player names
- 	int				num_players; // number of player
+ 	int				num_players; // number of players
 	unsigned char	core[4096]; // the vm board
+	int				win_player;//keep track of currently winning player (1, 2, 3, or 4)
 	int				cycle_to_die;//initalized to CYCLE_TO_DIE
 	int				checks;//checks to see if cycle_to_die has been decreased
 	int				cycles;
@@ -88,7 +91,8 @@ int					read_input(int fd, t_io *info);
 /*
 ** ncurses.c
 */
-void				init_curses(t_vm *vm);
+void				print_curses(t_vm *vm);
+void				init_curses(void);
 
 /*
 ** vm arguments

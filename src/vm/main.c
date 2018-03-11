@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/08 18:20:52 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/10 22:52:38 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,11 @@ void	assign_player_num(t_vm *vm, int i, unsigned char **reg)
 	(*reg)[1] = 255;
 	(*reg)[2] = 255;
 	(*reg)[3] = 255 - i;
+	vm->info[i].player_num[0] = 255;
+	vm->info[i].player_num[0] = 255;
+	vm->info[i].player_num[0] = 255;
+	vm->info[i].player_num[0] = 255 - i;
+	vm->info[i].player_int = i + 1;
 }
 
 void 	init_vm(t_vm *vm)
@@ -132,6 +137,7 @@ void 	init_vm(t_vm *vm)
 		assign_player_num(vm, i, &reg);
 		x += ((4096 / vm->num_players) - vm->info[i].head.prog_size);
 	}
+	vm->win_player = vm->num_players;
 }
 
 void jumptable(int a, t_vm *vm, int i)
@@ -165,15 +171,23 @@ int		valid_acb(unsigned char acb, int b1, int b2, int b3)
 int		main(int ac, char **av)
 {
 	t_vm			vm;
+	int				ch;
 
 	if (ac < 2)
 		error();
 	init_players(ac, av, &vm);
 	init_vm(&vm);
-	ft_printf("prog size: [%i]\n", vm.info[0].head.prog_size);
-	//init_curses(&vm);
-	print_core(vm.core, -1);
+	init_curses();
+	//print_core(vm.core, -1);
+	print_curses(&vm);
 	read_bytes(&vm, -1);
-	ft_printf("\n");
+	while ((ch = getch()))
+	{
+		if (ch == 27)
+		{
+			endwin();
+			break ;
+		}
+	}
 	return (0);
 }

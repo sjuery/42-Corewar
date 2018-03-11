@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/02/07 17:43:29 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/10 23:42:46 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,32 @@ int		setcolor(int i, t_vm *vm)
 		return (0);
 }
 
-void	init_curses(t_vm *vm)
+void	init_curses(void) 
 {
-	int i = -1;
-	int x = 0;
-	int y = 0;
-	int color = 0;
-
 	initscr();
 	curs_set(false);
-
+	keypad(stdscr, TRUE);
+	noecho();
 	start_color();
 	init_pair(1, COLOR_CYAN, COLOR_BLACK);
 	init_pair(2, COLOR_RED, COLOR_BLACK);
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(4, COLOR_GREEN, COLOR_BLACK);
+}
+
+//need to know relationship between x, y (location in terminal) and i (location in the core)
+//x = i/64
+//y = i % 64 * 2
+//attron(COLOR_PAIR(vm->info[i].player_int));
+//st, sti, fork lfork need to mvprintw
+//how are the 00 being printed in gray with black backgroundi?//need to know for printing index(PC)
+
+void	print_curses(t_vm *vm)
+{
+	int i = -1;
+	int x = 0;
+	int y = 0;
+	int color = 0;
 
 	while (++i < 4096)
 	{
@@ -64,8 +75,5 @@ void	init_curses(t_vm *vm)
 		mvprintw(x, y++, " ");
 		attroff(COLOR_PAIR(2));
 	}
-
 	refresh();
-	sleep(5);
-	endwin();
 }

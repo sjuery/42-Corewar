@@ -6,64 +6,12 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/08 18:38:58 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/10 23:43:25 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 #include "asm.h"
-
-void printbits(unsigned char octet)
-{
-    char arr[9];
-
-
-    arr[0] = ((octet & 0b10000000) != 0) + '0';
-    arr[1] = ((octet & 0b01000000) != 0) + '0';
-    arr[2] = ((octet & 0b00100000) != 0) + '0';
-    arr[3] = ((octet & 0b00010000) != 0) + '0';
-    arr[4] = ((octet & 0b00001000) != 0) + '0';
-    arr[5] = ((octet & 0b00000100) != 0) + '0';
-    arr[6] = ((octet & 0b00000010) != 0) + '0';
-    arr[7] = ((octet & 0b00000001) != 0) + '0';
-	arr[8] = '\n';
-    write(1, &arr, 9);
-}
-
-int		*read_acb(unsigned char a)
-{
-	int	arr[3];
-	int *ret;
-	char *addrs[4] = {"None", "Register", "Direct", "Indirect"};
-/*
-	ret = 0;
-	//a += 226;
-	while (a >= 2)
-	{
-		ret = ret * 10 + (a % 2);
-		a = a / 2;
-	}
-	ret = ret * 10 + a;
-	printbits(ret);
-	ft_printf("\nRET %x\n", ret);
-	return (ret);*/
-	arr[0] = ACB1(a);
-	arr[1] = ACB2(a);
-	arr[2] = ACB3(a);
-	DBG_INT("A: ", a);
-	ft_putendl(addrs[ACB1(a)]);
-	ft_putendl(addrs[ACB2(a)]);
-	ft_putendl(addrs[ACB3(a)]);
-	//DBG_INT("ACB1: ", ACB1(a));
-	//DBG_INT("ACB2: ", ACB2(a));
-	//DBG_INT("ACB3: ", ACB3(a));
-//	printbits(a);
-	printbits(arr[0]);
-	printbits(arr[1]);
-	printbits(arr[2]);
-	ret = arr;
-	return (ret);
-}
 
 void	reset_alive_all(t_vm *vm)
 {
@@ -118,9 +66,9 @@ void	process_update(t_vm *vm, int i)
 	if (vm->info[i].start + vm->info[i].index > 4095)//wrapping around the core
 		vm->info[i].index = vm->info[i].start * -1;
 	op = vm->core[vm->info[i].start + vm->info[i].index];
-	if (op > 0 && op < 17 && vm->info[i].wait_cycle == g_optab[op - 1].cycles)
+	if (op > 0 && op < 17 && vm->info[i].wait_cycle == g_optab[op - 1].cycles - 1)
 	{
-		ft_printf("cycles[%i] op[%02hhx]\n", vm->cycles, op);
+		//printf("process[%i] cycles[%i] op[%02hhx]\n", i, vm->cycles, (unsigned char)op);
 		jumptable(op, vm, i);
 		ft_putchar('\n');
 		vm->info[i].wait_cycle = 0;
@@ -135,8 +83,9 @@ void	process_update(t_vm *vm, int i)
 }
 
 //implement decrease of CYCLE_TO_DIE with NBR_LIVE
-//keep track of which player num is winning
-//do processes need to keep track of how many cycles since birth? ecah have their pown cycle count?
+//do processes need to keep track of how many cycles since birth? each have their own cycle count?
+//ncurses visualizer
+//endianness
 
 void	read_bytes(t_vm *vm, int i)
 {
@@ -148,13 +97,13 @@ void	read_bytes(t_vm *vm, int i)
 	while (1)
 	{
 		i = vm->process_count - 1;
+		vm->cycles++;
 		while (i >= 0)
 		{
 			if (vm->info[i].executing == 1)
 				process_update(vm, i);
 			i--;
 		}
-		vm->cycles++;
 		//ft_printf("cycle [%i] cycle_to_die [%i]\n", vm->cycles, vm->cycle_to_die);
 		check_executing_processes(vm, &game_end);
 		if (counter == 0)
@@ -171,8 +120,11 @@ void	read_bytes(t_vm *vm, int i)
 		if (game_end)
 			break ;
 		//else
-		//	print_core(vm->core, -1);//preferably, here we would update ncurses and display
+		//	print_core(vm->core, -1);//refresh();
 		game_end = 1;
 	}
-	print_core(vm->core, -1);
+	//print_core(vm->core, -1);
+	ft_printf("\nContestant %i, \"%s\", has won !\n", vm->win_player, vm->info[vm->win_player - 1].header + 4);
 }
+
+//make another ex.s champion that actually calls live with it's name to see if live works

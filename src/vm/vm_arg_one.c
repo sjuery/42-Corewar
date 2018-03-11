@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/08 18:42:07 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/10 23:45:42 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,23 @@ void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 		vm->info[i].index += 2;
 	}
 }
-
+//how does a player win if no one has icalled live? first or last process to execute?
 void	vm_live(t_vm *vm, int i)
 {
-	vm->info[i].index += 5;
+	int player_int;
+	//vm->info[i].index += 5;
+	vm->info[i].index++;
 	vm->info[i].live++;
 	vm->info[i].alive = 1;
+
+	player_int = 0;
+	if (vm->core[vm->info[i].start + vm->info[i].index] == 255 &&
+			vm->core[vm->info[i].start + vm->info[i].index + 1] == 255
+			&& vm->core[vm->info[i].start + vm->info[i].index + 2] == 255)
+		player_int = 256 - vm->core[vm->info[i].start + vm->info[i].index + 3];
+	if (player_int >= 1 && player_int <= vm->num_players)
+		vm->win_player = player_int;
+	vm->info[i].index += 4;
 	ft_printf("live called");
 }
 
@@ -65,7 +76,7 @@ void	vm_zjmp(t_vm *vm, int i)
 	vm->info[i].carry = 0;
 	ft_printf("zjmp called;");
 }
-
+//ask aneesh if he added the macro for start + index//gonna need it to make mvprintw easier for st, sti, fork, lfork
 void	vm_sti(t_vm *vm, int i)
 {
 	unsigned char	*l1;
