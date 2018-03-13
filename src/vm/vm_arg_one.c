@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/10 19:01:52 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/12 16:14:10 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,11 @@
 
 void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 {
+	int	idx;
+
 	*l = NULL;
+	idx = ((acb & 0b100) != 0);
+	acb = acb & 0b11;
 	if (acb == 1)
 	{
 		*l = vm->info[i].regs[vm->core[vm->info[i].start + vm->info[i].index]];
@@ -27,7 +31,7 @@ void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 	}
 	else if (acb == 3)
 	{
-		*l = &vm->core[vm->info[i].start + vm->info[i].index + indirect(vm, i, vm->core[vm->info[i].start + vm->info[i].index - 2])];
+		*l = &vm->core[vm->info[i].start + vm->info[i].index + indirect(vm, i, idx)];
 		vm->info[i].index += 2;
 	}
 }
@@ -42,7 +46,7 @@ void	vm_live(t_vm *vm, int i)
 
 int		get_index_one(unsigned char *l)
 {
-	return (l[0] * 0x100 + l[1]);
+	return (l[1] * 0x100 + l[0]);
 }
 
 int		get_index_two(unsigned char *l1, unsigned char *l2)
@@ -50,7 +54,7 @@ int		get_index_two(unsigned char *l1, unsigned char *l2)
 	unsigned char l3[4];
 
 	reg_add(l1, l2, l3);
-	return (l3[0] * 0x1000000 + l3[1] * 0x10000 + l3[2] * 0x100 + l3[3]);
+	return (l3[3] * 0x1000000 + l3[2] * 0x10000 + l3[1] * 0x100 + l3[0]);
 }
 
 void	vm_zjmp(t_vm *vm, int i)
@@ -81,7 +85,7 @@ void	vm_sti(t_vm *vm, int i)
 	get_offset_index(vm, i, ACB1(acb), &l1);
 	get_offset_index(vm, i, ACB2(acb), &l2);
 	get_offset_index(vm, i, ACB3(acb), &l3);
-	index = (l2[0] << 8 | l2[1]) + (l3[0] << 8 | l3[1]);
+	index = (l2[1] << 8 | l2[0]) + (l3[1] << 8 | l3[0]);
 	reg_copy(&vm->core[vm->info[i].start + instruct_index + index], l1);
 /*
 	vm->core[vm->info[i].start + instruct_index + index] = l1[0];

@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/10 17:48:16 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/12 17:00:20 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct		s_io
 
 typedef struct		s_vm
 {
-	t_io			info[1024]; // holds all the process
+	t_io			info[4096]; // holds all the process
 	int				process_count; // helps us keep track of total # of process
 	char			*players[4]; // player names
  	int				num_players; // number of player
@@ -112,6 +112,7 @@ void	vm_sub(t_vm *vm, int i);
 
 int		indirect(t_vm *vm, int i, unsigned char opcode);
 void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l); // maybe concatenate acb pair and whether or not it' uses idx mod
+void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l);
 int		get_index_one(unsigned char *l);
 int		get_index_two(unsigned char *l1, unsigned char *l2);
 
