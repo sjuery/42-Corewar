@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/10 23:42:46 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/15 20:10:49 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,23 @@ void	init_curses(void)
 	init_pair(2, COLOR_RED, COLOR_BLACK);
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(4, COLOR_GREEN, COLOR_BLACK);
+	init_pair(5, COLOR_WHITE, COLOR_WHITE);
 }
+//st and sti modify array of structs for visualizer
+//struct contains owner(player_int) and unsigned char, and previous index that was highlighted
+//array of array of structs
+//highlight current index and unhighlight previous index
+//need correlation between the index and array of array of structs
+
 
 //need to know relationship between x, y (location in terminal) and i (location in the core)
-//x = i/64
-//y = i % 64 * 2
+//y = i/64
+//x = i % 64 * 2 + i - 1//spaces 
 //attron(COLOR_PAIR(vm->info[i].player_int));
 //st, sti, fork lfork need to mvprintw
-//how are the 00 being printed in gray with black backgroundi?//need to know for printing index(PC)
+//how are the 00 being printed in gray with black background?//need to know for printing index(PC)
 
-void	print_curses(t_vm *vm)
+/*void	print_curses(t_vm *vm)
 {
 	int i = -1;
 	int x = 0;
@@ -76,4 +83,39 @@ void	print_curses(t_vm *vm)
 		attroff(COLOR_PAIR(2));
 	}
 	refresh();
+	sleep(1);
+	endwin();
+}*/
+
+void	print_curses(t_vm *vm)
+{
+	int i = -1;
+	int x = 0;
+	int y = 0;
+	int color = 0;
+	clear();
+	while (++i < 4096)
+	{
+		attron(COLOR_PAIR(vm->vis[i].player));
+		if (i % 64 == 0)
+		{
+			x++;
+			y = 0;
+		}
+		if (vm->vis[i].byte < 16 && vm->vis[i].byte >= 0)
+		{
+			mvprintw(x, y++, "0");
+			mvprintw(x, y++, "%hhx", vm->vis[i].byte);
+		}
+		else
+		{
+			mvprintw(x, y, "%hhx", vm->vis[i].byte);
+			y += 2;
+		}
+		mvprintw(x, y++, " ");
+		attroff(COLOR_PAIR(vm->vis[i].player));
+	}
+	refresh();
+	usleep(50000);
+	endwin();
 }

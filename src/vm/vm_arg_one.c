@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/10 23:45:42 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/15 19:43:14 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 void	vm_live(t_vm *vm, int i)
 {
 	int player_int;
-	//vm->info[i].index += 5;
 	vm->info[i].index++;
 	vm->info[i].live++;
 	vm->info[i].alive = 1;
@@ -48,7 +47,7 @@ void	vm_live(t_vm *vm, int i)
 	if (player_int >= 1 && player_int <= vm->num_players)
 		vm->win_player = player_int;
 	vm->info[i].index += 4;
-	ft_printf("live called");
+	//ft_printf("live called");
 }
 
 int		get_index_one(unsigned char *l)
@@ -74,9 +73,9 @@ void	vm_zjmp(t_vm *vm, int i)
 	}
 	vm->info[i].index += get_index_one(&vm->core[vm->info[i].start + vm->info[i].index + 1]);
 	vm->info[i].carry = 0;
-	ft_printf("zjmp called;");
+	//ft_printf("zjmp called;");
 }
-//ask aneesh if he added the macro for start + index//gonna need it to make mvprintw easier for st, sti, fork, lfork
+//ask aneesh if he added the macro for start + index//gonna need it to make mvprintw easier for st, sti
 void	vm_sti(t_vm *vm, int i)
 {
 	unsigned char	*l1;
@@ -85,6 +84,7 @@ void	vm_sti(t_vm *vm, int i)
 	int				acb;
 	short			index;
 	int				instruct_index;
+	int				pos;
 
 	instruct_index = vm->info[i].index;
 	vm->info[i].index += 2;
@@ -97,14 +97,32 @@ void	vm_sti(t_vm *vm, int i)
 	vm->core[vm->info[i].start + instruct_index + index + 1] = l1[1];
 	vm->core[vm->info[i].start + instruct_index + index + 2] = l1[2];
 	vm->core[vm->info[i].start + instruct_index + index + 3] = l1[3];
-	ft_printf("sti called");
+	vm->vis[vm->info[i].start + instruct_index + index].byte = l1[0];
+	vm->vis[vm->info[i].start + instruct_index + index + 1].byte = l1[1];
+	vm->vis[vm->info[i].start + instruct_index + index + 2].byte = l1[2];
+	vm->vis[vm->info[i].start + instruct_index + index + 3].byte = l1[3];
+	vm->vis[vm->info[i].start + instruct_index + index ].player = i + 1;
+	vm->vis[vm->info[i].start + instruct_index + index + 1].player = i + 1;
+	vm->vis[vm->info[i].start + instruct_index + index + 2].player = i + 1;
+	vm->vis[vm->info[i].start + instruct_index + index + 3].player = i + 1;
+//update visualizer
+	/*attron(COLOR_PAIR(vm->info[i].player_int));
+	pos = vm->info[i].start + instruct_index + index;
+	//dprintf(2, "x[%i], y[%i], player_int[%i]\n", vm->info[i].start + instruct_index + index / 64, vm->info[i].start + instruct_index + index * 2 + vm->info[i].start + instruct_index + index - 1, vm->info[i].player_int);
+	//mvprintw(pos / 64 + 1, pos * 2 + pos, "%02hhx", l1[0]);
+	//mvprintw((pos + 1) / 64 + 1, (pos + 1) * 2 + pos + 1, "%02hhx", l1[1]);
+	//mvprintw((pos + 2) / 64 + 1, (pos + 2) * 2 + pos + 2, "%02hhx", l1[2]);
+	//mvprintw((pos + 3) / 64 + 1, (pos + 3) * 2 + pos + 3, "%02hhx", l1[3]);
+	attroff(COLOR_PAIR(vm->info[i].player_int));
+	refresh();*/
+	//ft_printf("sti called");
 }
 
 void	vm_lfork(t_vm *vm, int i)
 {
 	(void)vm;
 	(void)i;
-	ft_printf("lfork called");
+	//ft_printf("lfork called");
 }
 
 void	vm_fork(t_vm *vm, int i)

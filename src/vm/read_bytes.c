@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/10 23:43:25 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/15 20:59:27 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ void	reset_alive_all(t_vm *vm)
 	int i;
 
 	i = 0;
-	ft_printf("RESETING ALIVE cycle[%i] todie[%i]\n", vm->cycles, vm->cycle_to_die);
+	//ft_printf("RESETING ALIVE cycle[%i] todie[%i]\n", vm->cycles, vm->cycle_to_die);
 	while (i < vm->process_count)
 	{
 		if (vm->info[i].alive == 0)
 		{
-			ft_printf("IM DED! cycle[%i] process[%i]\n", vm->cycles, i);
+			//ft_printf("IM DED! cycle[%i] process[%i]\n", vm->cycles, i);
 			vm->info[i].executing = 0;
 		}
 		vm->info[i].alive = 0;
@@ -33,10 +33,10 @@ void	reset_alive_all(t_vm *vm)
 
 void	reset_alive(t_vm *vm, int i)
 {
-	ft_printf("RESETING ALIVE cycle[%i] todie[%i]\n", vm->cycles, vm->cycle_to_die);
+	//ft_printf("RESETING ALIVE cycle[%i] todie[%i]\n", vm->cycles, vm->cycle_to_die);
 	if (vm->info[i].alive == 0)
 	{
-		ft_printf("IM DED! cycle[%i] process[%i]\n", vm->cycles, i);
+		//ft_printf("IM DED! cycle[%i] process[%i]\n", vm->cycles, i);
 		vm->info[i].executing = 0;
 	}
 	vm->info[i].alive = 0;
@@ -61,22 +61,42 @@ void	check_executing_processes(t_vm *vm, int *game_end)
 void	process_update(t_vm *vm, int i)
 {
 	int op;
+	int previous_index;
 
 	//ft_printf("\nProcess number[%i], Byte Read [%#0.2hhx], Index [%i]", i, vm->core[vm->info[i].start + vm->info[i].index], vm->info[i].index);
 	if (vm->info[i].start + vm->info[i].index > 4095)//wrapping around the core
 		vm->info[i].index = vm->info[i].start * -1;
 	op = vm->core[vm->info[i].start + vm->info[i].index];
+	if (vm->vis[vm->info[i].start + vm->info[i].index].previous_index)
+	{
+		attron(COLOR_PAIR(vm->vis[vm->vis[vm->info[i].start + vm->info[i].index].previous_index].player));
+		mvprintw((vm->vis[vm->info[i].start + vm->info[i].index].previous_index) / 64 + 1, ((vm->vis[vm->info[i].start + vm->info[i].index].previous_index) * 2 + vm->vis[vm->info[i].start + vm->info[i].index].previous_index) % 192, "%hhx", vm->vis[vm->vis[vm->info[i].start + vm->info[i].index].previous_index].byte);
+		mvprintw((vm->vis[vm->info[i].start + vm->info[i].index].previous_index + 1) / 64 + 1, ((vm->vis[vm->info[i].start + vm->info[i].index].previous_index + 1) * 2 + (vm->vis[vm->info[i].start + vm->info[i].index].previous_index + 1) + 1) % 192, "%hhx", vm->vis[vm->vis[vm->info[i].start + vm->info[i].index].previous_index].byte);
+		attroff(COLOR_PAIR(vm->vis[vm->vis[vm->info[i].start + vm->info[i].index].previous_index].player));
+	}
+	attron(COLOR_PAIR(5));
 	if (op > 0 && op < 17 && vm->info[i].wait_cycle == g_optab[op - 1].cycles - 1)
 	{
+	mvprintw(vm->info[i].start + vm->info[i].index / 64 + 1, (vm->info[i].start + vm->info[i].index) * 2 + (vm->info[i].start + vm->info[i].index) % 192, "%hhx", vm->core[vm->info[i].start + vm->info[i].index + 1]);
 		//printf("process[%i] cycles[%i] op[%02hhx]\n", i, vm->cycles, (unsigned char)op);
+		previous_index = vm->info[i].index;
 		jumptable(op, vm, i);
-		ft_putchar('\n');
+		//ft_putchar('\n');
 		vm->info[i].wait_cycle = 0;
+		vm->vis[vm->info[i].start + vm->info[i].index].previous_index = previous_index;
 	}
 	else if (op > 0 && op < 17)
 		vm->info[i].wait_cycle++;
 	else
+	{
+	mvprintw(vm->info[i].start + vm->info[i].index / 64 + 1, (vm->info[i].start + vm->info[i].index * 2 + vm->info[i].start + vm->info[i].index) % 192, "%hhx", vm->core[vm->info[i].start + vm->info[i].index]);
+	mvprintw((vm->info[i].start + vm->info[i].index + 1) / 64 + 1, ((vm->info[i].start + vm->info[i].index + 1) * 2 + (vm->info[i].start + vm->info[i].index + 1) + 1) % 192, "%hhx", vm->core[vm->info[i].start + vm->info[i].index + 1]);
+		vm->vis[vm->info[i].start + vm->info[i].index + 1].previous_index = vm->info[i].index;
 		vm->info[i].index++;
+	}
+	attroff(COLOR_PAIR(5));
+	refresh();
+	usleep(50000);
 	vm->info[i].cycles++;
 	//if (vm->info[i].cycles % vm->cycle_to_die == 0)
 	//	reset_alive(vm, i);
@@ -104,6 +124,8 @@ void	read_bytes(t_vm *vm, int i)
 				process_update(vm, i);
 			i--;
 		}
+		//print_curses(vm);
+		//clear and print t_vis again
 		//ft_printf("cycle [%i] cycle_to_die [%i]\n", vm->cycles, vm->cycle_to_die);
 		check_executing_processes(vm, &game_end);
 		if (counter == 0)
@@ -123,7 +145,8 @@ void	read_bytes(t_vm *vm, int i)
 		//	print_core(vm->core, -1);//refresh();
 		game_end = 1;
 	}
-	//print_core(vm->core, -1);
+	endwin();
+	print_core(vm->core, -1);
 	ft_printf("\nContestant %i, \"%s\", has won !\n", vm->win_player, vm->info[vm->win_player - 1].header + 4);
 }
 
