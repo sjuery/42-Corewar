@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/08 18:44:24 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/12 18:32:34 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	vm_and(t_vm *vm, int i)
 	get_offset(vm, i, ACB3(acb), &l3);
 	reg_and(l1, l2, l3);
 	vm->info[i].carry = 1;
-	ft_printf("and called");
+	//ft_printf("and called");
 }
 
 void	vm_xor(t_vm *vm, int i)
@@ -159,7 +159,7 @@ void	vm_add(t_vm *vm, int i)
 	get_offset(vm, i, ACB2(acb), &l2);
 	get_offset(vm, i, ACB3(acb), &l3);
 	reg_add(l1, l2, l3);
-	ft_printf("add called");
+	//ft_printf("add called");
 	//vm->info[i].index += 3;
 }
 

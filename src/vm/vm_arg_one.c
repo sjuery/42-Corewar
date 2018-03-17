@@ -6,11 +6,12 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/15 19:43:14 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/16 16:06:46 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+#define VWRAP 192
 
 void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 {
@@ -76,6 +77,7 @@ void	vm_zjmp(t_vm *vm, int i)
 	//ft_printf("zjmp called;");
 }
 //ask aneesh if he added the macro for start + index//gonna need it to make mvprintw easier for st, sti
+//if the byte is less than 16, will not print correctly currently
 void	vm_sti(t_vm *vm, int i)
 {
 	unsigned char	*l1;
@@ -105,16 +107,21 @@ void	vm_sti(t_vm *vm, int i)
 	vm->vis[vm->info[i].start + instruct_index + index + 1].player = i + 1;
 	vm->vis[vm->info[i].start + instruct_index + index + 2].player = i + 1;
 	vm->vis[vm->info[i].start + instruct_index + index + 3].player = i + 1;
-//update visualizer
-	/*attron(COLOR_PAIR(vm->info[i].player_int));
-	pos = vm->info[i].start + instruct_index + index;
-	//dprintf(2, "x[%i], y[%i], player_int[%i]\n", vm->info[i].start + instruct_index + index / 64, vm->info[i].start + instruct_index + index * 2 + vm->info[i].start + instruct_index + index - 1, vm->info[i].player_int);
-	//mvprintw(pos / 64 + 1, pos * 2 + pos, "%02hhx", l1[0]);
-	//mvprintw((pos + 1) / 64 + 1, (pos + 1) * 2 + pos + 1, "%02hhx", l1[1]);
-	//mvprintw((pos + 2) / 64 + 1, (pos + 2) * 2 + pos + 2, "%02hhx", l1[2]);
-	//mvprintw((pos + 3) / 64 + 1, (pos + 3) * 2 + pos + 3, "%02hhx", l1[3]);
+	attron(COLOR_PAIR(vm->info[i].player_int));
+	mvprintw(vm->info[i].start + instruct_index + index / 64 + 1,
+			(vm->info[i].start + instruct_index + index * 2 + vm->info[i].start + instruct_index + index) % VWRAP,
+			 "%02hhx", vm->vis[vm->info[i].start + instruct_index + index].byte);
+	mvprintw((vm->info[i].start + instruct_index + index + 1)/ 64 + 1,
+			((vm->info[i].start + instruct_index + index + 1) * 2 + vm->info[i].start + instruct_index + index + 1)
+			% VWRAP, "%02hhx", vm->vis[vm->info[i].start + instruct_index + index + 2].byte);
+	mvprintw((vm->info[i].start + instruct_index + index + 2)/ 64 + 1,
+			((vm->info[i].start + instruct_index + index + 2) * 2 + vm->info[i].start + instruct_index + index + 2)
+			% VWRAP, "%02hhx", vm->vis[vm->info[i].start + instruct_index + index + 3].byte);
+	mvprintw((vm->info[i].start + instruct_index + index + 3)/ 64 + 1,
+			((vm->info[i].start + instruct_index + index + 3) * 2 + vm->info[i].start + instruct_index + index + 3)
+			% VWRAP, "%02hhx", vm->vis[vm->info[i].start + instruct_index + index + 1].byte);
+	refresh();
 	attroff(COLOR_PAIR(vm->info[i].player_int));
-	refresh();*/
 	//ft_printf("sti called");
 }
 

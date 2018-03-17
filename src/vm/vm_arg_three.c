@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/06 21:05:17 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/13 13:38:24 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void	vm_ld(t_vm *vm, int i)
 	ft_printf("ld called: %0.2hhx%0.2hhx%0.2hhx%0.2hhx", l2[0], l2[1], l2[2], l2[3]);
 	vm->info[i].carry = 1;
 }
-
+//if instruction is invalid, index should only move by one
 void	vm_st(t_vm *vm, int i)
 {
 	unsigned char	acb;

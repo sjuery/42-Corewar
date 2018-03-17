@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/10 22:52:38 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/15 18:21:32 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,29 +18,32 @@ void	error(void)
 	exit(0);
 }
 
-void	write_info(t_io *io, int fd, int *i, unsigned char *test)
+void	write_info(t_vm *vm, int fd, int *x, int i)
 {
 	int	j;
 
-	if (!read_input(fd, io))
+	//if (!read_input(fd, io))
+	if (!read_input(fd, &vm->info[i]))
 		error();
 	j = -1;
-	while (++j < io->head.prog_size)
+	while (++j < vm->info[i].head.prog_size)
 	{
-		test[*i] = io->body[j];
-		*i = *i + 1;
+		vm->vis[*x].player = i + 1;
+		vm->core[*x] = vm->info[i].body[j];
+		vm->vis[*x].byte = vm->info[i].body[j];
+		*x = *x + 1;
 	}
 }
 
-void	print_core(unsigned char *test, int i)
+void	print_core(unsigned char *core, int i)
 {
 	while (++i < 4096)
 	{
 		if (i % 64 == 0)
 			ft_printf("\n");
-		if (test[i] < 16 && test[i] >= 0)
+		if (core[i] < 16 && core[i] >= 0)
 			ft_printf("0");
-		ft_printf("%hhx ", test[i]);
+		ft_printf("%hhx ", core[i]);
 	}
 }
 
@@ -120,18 +123,27 @@ void 	init_vm(t_vm *vm)
 	int	x;
 	int	fd;
 	unsigned char *reg;
+	int j;
 
 	i = -1;
 	x = 0;
 	vm->process_count = 0;
 	vm->cycle_to_die = CYCLE_TO_DIE;
 	ft_bzero(vm->core, 4096);
+	while (j < 4096)
+	{
+		vm->vis[j].player = 0;
+		vm->vis[j].byte = 0;
+		vm->vis[j].previous_index = 0;
+		j++;
+	}
 	ft_printf("vm->num_players [%i]\n", vm->num_players);
 	while (++i < vm->num_players)
 	{
 		vm->process_count++;
 		fd = open(vm->players[i], O_RDONLY);
-		write_info(&vm->info[i], fd, &x, vm->core);
+		write_info(vm, fd, &x, i);
+		//write_info(&vm->info[i], fd, &x, vm->core);
 		vm->info[i].location = i * (4096 / vm->num_players);
 		vm->info[i].start = vm->info[i].location;
 		assign_player_num(vm, i, &reg);
@@ -181,13 +193,13 @@ int		main(int ac, char **av)
 	//print_core(vm.core, -1);
 	print_curses(&vm);
 	read_bytes(&vm, -1);
-	while ((ch = getch()))
+/*	while ((ch = getch()))
 	{
 		if (ch == 27)
 		{
 			endwin();
 			break ;
 		}
-	}
+	}*/
 	return (0);
 }
