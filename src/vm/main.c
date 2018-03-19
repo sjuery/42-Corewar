@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/18 23:49:08 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/19 10:40:37 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	print_core(unsigned char *core, int i)
 			ft_printf("0");
 		ft_printf("%hhx ", core[i]);
 	}
+	ft_putchar('\n');
 }
 
 int		blank_pos(char **av)
@@ -165,10 +166,57 @@ void jumptable(int a, t_vm *vm, int i)
 	jt[15] = vm_aff;
 	jt[a - 1](vm, i);
 }
-
-int		valid_acb(unsigned char acb, int b1, int b2, int b3)
+/*
+int		valid_acb(t_instr instr, int b1, int b2, int b3)
 {
-	return (ACB1(acb) == b1 && ACB2(acb) == b2 && ACB3(acb) == b3);
+	int	index;
+	int	jumps[4];
+
+	index = instr.vm->info[instr.i].index + 3;
+	jumps[0] = 0;
+	jumps[1] = 1;
+	jumps[2] = 4;
+	jumps[3] = 2;
+	if (ACB1(instr.acb) != b1)
+	{
+		//ft_printf("ACB1 doesn't match\n");
+		return (0);
+	}
+	else if (b1 == 1 && (instr.vm->core[index] == 0 || instr.vm->core[index] > REG_NUMBER))
+	{
+		//ft_printf("invalid reegister number 1: %hhx\n", instr.vm->core[index]);
+		return (0);
+	}
+	index += jumps[b1];
+	if (ACB2(instr.acb) != b2)
+	{
+		//ft_printf("ACB2 doesn't match\n");
+		return (0);
+	}
+	else if (b2 == 1 && (instr.vm->core[index] == 0 || instr.vm->core[index] > REG_NUMBER))
+	{
+		//ft_printf("invalid reegister number 2: %hhx\n", instr.vm->core[index]);
+		return (0);
+	}
+	index += jumps[b2];
+	if (ACB3(instr.acb) != b3)
+	{
+		//ft_printf("ACB3 doesn't match\n");
+		return (0);
+	}
+	else if (b3 == 1 && (instr.vm->core[index] == 0 || instr.vm->core[index] > REG_NUMBER))
+	{
+		//ft_printf("invalid reegister number 3: %hhx\n", instr.vm->core[index]);
+		return (0);
+	}
+	index += jumps[b3];
+	return (1);
+}
+*/
+int		valid_acb(t_instr instr, int b1, int b2, int b3)
+//int		valid_acb(unsigned char acb, int b1, int b2, int b3)
+{
+	return (ACB1(instr.acb) == b1 && ACB2(instr.acb) == b2 && ACB3(instr.acb) == b3);
 }
 
 int		main(int ac, char **av)

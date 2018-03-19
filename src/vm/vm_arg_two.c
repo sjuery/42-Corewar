@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/12 18:32:34 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/19 10:41:40 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	vm_and(t_vm *vm, int i)
 	acb = vm->core[ACB];
 	if (ACB3(acb) != 1)
 	{
-		ft_printf("Burn!\n");
+		//ft_printf("Burn!\n");
 		return ;
 	}
 	get_offset(vm, i, ACB1(acb) | 0b100, &l1);
@@ -49,34 +49,17 @@ void	vm_xor(t_vm *vm, int i)
 	acb = vm->core[ACB];
 	if (ACB3(acb) != 1)
 	{
-		ft_printf("Burn!\n");
+		//ft_printf("Burn!\n");
 		return ;
 	}
 	get_offset(vm, i, ACB1(acb) | 0b100, &l1);
 	get_offset(vm, i, ACB2(acb) | 0b100, &l2);
 	get_offset(vm, i, ACB3(acb), &l3);
 	reg_xor(l1, l2, l3);
-	ft_printf("xor called");
+	//ft_printf("xor called");
 }
 
-int		indirect(t_vm *vm, int i, unsigned char opcode)
-{
-	//use % idx_mod
-	//ld
-	//st
-	//ldi
-	//sti ?
-	//zjmp
-	//fork
-	if (opcode)
-	//if (opcode == 0x2 || opcode == 0x3 ||
-		//opcode == 0x9 || opcode == 0xA || opcode == 0xC)
-		return ((vm->core[vm->info[i].start + vm->info[i].index] * 0x100 +
-				vm->core[vm->info[i].start + vm->info[i].index + 1]) % IDX_MOD);
-	else
-		return (vm->core[vm->info[i].start + vm->info[i].index] * 0x100 +
-				vm->core[vm->info[i].start + vm->info[i].index + 1]);
-}
+/*
 
 void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 {
@@ -103,6 +86,9 @@ void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 	}
 }
 
+*/
+
+
 void	vm_or(t_vm *vm, int i)
 {
 	unsigned char	*l1;
@@ -114,14 +100,14 @@ void	vm_or(t_vm *vm, int i)
 	acb = vm->core[ACB];
 	if (ACB3(acb) != 1)
 	{
-		ft_printf("Burn!\n");
+		//ft_printf("Burn!\n");
 		return ;
 	}
 	get_offset(vm, i, ACB1(acb) | 0b100, &l1);
 	get_offset(vm, i, ACB2(acb) | 0b100, &l2);
 	get_offset(vm, i, ACB3(acb), &l3);
 	reg_or(l1, l2, l3);
-	ft_printf("or called");
+	//ft_printf("or called");
 }
 
 void	vm_aff(t_vm *vm, int i)
@@ -133,12 +119,12 @@ void	vm_aff(t_vm *vm, int i)
 	acb = vm->core[ACB];
 	if (!valid_acb(acb, 1, 0, 0))
 	{
-		ft_printf("Burn!\n");
+		//ft_printf("Burn!\n");
 		return ;
 	}
 	get_offset(vm, i, ACB1(acb), &l1);
-	ft_printf("%c\n", l1[3]);
-	ft_printf("aff called");
+	//ft_printf("%c\n", l1[3]);
+	//ft_printf("aff called");
 }
 
 void	vm_add(t_vm *vm, int i)
@@ -152,7 +138,7 @@ void	vm_add(t_vm *vm, int i)
 	acb = vm->core[ACB];
 	if (!valid_acb(acb, 1, 1, 1))
 	{
-		ft_printf("Burn!\n");
+		//ft_printf("Burn!\n");
 		return ;
 	}
 	get_offset(vm, i, ACB1(acb), &l1);
@@ -192,13 +178,13 @@ void	vm_sub(t_vm *vm, int i)
 	acb = vm->core[ACB];
 	if (!valid_acb(acb, 1, 1, 1))
 	{
-		ft_printf("Burn!\n");
+		//ft_printf("Burn!\n");
 		return ;
 	}
 	get_offset(vm, i, ACB1(acb), &l1);
 	get_offset(vm, i, ACB2(acb), &l2);
 	get_offset(vm, i, ACB3(acb), &l3);
 	reg_sub(l1, l2, l3);
-	ft_printf("sub called");
+	//ft_printf("sub called");
 	//vm->info[i].index += 3;
 }

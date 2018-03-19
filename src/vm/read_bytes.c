@@ -6,14 +6,13 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/19 00:14:15 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/19 00:25:17 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 #include "asm.h"
 #define VWRAP 192
-
 void	reset_alive_all(t_vm *vm)
 {
 	int i;
@@ -74,15 +73,13 @@ void	process_update(t_vm *vm, int i)
 	int op;
 	int previous_index;
 
-	//ft_printf("\nProcess number[%i], Byte Read [%#0.2hhx], Index [%i]", i, vm->core[vm->info[i].start + vm->info[i].index], vm->info[i].index);
-	if (vm->info[i].start + vm->info[i].index > MEM_SIZE - 1)
+	if (vm->info[i].start + vm->info[i].index > MEM_SIZE - 1)//should this be >= MEM_SIZE - 1?
 		vm->info[i].index = vm->info[i].start * -1;
 	op = vm->core[vm->info[i].start + vm->info[i].index];
 	vis_unhighlight_process(vm, i);
-	if (op > 0 && op < 17 && vm->info[i].wait_cycle == g_optab[op - 1].cycles - 1)
+	if ((op > 0 && op < 17) && vm->info[i].wait_cycle == g_optab[op - 1].cycles - 1)
 	{
 		vis_highlight_process(vm, i);
-		//printf("process[%i] cycles[%i] op[%02hhx]\n", i, vm->cycles, (unsigned char)op);
 		previous_index = vm->info[i].start + vm->info[i].index;
 		jumptable(op, vm, i);
 		vm->info[i].wait_cycle = 0;
