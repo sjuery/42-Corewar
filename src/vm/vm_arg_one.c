@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/16 16:06:46 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/18 22:17:38 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 		vm->info[i].index += 2;
 	}
 }
-//how does a player win if no one has icalled live? first or last process to execute?
+//how does a player win if no one has called live? first or last process to execute?
 void	vm_live(t_vm *vm, int i)
 {
 	int player_int;

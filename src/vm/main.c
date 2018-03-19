@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/16 17:04:14 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/18 23:49:08 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	write_info(t_vm *vm, int fd, int *x, int i)
 {
 	int	j;
 
-	//if (!read_input(fd, io))
 	if (!read_input(fd, &vm->info[i]))
 		error();
 	j = -1;
@@ -37,7 +36,7 @@ void	write_info(t_vm *vm, int fd, int *x, int i)
 
 void	print_core(unsigned char *core, int i)
 {
-	while (++i < 4096)
+	while (++i < MEM_SIZE)
 	{
 		if (i % 64 == 0)
 			ft_printf("\n");
@@ -71,7 +70,7 @@ int		get_n_players(int ac, char **av, t_vm *vm, int n_start)
 		if (!ft_strcmp(av[n_start], "-n"))
 		{
 			if (ft_general_validate("%d", av[n_start + 1])
-					&& ft_atoi(av[n_start + 1]) < 4)
+					&& ft_atoi(av[n_start + 1]) < MAX_PLAYERS)
 				vm->players[ft_atoi(av[n_start + 1])] = av[n_start + 2];
 			else
 				error();
@@ -106,14 +105,14 @@ void 	init_players(int ac, char **av, t_vm *vm)
 void	assign_player_num(t_vm *vm, int i, unsigned char **reg)
 {
 	*reg = vm->info[i].regs[1];
-	(*reg)[0] = 255;
-	(*reg)[1] = 255;
-	(*reg)[2] = 255;
-	(*reg)[3] = 255 - i;
-	vm->info[i].player_num[0] = 255;
-	vm->info[i].player_num[0] = 255;
-	vm->info[i].player_num[0] = 255;
-	vm->info[i].player_num[0] = 255 - i;
+	(*reg)[0] = 0xff;
+	(*reg)[1] = 0xff;
+	(*reg)[2] = 0xff;
+	(*reg)[3] = 0xff - i;
+	vm->info[i].player_num[0] = 0xff;
+	vm->info[i].player_num[1] = 0xff;
+	vm->info[i].player_num[2] = 0xff;
+	vm->info[i].player_num[3] = 0xff - i;
 	vm->info[i].player_int = i + 1;
 }
 
@@ -127,27 +126,19 @@ void 	init_vm(t_vm *vm)
 
 	i = -1;
 	x = 0;
-	vm->process_count = 0;
 	vm->cycle_to_die = CYCLE_TO_DIE;
-	ft_bzero(vm->core, 4096);
-	while (j < 4096)
-	{
-		vm->vis[j].player = 0;
-		vm->vis[j].byte = 0;
-		vm->vis[j].previous_index = 0;
-		j++;
-	}
+	ft_bzero(vm->core, MEM_SIZE);
+	ft_bzero(vm->vis, MEM_SIZE);
 	ft_printf("vm->num_players [%i]\n", vm->num_players);
 	while (++i < vm->num_players)
 	{
 		vm->process_count++;
 		fd = open(vm->players[i], O_RDONLY);
 		write_info(vm, fd, &x, i);
-		//write_info(&vm->info[i], fd, &x, vm->core);
-		vm->info[i].location = i * (4096 / vm->num_players);
+		vm->info[i].location = i * (MEM_SIZE / vm->num_players);
 		vm->info[i].start = vm->info[i].location;
 		assign_player_num(vm, i, &reg);
-		x += ((4096 / vm->num_players) - vm->info[i].head.prog_size);
+		x += ((MEM_SIZE / vm->num_players) - vm->info[i].head.prog_size);
 	}
 	vm->win_player = vm->num_players;
 }
@@ -187,6 +178,7 @@ int		main(int ac, char **av)
 
 	if (ac < 2)
 		error();
+	ft_bzero(&vm, sizeof(vm));
 	init_players(ac, av, &vm);
 	init_vm(&vm);
 	init_curses();

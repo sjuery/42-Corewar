@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/16 17:04:19 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/18 23:11:04 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,23 +36,11 @@
 # define ACB3(a) ((a >> 2) % 4)
 # define ACB			vm->info[i].start + vm->info[i].index - 1
 
-/*
-** typedef struct					s_header
-** {
-** 		unsigned int				magic; <-- the ex identifier
-** 		char						prog_name[PROG_NAME_LENGTH + 1]; <-- process name
-** 		unsigned int				prog_size; <-- bytes to be read
-** 		char						comment[COMMENT_LENGTH + 1]; <-- process comment
-** }
-*/
-//everytime something is highlighted, mark the next previous_index in the array with current index
-//everytime something in the core is written in (st & sti), t_vis needs to be updated
-//
 typedef	struct		s_vis
 {
 	unsigned char	byte;//character to be printed
-	int				player;//owner
-	int				previous_index;//need to unhighlight this and change the color back to the owners color
+	int				player;//owner of the byte that is being printed
+	int				previous_index;//unhighlight this and change the color back to the owners color
 }					t_vis;
 
 typedef struct		s_io
@@ -85,10 +73,10 @@ typedef struct		s_vm
 	t_vis			vis[4096]; // visualiser board
 	int				win_player;//keep track of currently winning player (1, 2, 3, or 4)
 	int				cycle_to_die;//initalized to CYCLE_TO_DIE
-	int				checks;//checks to see if cycle_to_die has been decreased
-	int				cycles;
 	int				counter;
 	size_t			dump_cycle;
+	int				checks;//checks to see if cycle_to_die has been decreased
+	int				cycles;
 }					t_vm;
 
 void				print_core(unsigned char *test, int i);
