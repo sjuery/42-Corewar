@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/12 17:00:20 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/17 20:52:08 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 # define ACB2(a) ((a >> 4) % 4)
 # define ACB3(a) ((a >> 2) % 4)
 # define ACB			vm->info[i].start + vm->info[i].index - 1
+# define VAL(a) (a[3] + (a[2] << 8) + (a[1] << 16) + (a[0] << 24))
+# define VAL2(a) ((a[1]) + (a[0] << 8))
 
 /*
 ** typedef struct					s_header
@@ -55,7 +57,7 @@ typedef struct		s_io
 	int				alive; // this is to check if the process has called live
 	int				executing;//will be false if process hasn't called live in CYCLE_TO_DIE cycles/ game ends when all processes no longer executing
 	int				live; // # of time it calls live
-	unsigned char	regs[REG_NUMBER][REG_SIZE]; // registers, # of reg + its size
+	unsigned char	regs[REG_NUMBER + 1][REG_SIZE]; // registers, # of reg + its size
 	unsigned char	pc[REG_SIZE]; // program counter
 	int				carry; // carry flag
 	int				location; // load location
@@ -77,6 +79,23 @@ typedef struct		s_vm
 	int				counter;
 	size_t			dump_cycle;
 }					t_vm;
+
+typedef struct		s_instr
+{
+	t_vm			*vm;
+	int				i;
+	unsigned char	acb;
+	unsigned char	*l1;
+	unsigned char	*l2;
+	unsigned char	*l3;
+	unsigned char	*s;
+	unsigned int	reg_index[3];
+	unsigned int	ri;
+	int				opcode_pos;
+	short			index;
+}					t_instr;
+
+t_instr				init_instr(t_vm *vm, int i);
 
 void				print_core(unsigned char *test, int i);
 
@@ -111,14 +130,19 @@ void	vm_add(t_vm *vm, int i);
 void	vm_sub(t_vm *vm, int i);
 
 int		indirect(t_vm *vm, int i, unsigned char opcode);
-void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l); // maybe concatenate acb pair and whether or not it' uses idx mod
-void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l);
+//int		indirect(t_vm *vm, int i, unsigned char opcode, int pos);
+//void get_offset(t_vm *vm, int i, unsigned char acb, unsigned char **l); // maybe concatenate acb pair and whether or not it' uses idx mod
+//void get_offset(t_instr *instr, unsigned char acb, unsigned char **l);
+int get_offset(t_instr *instr, unsigned char acb, unsigned char **l);
+int get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l);
+//void get_offset_index(t_instr instr, unsigned char acb, unsigned char **l);
+//void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l);
 int		get_index_one(unsigned char *l);
 int		get_index_two(unsigned char *l1, unsigned char *l2);
 
 void jumptable(int a, t_vm *vm, int i);
-int		valid_acb(unsigned char acb, int b1, int b2, int b3);
-
+//int		valid_acb(unsigned char acb, int b1, int b2, int b3);
+int		valid_acb(t_instr instr, int b1, int b2, int b3);
 /*
 ** read_bytes.c
 */

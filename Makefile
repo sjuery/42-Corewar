@@ -14,8 +14,10 @@ NAME	= corewar
 ASMNAME = asm
 DASMNAME = dasm
 
-FILES	= 	main parse_file ncurses vm_arg_one vm_arg_two \
-			vm_arg_three read_bytes reg_ops op
+FILES	= 	main parse_file ncurses \
+			read_bytes reg_ops op \
+			vm_args
+			#vm_arg_one vm_arg_two vm_arg_three
 ASMFILES= 	assembler convert_to_hex op \
 			parse
 DASMFILES= 	disassembler convert_to_asmbly op \

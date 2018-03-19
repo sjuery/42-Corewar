@@ -1,0 +1,109 @@
+to do:
+
+Write helper functions for indirect, direct, and register placement
+helper functions for add and subtract
+
+
+getting offsets:
+
+ACB:
+
+    ACB1    ACB2    ACB3
+    [0-3]   [0-3]   [0-3]   00
+    vm->core[index] = ACB
+    vm->core[index - 1] = OP
+
+copy OP into variable opcode
+copy ACB into variable acb
+
+ACB1 == 0:
+    invalid ACB,
+    instruction without parameters
+
+ACB1 == 1:
+    read as register - 1 byte
+        vm->info[i].regs[vm->core[vm->info[i].index + 1]]
+    index += 1
+
+ACB1 == 2:
+    read direct value - 4 bytes
+        vm->core[vm->info[i].index],
+        vm->core[vm->info[i].index + 1],
+        vm->core[vm->info[i].index + 2],
+        vm->core[vm->info[i].index + 3]
+    index += 4
+
+ACB1 == 3:
+    read indirect value - 2 bytes
+    vm->core[vm->info[i].index] * 0x100 + vm->core[vm->info[i].index + 1]
+    index += 2
+
+index now points to byte after param 1
+
+ACB2 == 0:
+    invalid ACB,
+    instruction without parameters,
+    instruction with only one parameter
+
+ACB2 == 1:
+    read as register - 1 byte
+        vm->info[i].regs[vm->core[vm->info[i].index + 1]]
+    index += 1
+
+ACB2 == 2:
+    read direct value - 4 bytes
+        vm->core[vm->info[i].index],
+        vm->core[vm->info[i].index + 1],
+        vm->core[vm->info[i].index + 2],
+        vm->core[vm->info[i].index + 3]
+    index += 4
+
+ACB2 == 3:
+    read indirect value - 2 bytes
+    vm->core[vm->info[i].index] * 0x100 + vm->core[vm->info[i].index + 1]
+    index += 2
+
+index now points to byte after param 2
+
+ACB3 == 0:
+    invalid ACB,
+    instruction without parameters,
+    instruction with only one parameter
+
+ACB3 == 1:
+    read as register - 1 byte
+        vm->info[i].regs[vm->core[vm->info[i].index + 1]]
+    index += 1
+
+ACB3 == 2:
+    read direct value - 4 bytes
+        vm->core[vm->info[i].index],
+        vm->core[vm->info[i].index + 1],
+        vm->core[vm->info[i].index + 2],
+        vm->core[vm->info[i].index + 3]
+    index += 4
+
+ACB3 == 3:
+    read indirect value - 2 bytes
+    vm->core[vm->info[i].index] * 0x100 + vm->core[vm->info[i].index + 1]
+    index += 2
+
+
+** Notes
+
+Handle negative values for indirect addressing
+Consolidate Isa's code for interpreting negative indices into its own function
+Restrict index output into range 0 - 4096
+
+
+carry is only modified if new value is 0
+
+To Do List:
+
+Handle header validation
+Handle size restriction
+Handle command-line bugs
+Convert t_io into a linked list
+Figure out endianness, and clean up all related bugs
+Decrement CYCLE_TO_DIE ?
+load player number into r1

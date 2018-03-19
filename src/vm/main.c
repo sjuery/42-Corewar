@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/08 18:20:52 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/16 03:28:21 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	print_core(unsigned char *test, int i)
 			ft_printf("0");
 		ft_printf("%hhx ", test[i]);
 	}
+	ft_putchar('\n');
 }
 
 int		blank_pos(char **av)
@@ -156,10 +157,57 @@ void jumptable(int a, t_vm *vm, int i)
 	jt[15] = vm_aff;
 	jt[a - 1](vm, i);
 }
-
-int		valid_acb(unsigned char acb, int b1, int b2, int b3)
+/*
+int		valid_acb(t_instr instr, int b1, int b2, int b3)
 {
-	return (ACB1(acb) == b1 && ACB2(acb) == b2 && ACB3(acb) == b3);
+	int	index;
+	int	jumps[4];
+
+	index = instr.vm->info[instr.i].index + 3;
+	jumps[0] = 0;
+	jumps[1] = 1;
+	jumps[2] = 4;
+	jumps[3] = 2;
+	if (ACB1(instr.acb) != b1)
+	{
+		//ft_printf("ACB1 doesn't match\n");
+		return (0);
+	}
+	else if (b1 == 1 && (instr.vm->core[index] == 0 || instr.vm->core[index] > REG_NUMBER))
+	{
+		//ft_printf("invalid reegister number 1: %hhx\n", instr.vm->core[index]);
+		return (0);
+	}
+	index += jumps[b1];
+	if (ACB2(instr.acb) != b2)
+	{
+		//ft_printf("ACB2 doesn't match\n");
+		return (0);
+	}
+	else if (b2 == 1 && (instr.vm->core[index] == 0 || instr.vm->core[index] > REG_NUMBER))
+	{
+		//ft_printf("invalid reegister number 2: %hhx\n", instr.vm->core[index]);
+		return (0);
+	}
+	index += jumps[b2];
+	if (ACB3(instr.acb) != b3)
+	{
+		//ft_printf("ACB3 doesn't match\n");
+		return (0);
+	}
+	else if (b3 == 1 && (instr.vm->core[index] == 0 || instr.vm->core[index] > REG_NUMBER))
+	{
+		//ft_printf("invalid reegister number 3: %hhx\n", instr.vm->core[index]);
+		return (0);
+	}
+	index += jumps[b3];
+	return (1);
+}
+*/
+int		valid_acb(t_instr instr, int b1, int b2, int b3)
+//int		valid_acb(unsigned char acb, int b1, int b2, int b3)
+{
+	return (ACB1(instr.acb) == b1 && ACB2(instr.acb) == b2 && ACB3(instr.acb) == b3);
 }
 
 int		main(int ac, char **av)
@@ -172,7 +220,7 @@ int		main(int ac, char **av)
 	init_vm(&vm);
 	ft_printf("prog size: [%i]\n", vm.info[0].head.prog_size);
 	//init_curses(&vm);
-	print_core(vm.core, -1);
+	//print_core(vm.core, -1);
 	read_bytes(&vm, -1);
 	ft_printf("\n");
 	return (0);
