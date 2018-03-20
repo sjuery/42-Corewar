@@ -31,6 +31,7 @@ void	write_info(t_vm *vm, int fd, int *x, int i)
 	char	*body;
 
 	body = ft_memalloc(sizeof(char) * CHAMP_MAX_SIZE + 1);
+	ft_printf("write info called, checking %d\n", fd);
 	if (!read_input(fd, &vm->info[i], body))
 		error();
 	j = -1;
@@ -67,33 +68,33 @@ int		blank_pos(char **av)
 	return (i);
 }
 
-int		get_n_players(int ac, char **av, t_vm *vm, int n_start)
-{
-	int	n;
-	int	i;
+// int		get_n_players(int ac, char **av, t_vm *vm, int n_start)
+// {
+// 	int	n;
+// 	int	i;
 
-	i = -1;
-	while (++i < 4)
-		vm->players[i] = 0;
-	i = 0;
-	while (++n_start < ac)
-	{
-		if (!ft_strcmp(av[n_start], "-n"))
-		{
-			if (ft_general_validate("%d", av[n_start + 1])
-					&& ft_atoi(av[n_start + 1]) < MAX_PLAYERS)
-				vm->players[ft_atoi(av[n_start + 1])] = av[n_start + 2];
-			else
-				error();
-			n_start += 2;
-		}
-		else
-			vm->players[blank_pos(vm->players)] = av[n_start];
-		++n;
-		++i;
-	}
-	return (n);
-}
+// 	i = -1;
+// 	while (++i < 4)
+// 		vm->players[i] = 0;
+// 	i = 0;
+// 	while (++n_start < ac)
+// 	{
+// 		if (!ft_strcmp(av[n_start], "-n"))
+// 		{
+// 			if (ft_general_validate("%d", av[n_start + 1])
+// 					&& ft_atoi(av[n_start + 1]) < MAX_PLAYERS)
+// 				vm->players[ft_atoi(av[n_start + 1])] = av[n_start + 2];
+// 			else
+// 				error();
+// 			n_start += 2;
+// 		}
+// 		else
+// 			vm->players[blank_pos(vm->players)] = av[n_start];
+// 		++n;
+// 		++i;
+// 	}
+// 	return (n);
+// }
 
 void	zero_flags(t_vm *vm)
 {
@@ -105,9 +106,37 @@ void	zero_flags(t_vm *vm)
 	vm->f.flags = 1;
 }
 
+void	get_champ_position(t_vm *vm, char *str, int pos)
+{
+	if (vm->players[pos] != NULL)
+	{
+		ft_printf("You cannot repeat the same -n values for multiple champions\n");
+		exit(0);
+	}
+	vm->players[pos] = str;
+	vm->num_players++;
+	if (vm->num_players > 4)
+		error();
+	ft_printf("Stored position, champ [%s] in index %i\n", vm->players[pos], pos);
+}
+
+void	fill_champ_position(t_vm *vm, char *str)
+{
+	int i = 0;
+
+	while (vm->players[i] != NULL)
+		i++;
+	vm->players[i] = str;
+	vm->num_players++;
+	if (vm->num_players > 4)
+		error();
+	ft_printf("Stored position, champ [%s] in index %i\n", vm->players[i], i);
+}
+
 void	check_flags(t_vm *vm, char **av, int *i)
 {
-	if ((!ft_strcmp(av[*i], "-dump") || !ft_strcmp(av[*i], "-d")) && ft_general_validate("%d", av[*i + 1]))
+	if ((!ft_strcmp(av[*i], "-dump") || !ft_strcmp(av[*i], "-d")) && ft_general_validate("%d", av[*i + 1])
+			&& vm->f.flags == 1 && vm->f.d == 0)
 	{
 		vm->f.d = ft_atoi(av[*i + 1]);
 		*i = *i + 1;
@@ -115,64 +144,84 @@ void	check_flags(t_vm *vm, char **av, int *i)
 	}
 	else if ((!ft_strcmp(av[*i], "-number") || !ft_strcmp(av[*i], "-n")) && ft_general_validate("%d", av[*i + 1]))
 	{
-		if (((vm->f.n = ft_atoi(av[*i + 1])) > 4))
+		ft_printf("N called, %i and %s\n", ft_atoi(av[*i + 1]), av[*i + 2]);
+		if ((ft_atoi(av[*i + 1]) > 4) && (ft_atoi(av[*i + 1]) < 1) && !ft_general_validate("%s", av[*i + 2]))
 			error();
-		*i = *i + 1;
-		ft_printf("Number flag detected, number value is %i", vm->f.n);
+		get_champ_position(vm, av[*i + 2], (ft_atoi(av[*i + 1]) - 1));
+		*i = *i + 2;
+		vm->f.flags = 0;
 	}
-	else if (!ft_strcmp(av[*i], "-graphic") || !ft_strcmp(av[*i], "-g"))
+	else if ((!ft_strcmp(av[*i], "-graphic") || !ft_strcmp(av[*i], "-g"))
+			&& vm->f.flags == 1 && vm->f.g == 0)
 	{
 		vm->f.g = 1;
 		ft_printf("Graphic flag detected, value %i", vm->f.g);
 	}
-	else if (!ft_strcmp(av[*i], "-debug") || !ft_strcmp(av[*i], "-b"))
+	else if ((!ft_strcmp(av[*i], "-debug") || !ft_strcmp(av[*i], "-b"))
+			&& vm->f.flags == 1 && vm->f.b == 0)
 	{
 		vm->f.b = 1;
 		ft_printf("Debug flag detected, value %i", vm->f.b);
 	}
-	else if (!ft_strcmp(av[*i], "-verbose") || !ft_strcmp(av[*i], "-v"))
+	else if ((!ft_strcmp(av[*i], "-verbose") || !ft_strcmp(av[*i], "-v"))
+			&& vm->f.flags == 1 && vm->f.v == 0)
 	{
 		vm->f.v = 1;
 		ft_printf("Verbose flag detected, value %i", vm->f.v);
 	}
+	else if (av[*i][0] != '-' && ft_general_validate("%s", av[*i]))
+		vm->f.flags = 0;
 	else
 		error();
 }
 
-// void 	init_players(int ac, char **av, t_vm *vm)
-// {
-// 	int i;
-
-// 	i = 0;
-// 	while (++i < ac)
-// 	{
-// 		if (ft_general_validate("%s", av[i]) && av[i][0] == '-')
-// 		{
-// 			printf("%s\n", av[i]);
-// 			check_flags(vm, av, &i);
-// 		}
-// 		else
-// 			error();
-// 	}
-// }
+void	fill_champs(t_vm *vm, char **av, int *i)
+{
+	if (!ft_strcmp(av[*i], "-d"))
+		*i = *i + 1;
+	else if (!ft_strcmp(av[*i], "-n"))
+		*i = *i + 2;
+	else if (av[*i][0] == '-');
+	else
+		fill_champ_position(vm, av[*i]);
+}
 
 void 	init_players(int ac, char **av, t_vm *vm)
 {
-	int	i;
-	int	n_start;
+	int i;
 
-	n_start = 0;
-	vm->dump_cycle = -1;
-	if (!ft_strcmp(av[1], "-dump"))
+	i = 0;
+	zero_flags(vm);
+	while (++i < ac)
 	{
-		if (ft_general_validate("%d", av[2]) && av[2][0] != '-')
-			vm->dump_cycle = ft_atoz(av[2]);
-		else
-			error();
-		n_start = 2;
+		printf("%s\n", av[i]);
+		check_flags(vm, av, &i);
 	}
-	vm->num_players = get_n_players(ac, av, vm, n_start);
+	i = 0;
+	while (++i < ac)
+	{
+		printf("second time %s\n", av[i]);
+		fill_champs(vm, av, &i);
+	}
 }
+
+// void 	init_players(int ac, char **av, t_vm *vm)
+// {
+// 	int	i;
+// 	int	n_start;
+
+// 	n_start = 0;
+// 	vm->dump_cycle = -1;
+// 	if (!ft_strcmp(av[1], "-dump"))
+// 	{
+// 		if (ft_general_validate("%d", av[2]) && av[2][0] != '-')
+// 			vm->dump_cycle = ft_atoz(av[2]);
+// 		else
+// 			error();
+// 		n_start = 2;
+// 	}
+// 	vm->num_players = get_n_players(ac, av, vm, n_start);
+// }
 
 void	assign_player_num(t_vm *vm, int i, unsigned char **reg)
 {
@@ -204,8 +253,10 @@ void 	init_vm(t_vm *vm)
 	ft_printf("vm->num_players [%i]\n", vm->num_players);
 	while (++i < vm->num_players)
 	{
+		ft_printf("Checking loop of init vm for %s\n", vm->players[i]);
 		vm->process_count++;
 		fd = open(vm->players[i], O_RDONLY);
+		// fd = open("resources/champs/examples/zork.cor", O_RDONLY);
 		write_info(vm, fd, &x, i);
 		vm->info[i].location = i * (MEM_SIZE / vm->num_players);
 		vm->info[i].start = vm->info[i].location;
@@ -213,6 +264,7 @@ void 	init_vm(t_vm *vm)
 		x += ((MEM_SIZE / vm->num_players) - vm->info[i].head.prog_size);
 	}
 	vm->win_player = vm->num_players;
+	ft_printf("Finished loop of init_vm\n");
 }
 
 void jumptable(int a, t_vm *vm, int i)
