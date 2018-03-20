@@ -14,24 +14,34 @@
 
 void	error(void)
 {
-	ft_printf("YOU DUN GOOFED\n");
+	ft_printf("Corewar Usage\n");
+	ft_printf("./corewar { d | g | b | v } { n | champion.cor }\n");
+	ft_printf("-dump, -d			dump mode\n");
+	ft_printf("-graphic, -g			graphic mode\n");
+	ft_printf("-debug, -b			debug mode\n");
+	ft_printf("-verbose, -v			verbose mode\n");\
+	ft_printf("-number, -n			designate champ slot\n");
 	exit(0);
 }
 
 void	write_info(t_vm *vm, int fd, int *x, int i)
 {
 	int	j;
+	// char			body[CHAMP_MAX_SIZE + 1];
+	char	*body;
 
-	if (!read_input(fd, &vm->info[i]))
+	body = ft_memalloc(sizeof(char) * CHAMP_MAX_SIZE + 1);
+	if (!read_input(fd, &vm->info[i], body))
 		error();
 	j = -1;
 	while (++j < vm->info[i].head.prog_size)
 	{
 		vm->vis[*x].player = i + 1;
-		vm->core[*x] = vm->info[i].body[j];
-		vm->vis[*x].byte = vm->info[i].body[j];
+		vm->core[*x] = body[j];
+		vm->vis[*x].byte = body[j];
 		*x = *x + 1;
 	}
+	free(body);
 }
 
 void	print_core(unsigned char *core, int i)
@@ -84,6 +94,67 @@ int		get_n_players(int ac, char **av, t_vm *vm, int n_start)
 	}
 	return (n);
 }
+
+void	zero_flags(t_vm *vm)
+{
+	vm->f.d = 0;
+	vm->f.n = 0;
+	vm->f.g = 0;
+	vm->f.b = 0;
+	vm->f.v = 0;
+	vm->f.flags = 1;
+}
+
+void	check_flags(t_vm *vm, char **av, int *i)
+{
+	if ((!ft_strcmp(av[*i], "-dump") || !ft_strcmp(av[*i], "-d")) && ft_general_validate("%d", av[*i + 1]))
+	{
+		vm->f.d = ft_atoi(av[*i + 1]);
+		*i = *i + 1;
+		ft_printf("Dump flag detected, dump value is %i", vm->f.d);
+	}
+	else if ((!ft_strcmp(av[*i], "-number") || !ft_strcmp(av[*i], "-n")) && ft_general_validate("%d", av[*i + 1]))
+	{
+		if (((vm->f.n = ft_atoi(av[*i + 1])) > 4))
+			error();
+		*i = *i + 1;
+		ft_printf("Number flag detected, number value is %i", vm->f.n);
+	}
+	else if (!ft_strcmp(av[*i], "-graphic") || !ft_strcmp(av[*i], "-g"))
+	{
+		vm->f.g = 1;
+		ft_printf("Graphic flag detected, value %i", vm->f.g);
+	}
+	else if (!ft_strcmp(av[*i], "-debug") || !ft_strcmp(av[*i], "-b"))
+	{
+		vm->f.b = 1;
+		ft_printf("Debug flag detected, value %i", vm->f.b);
+	}
+	else if (!ft_strcmp(av[*i], "-verbose") || !ft_strcmp(av[*i], "-v"))
+	{
+		vm->f.v = 1;
+		ft_printf("Verbose flag detected, value %i", vm->f.v);
+	}
+	else
+		error();
+}
+
+// void 	init_players(int ac, char **av, t_vm *vm)
+// {
+// 	int i;
+
+// 	i = 0;
+// 	while (++i < ac)
+// 	{
+// 		if (ft_general_validate("%s", av[i]) && av[i][0] == '-')
+// 		{
+// 			printf("%s\n", av[i]);
+// 			check_flags(vm, av, &i);
+// 		}
+// 		else
+// 			error();
+// 	}
+// }
 
 void 	init_players(int ac, char **av, t_vm *vm)
 {

@@ -148,5 +148,5 @@ void	read_bytes(t_vm *vm, int i)
 		game_end = 1;
 	}
 	endwin();
-	ft_printf("\nContestant %i, \"%s\", has won !\n", vm->win_player, vm->info[vm->win_player - 1].header + 4);
+	ft_printf("\nContestant %i, \"%s\", has won !\n", vm->win_player, vm->info[vm->win_player - 1].head.prog_name);
 }

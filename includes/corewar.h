@@ -53,8 +53,8 @@ typedef	struct		s_vis
 typedef struct		s_io
 {
 	t_header		head; // header in comment from op.h to see what it contains
-	char			header[HEADER_SIZE]; // store stuff being read
-	char			body[CHAMP_MAX_SIZE + 1];
+	// char			header[HEADER_SIZE]; // store stuff being read
+	// char			body[CHAMP_MAX_SIZE + 1];
 	unsigned char	player_num[4];//FF FF, FF FE, etc
 	int				player_int;//player 1, 2, 3 or 4
 	int				index; // to track where the instruction reading is currently at
@@ -77,11 +77,12 @@ typedef struct		s_flags
 	int				g; // -g (visualizer)
 	int				b; // -b (debug)
 	int				v; // -v (verbose)
+	int				flags; // this is default set to 1, when it parses actual champ it sets to 0
 }					t_flags;
 
 typedef struct		s_vm
 {
-	t_io			info[1024]; // holds all the process
+	t_io			info[3600]; // holds all the process
 	int				process_count; // helps us keep track of total # of process
 	char			*players[4]; // player names
  	int				num_players; // number of players
@@ -118,7 +119,7 @@ void				print_core(unsigned char *test, int i);
 /*
 ** parse_file.c
 */
-int					read_input(int fd, t_io *info);
+int					read_input(int fd, t_io *info, char *body);
 
 /*
 ** ncurses.c
