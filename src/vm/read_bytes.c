@@ -12,7 +12,7 @@
 
 #include "corewar.h"
 #include "asm.h"
-#define VWRAP 192
+
 void	reset_alive_all(t_vm *vm)
 {
 	int i;

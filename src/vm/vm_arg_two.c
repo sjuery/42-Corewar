@@ -12,10 +12,6 @@
 
 #include "corewar.h"
 
-#define PARAM1 		vm->info[i].start + vm->info[i].index
-#define PARAM2		vm->info[i].start + vm->info[i].index + 1
-#define PARAM3		vm->info[i].start + vm->info[i].index + 2
-
 void	vm_and(t_vm *vm, int i)
 {
 	unsigned char	*l1;

@@ -38,6 +38,11 @@
 # define VAL(a) (a[3] + (a[2] << 8) + (a[1] << 16) + (a[0] << 24))
 # define VAL2(a) ((a[1]) + (a[0] << 8))
 
+# define PARAM1 	vm->info[i].start + vm->info[i].index
+# define PARAM2		vm->info[i].start + vm->info[i].index + 1
+# define PARAM3		vm->info[i].start + vm->info[i].index + 2
+# define VWRAP 		192
+
 typedef	struct		s_vis
 {
 	unsigned char	byte;//character to be printed
@@ -65,6 +70,15 @@ typedef struct		s_io
 	int				wait_cycle;//each instruction has different amount of cycles it has to wait before executing
 }					t_io;
 
+typedef struct		s_flags
+{
+	int				d; // -dump
+	int				n; // -n (player count)
+	int				g; // -g (visualizer)
+	int				b; // -b (debug)
+	int				v; // -v (verbose)
+}					t_flags;
+
 typedef struct		s_vm
 {
 	t_io			info[1024]; // holds all the process
@@ -79,6 +93,7 @@ typedef struct		s_vm
 	size_t			dump_cycle;
 	int				checks;//checks to see if cycle_to_die has been decreased
 	int				cycles;
+	t_flags			f; // flags
 }					t_vm;
 
 typedef struct		s_instr

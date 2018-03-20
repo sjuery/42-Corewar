@@ -230,7 +230,7 @@ int		main(int ac, char **av)
 	init_players(ac, av, &vm);
 	init_vm(&vm);
 	init_curses();
-	//print_core(vm.core, -1);
+	// print_core(vm.core, -1);
 	print_curses(&vm);
 	read_bytes(&vm, -1);
 /*	while ((ch = getch()))

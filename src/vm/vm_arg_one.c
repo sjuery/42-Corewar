@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "corewar.h"
-#define VWRAP 192
 
 void get_offset_index(t_vm *vm, int i, unsigned char acb, unsigned char **l)
 {
