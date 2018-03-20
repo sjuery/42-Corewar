@@ -15,7 +15,7 @@
 void	error(void)
 {
 	ft_printf("Corewar Usage\n");
-	ft_printf("./corewar { d | g | b | v } { n | champion.cor }\n");
+	ft_printf("./corewar { d <value> | g | b | v } { n <value> | champion.cor }\n");
 	ft_printf("-dump, -d			dump mode\n");
 	ft_printf("-graphic, -g			graphic mode\n");
 	ft_printf("-debug, -b			debug mode\n");
