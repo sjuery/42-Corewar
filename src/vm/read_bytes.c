@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/19 00:25:17 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/20 23:07:32 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,35 @@ void	check_executing_processes(t_vm *vm, int *game_end)
 void	vis_highlight_process(t_vm *vm, int i)
 {
 	attron(COLOR_PAIR(5));
-	mvprintw((vm->info[i].start + vm->info[i].index) / 64 + 1,
-			((vm->info[i].start + vm->info[i].index) * 3) % VWRAP,
-			"%02hhx", vm->vis[vm->info[i].start + vm->info[i].index].byte);
+	mvprintw((PARAM1) / 64 + 1, ((PARAM1) * 3) % VWRAP, "%02hhx",
+			vm->vis[PARAM1].byte);
 	attroff(COLOR_PAIR(5));
 }
 
 void	vis_unhighlight_process(t_vm *vm, int i)
 {
-	if (vm->info[i].start + vm->vis[vm->info[i].start + vm->info[i].index].previous_index)
-	{
-		attron(COLOR_PAIR(vm->vis[vm->vis[vm->info[i].start + vm->info[i].index].previous_index].player));
-		mvprintw((vm->vis[vm->info[i].start + vm->info[i].index].previous_index) / 64 + 1,
-				((vm->vis[vm->info[i].start + vm->info[i].index].previous_index) * 3) % VWRAP,
-				"%02hhx", vm->vis[vm->vis[vm->info[i].start + vm->info[i].index].previous_index].byte);
-		attroff(COLOR_PAIR(vm->vis[vm->vis[vm->info[i].start + vm->info[i].index].previous_index].player));
-	}
+	//if (vm->info[i].start + vm->vis[PARAM1].previous_index)
+//	{
+		attron(COLOR_PAIR(vm->vis[vm->vis[PARAM1].previous_index].player));
+		mvprintw((vm->vis[PARAM1].previous_index) / 64 + 1,
+				((vm->vis[PARAM1].previous_index) * 3) % VWRAP,
+				"%02hhx", vm->vis[vm->vis[PARAM1].previous_index].byte);
+		attroff(COLOR_PAIR(vm->vis[vm->vis[PARAM1].previous_index].player));
+//	}
+}
+
+void	vis_print_debug(t_vm *vm)
+{//print CTD CYCLE #Processes CYCLEDELTA MAX_CHECKS NBR_LIVE Players (name, last live?, lives in current period)
+	attron(0);
+	mvprintw(5, VWRAP + 10, "Cycle : %i", vm->cycles);
+	mvprintw(7, VWRAP + 10, "Processes : %i", vm->process_count);
+	mvprintw(9, VWRAP + 10, "Cycle_To_Die : %i", vm->cycle_to_die);
+	//need help with printing players
+	
+	mvprintw(15, VWRAP + 10, "MAX_CHECKS : %i", MAX_CHECKS);
+	mvprintw(17, VWRAP + 10, "NBR_LIVE : %i", NBR_LIVE);
+	mvprintw(19, VWRAP + 10, "CYCLE_DELTA : %i", CYCLE_DELTA);
+	attroff(0);
 }
 
 void	process_update(t_vm *vm, int i)
@@ -73,28 +86,24 @@ void	process_update(t_vm *vm, int i)
 	int op;
 	int previous_index;
 
-	if (vm->info[i].start + vm->info[i].index > MEM_SIZE - 1)//should this be >= MEM_SIZE - 1?
+	if (PARAM1 > MEM_SIZE - 1)//should this be >= MEM_SIZE - 1?
 		vm->info[i].index = vm->info[i].start * -1;
-	op = vm->core[vm->info[i].start + vm->info[i].index];
+	op = vm->core[PARAM1];
 	vis_unhighlight_process(vm, i);
+	vis_highlight_process(vm, i);
+	vis_print_debug(vm);
 	if ((op > 0 && op < 17) && vm->info[i].wait_cycle == g_optab[op - 1].cycles - 1)
 	{
-		vis_highlight_process(vm, i);
-		previous_index = vm->info[i].start + vm->info[i].index;
+		previous_index = PARAM1;
 		jumptable(op, vm, i);
 		vm->info[i].wait_cycle = 0;
-		vm->vis[vm->info[i].start + vm->info[i].index].previous_index = previous_index;
+		vm->vis[PARAM1].previous_index = previous_index;
 	}
 	else if (op > 0 && op < 17)
-	{
-		vis_highlight_process(vm, i);
 		vm->info[i].wait_cycle++;
-	}
 	else
 	{
-		vis_highlight_process(vm, i);
-		vm->vis[vm->info[i].start + vm->info[i].index + 1].previous_index = vm->info[i].start +
-			vm->info[i].index;
+		vm->vis[PARAM2].previous_index = PARAM1;
 		vm->info[i].index++;
 	}
 	vm->info[i].cycles++;
@@ -126,12 +135,12 @@ void	read_bytes(t_vm *vm, int i)
 	int game_end;
 	int	counter;
 
-	counter = 1;
 	game_end = 1;
+	counter = 1;
 	while (1)
 	{
 		i = vm->process_count - 1;
-		++vm->cycles;
+		vm->cycles++;
 		while (i >= 0)
 		{
 			if (vm->info[i].executing == 1)

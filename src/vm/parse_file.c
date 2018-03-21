@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 16:52:00 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/05 18:56:58 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/20 20:57:38 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ void	convert_header(t_io *info, char *header, int i, int x)
 
 int		read_input(int fd, t_io *info, char *body)
 {
-	// char			header[HEADER_SIZE];
 	char		*header;
 
 	header = ft_memalloc(sizeof(char) * HEADER_SIZE);
@@ -42,7 +41,6 @@ int		read_input(int fd, t_io *info, char *body)
 	if ((info->head.prog_size = read(fd, body, CHAMP_MAX_SIZE)) <= 0)
 		return (0);
 	body[info->head.prog_size] = 0;
-	//info->alive = 1;//info->executing = 1 instead of assuming program will call live
 	info->executing = 1;
 	free(header);
 	return (1);
