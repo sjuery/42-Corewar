@@ -181,4 +181,30 @@ int		reg_or(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
 int		reg_and(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3);
 void reg_copy(unsigned char *dest, unsigned char *src);
 
+/*
+** flags.c
+*/
+void	zero_flags(t_vm *vm);
+void	get_champ_position(t_vm *vm, char *str, int pos);
+void	fill_champ_position(t_vm *vm, char *str);
+void	check_flags(t_vm *vm, char **av, int *i);
+void	fill_champs(t_vm *vm, char **av, int *i);
+
+/*
+** init.c
+*/
+void 	init_vm(t_vm *vm);
+void 	init_players(int ac, char **av, t_vm *vm);
+void	write_info(t_vm *vm, int fd, int *x, int i);
+void	jumptable(int a, t_vm *vm, int i);
+
+/*
+** util.c
+*/
+int		blank_pos(char **av);
+void	assign_player_num(t_vm *vm, int i, unsigned char **reg);
+void	print_core(unsigned char *core, int i);
+int		valid_acb(t_instr instr, int b1, int b2, int b3);
+void	error(void);
+
 #endif
