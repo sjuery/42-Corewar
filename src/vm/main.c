@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/19 10:40:37 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/21 21:49:32 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -352,9 +352,11 @@ int		main(int ac, char **av)
 	ft_bzero(&vm, sizeof(vm));
 	init_players(ac, av, &vm);
 	init_vm(&vm);
-	init_curses();
-	// print_core(vm.core, -1);
-	print_curses(&vm);
+	if (vm.f.g)
+	{
+		init_curses();
+		print_curses(&vm);
+	}
 	read_bytes(&vm, -1);
 /*	while ((ch = getch()))
 	{

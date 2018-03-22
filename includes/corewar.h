@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/19 10:39:47 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/21 21:45:46 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ typedef struct		s_vm
 	size_t			dump_cycle;
 	int				checks;//checks to see if cycle_to_die has been decreased
 	int				cycles;
+	int				live;//keeps tracks of number of times live was called for NBR_lIVE
 	t_flags			f; // flags
 }					t_vm;
 

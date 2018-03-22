@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/20 23:07:32 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/21 23:37:14 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	check_executing_processes(t_vm *vm, int *game_end)
 	}
 }
 
-void	vis_highlight_process(t_vm *vm, int i)
+void	vis_highlight_process(t_vm *vm, int i)//should probably use vm->vis here
 {
 	attron(COLOR_PAIR(5));
 	mvprintw((PARAM1) / 64 + 1, ((PARAM1) * 3) % VWRAP, "%02hhx",
@@ -57,22 +57,20 @@ void	vis_highlight_process(t_vm *vm, int i)
 
 void	vis_unhighlight_process(t_vm *vm, int i)
 {
-	//if (vm->info[i].start + vm->vis[PARAM1].previous_index)
-//	{
-		attron(COLOR_PAIR(vm->vis[vm->vis[PARAM1].previous_index].player));
-		mvprintw((vm->vis[PARAM1].previous_index) / 64 + 1,
-				((vm->vis[PARAM1].previous_index) * 3) % VWRAP,
-				"%02hhx", vm->vis[vm->vis[PARAM1].previous_index].byte);
-		attroff(COLOR_PAIR(vm->vis[vm->vis[PARAM1].previous_index].player));
-//	}
+	attron(COLOR_PAIR(vm->vis[vm->vis[PARAM1].previous_index].player));
+	mvprintw((vm->vis[PARAM1].previous_index) / 64 + 1,
+			((vm->vis[PARAM1].previous_index) * 3) % VWRAP,
+			"%02hhx", vm->vis[vm->vis[PARAM1].previous_index].byte);
+	attroff(COLOR_PAIR(vm->vis[vm->vis[PARAM1].previous_index].player));
 }
 
 void	vis_print_debug(t_vm *vm)
-{//print CTD CYCLE #Processes CYCLEDELTA MAX_CHECKS NBR_LIVE Players (name, last live?, lives in current period)
+{//print Players (name, last live?, lives in current period)
 	attron(0);
 	mvprintw(5, VWRAP + 10, "Cycle : %i", vm->cycles);
 	mvprintw(7, VWRAP + 10, "Processes : %i", vm->process_count);
 	mvprintw(9, VWRAP + 10, "Cycle_To_Die : %i", vm->cycle_to_die);
+	mvprintw(11, VWRAP + 10, "Live called in current period : %i", vm->live);
 	//need help with printing players
 	
 	mvprintw(15, VWRAP + 10, "MAX_CHECKS : %i", MAX_CHECKS);
@@ -110,16 +108,19 @@ void	process_update(t_vm *vm, int i)
 	//if (vm->info[i].cycles % vm->cycle_to_die == 0)
 	//	reset_alive(vm, i);
 }
-
-//implement decrease of CYCLE_TO_DIE with NBR_LIVE
 //do processes need to keep track of how many cycles since birth? each have their own cycle count?
+//to do:print player info in vis, management of winning player
 //endianness
+//memory corruption problem in vm struct
 
 void	cycle_scheduler(t_vm *vm, int *counter)
 {
 	if (*counter == 0)
 	{
 		vm->checks++;
+		if (vm->live >= NBR_LIVE)
+			vm->cycle_to_die -= CYCLE_DELTA;
+		vm->live = 0;
 		reset_alive_all(vm);
 	}
 	*counter = (*counter + 1) % vm->cycle_to_die;
@@ -147,8 +148,11 @@ void	read_bytes(t_vm *vm, int i)
 				process_update(vm, i);
 			i--;
 		}
-		refresh();
-		usleep(50000);
+		if (vm->f.g)
+		{
+			refresh();
+			usleep(50000);
+		}
 		check_executing_processes(vm, &game_end);
 		cycle_scheduler(vm, &counter);
 		//ft_printf("cycle[%i]\n", vm->cycles);

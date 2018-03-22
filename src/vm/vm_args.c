@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/19 10:41:40 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/21 23:35:35 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,27 @@ void reg_copy(unsigned char *dest, unsigned char *src)
 	dest[3] = src[3];
 }
 
+void vis_copy(t_vis *dest, unsigned char *src, t_vm *vm , int i)
+{
+	dest[0].byte = src[0];
+	dest[1].byte = src[1];
+	dest[2].byte = src[2];
+	dest[3].byte = src[3];
+	dest[0].player = vm->info[i].player_int;
+	dest[1].player = vm->info[i].player_int;
+	dest[2].player = vm->info[i].player_int;
+	dest[3].player = vm->info[i].player_int;
+}
+void	vis_update(t_vm *vm, int index)
+{
+	attron(COLOR_PAIR(vm->vis[index].player));
+	mvprintw(index / 64 + 1, (index * 3) % VWRAP, "%02hhx", vm->vis[index].byte);
+	mvprintw((index + 1) / 64 + 1, ((index + 1) * 3) % VWRAP, "%02hhx", vm->vis[index + 1].byte);
+	mvprintw((index + 2) / 64 + 1, ((index + 2) * 3) % VWRAP, "%02hhx", vm->vis[index + 2].byte);
+	mvprintw((index + 3) / 64 + 1, ((index + 3) * 3) % VWRAP, "%02hhx", vm->vis[index + 3].byte);
+	attroff(COLOR_PAIR(vm->vis[index].player));
+	refresh();
+}
 int		indirect(t_vm *vm, int i, unsigned char opcode)
 {
 	//use % idx_mod
@@ -247,12 +268,15 @@ void output_index(char *opname, t_instr instr)
         ft_printf("%hhd ", instr.l3[0]);
     ft_printf("\n");*/
 }
-
+//bug with 'live' and 'and': it gets called with parameter of 'and' instead of appropriately
 void	vm_live(t_vm *vm, int i)
 {
-    //ft_printf("P    %d | ", i + 1);
+	vm->live++;
+    ft_printf("P    %d | ", i + 1);
+	ft_printf("live index[%i]\n", vm->info[i].index);
     vm->info[i].index += 1;
-    //ft_printf("live %d", print_reg(&vm->core[vm->info[i].start + vm->info[i].index]));
+    ft_printf("live %d", print_reg(&vm->core[vm->info[i].start + vm->info[i].index]));
+	ft_printf("live called with[%02hhx %02hhx %02hhx %02hhx]\n", vm->core[vm->info[i].start + vm->info[i].index + 1], vm->core[vm->info[i].start + vm->info[i].index + 2], vm->core[vm->info[i].start + vm->info[i].index + 3], vm->core[vm->info[i].start + vm->info[i].index + 3]);
     vm->info[i].index += 4;
 	vm->info[i].live++;
 	vm->info[i].alive = 1;
@@ -289,6 +313,8 @@ void	vm_sti(t_vm *vm, int i)
 	instr.index = ((VAL2(instr.l2) + VAL2(instr.l3)) & 0xFFFF) % IDX_MOD;
     output_index("sti", instr);
 	reg_copy(&vm->core[vm->info[i].start + instr.opcode_pos + instr.index], instr.l1);
+	vis_copy(&vm->vis[vm->info[i].start + instr.opcode_pos + instr.index], instr.l1, vm, i);
+	vis_update(vm, vm->info[i].start + instr.opcode_pos + instr.index);
 }
 void	vm_lfork(t_vm *vm, int i)
 {
@@ -411,6 +437,8 @@ void	vm_st(t_vm *vm, int i)
         instr.l2 = &vm->core[vm->info[i].start + instr.opcode_pos + VAL(instr.l2) % 4096];
     output("st", instr);
     reg_copy(instr.l2, instr.l1);
+	vis_copy(&vm->vis[vm->info[i].start + instr.opcode_pos + VAL(instr.l2)], instr.l1, vm, i);
+	vis_update(vm, vm->info[i].start + instr.opcode_pos + VAL(instr.l2));
 }
 void	vm_sub(t_vm *vm, int i)
 {
