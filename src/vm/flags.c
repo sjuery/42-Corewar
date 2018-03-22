@@ -12,21 +12,12 @@
 
 #include "corewar.h"
 
-void	zero_flags(t_vm *vm)
-{
-	vm->f.d = 0;
-	vm->f.n = 0;
-	vm->f.g = 0;
-	vm->f.b = 0;
-	vm->f.v = 0;
-	vm->f.flags = 1;
-}
-
 void	get_champ_position(t_vm *vm, char *str, int pos)
 {
 	if (vm->players[pos] != NULL)
 	{
-		ft_printf("You cannot repeat the same -n values for multiple champions\n");
+		ft_printf("You cannot repeat the same -n values");
+		ft_printf("for multiple champions\n");
 		exit(0);
 	}
 	vm->players[pos] = str;
@@ -37,8 +28,9 @@ void	get_champ_position(t_vm *vm, char *str, int pos)
 
 void	fill_champ_position(t_vm *vm, char *str)
 {
-	int i = 0;
+	int i;
 
+	i = 0;
 	while (vm->players[i] != NULL)
 		i++;
 	vm->players[i] = str;
@@ -47,23 +39,9 @@ void	fill_champ_position(t_vm *vm, char *str)
 		error();
 }
 
-void	check_flags(t_vm *vm, char **av, int *i)
+void	check_more_flags(t_vm *vm, char **av, int *i)
 {
-	if ((!ft_strcmp(av[*i], "-dump") || !ft_strcmp(av[*i], "-d")) && ft_general_validate("%d", av[*i + 1])
-			&& vm->f.flags == 1 && vm->f.d == 0)
-	{
-		vm->f.d = ft_atoi(av[*i + 1]);
-		*i = *i + 1;
-	}
-	else if ((!ft_strcmp(av[*i], "-number") || !ft_strcmp(av[*i], "-n")) && ft_general_validate("%d", av[*i + 1]))
-	{
-		if ((ft_atoi(av[*i + 1]) > 4) && (ft_atoi(av[*i + 1]) < 1) && !ft_general_validate("%s", av[*i + 2]))
-			error();
-		get_champ_position(vm, av[*i + 2], (ft_atoi(av[*i + 1]) - 1));
-		*i = *i + 2;
-		vm->f.flags = 0;
-	}
-	else if ((!ft_strcmp(av[*i], "-graphic") || !ft_strcmp(av[*i], "-g"))
+	if ((!ft_strcmp(av[*i], "-graphic") || !ft_strcmp(av[*i], "-g"))
 			&& vm->f.flags == 1 && vm->f.g == 0)
 		vm->f.g = 1;
 	else if ((!ft_strcmp(av[*i], "-debug") || !ft_strcmp(av[*i], "-b"))
@@ -78,13 +56,36 @@ void	check_flags(t_vm *vm, char **av, int *i)
 		error();
 }
 
+void	check_flags(t_vm *vm, char **av, int *i)
+{
+	if ((!ft_strcmp(av[*i], "-dump") || !ft_strcmp(av[*i], "-d")) &&
+	ft_general_validate("%d", av[*i + 1]) && vm->f.flags == 1 && vm->f.d == 0)
+	{
+		vm->f.d = ft_atoi(av[*i + 1]);
+		*i = *i + 1;
+	}
+	else if ((!ft_strcmp(av[*i], "-number") || !ft_strcmp(av[*i], "-n"))
+		&& ft_general_validate("%d", av[*i + 1]))
+	{
+		if ((ft_atoi(av[*i + 1]) > 4) && (ft_atoi(av[*i + 1]) < 1)
+			&& !ft_general_validate("%s", av[*i + 2]))
+			error();
+		get_champ_position(vm, av[*i + 2], (ft_atoi(av[*i + 1]) - 1));
+		*i = *i + 2;
+		vm->f.flags = 0;
+	}
+	else
+		check_more_flags(vm, av, i);
+}
+
 void	fill_champs(t_vm *vm, char **av, int *i)
 {
 	if (!ft_strcmp(av[*i], "-d"))
 		*i = *i + 1;
 	else if (!ft_strcmp(av[*i], "-n"))
 		*i = *i + 2;
-	else if (av[*i][0] == '-');
+	else if (av[*i][0] == '-')
+		;
 	else
 		fill_champ_position(vm, av[*i]);
 }

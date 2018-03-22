@@ -12,13 +12,23 @@
 
 #include "corewar.h"
 
-void 	init_vm(t_vm *vm)
+void	zero_flags(t_vm *vm)
 {
-	int	i;
-	int	x;
-	int	fd;
-	unsigned char *reg;
-	int j;
+	vm->f.d = 0;
+	vm->f.n = 0;
+	vm->f.g = 0;
+	vm->f.b = 0;
+	vm->f.v = 0;
+	vm->f.flags = 1;
+}
+
+void	init_vm(t_vm *vm)
+{
+	int				i;
+	int				x;
+	int				fd;
+	unsigned char	*reg;
+	int				j;
 
 	i = -1;
 	x = 0;
@@ -38,7 +48,7 @@ void 	init_vm(t_vm *vm)
 	vm->win_player = vm->num_players;
 }
 
-void jumptable(int a, t_vm *vm, int i)
+void	jumptable(int a, t_vm *vm, int i)
 {
 	void (*jt[16])(t_vm *vm, int i);
 
@@ -63,7 +73,7 @@ void jumptable(int a, t_vm *vm, int i)
 
 void	write_info(t_vm *vm, int fd, int *x, int i)
 {
-	int	j;
+	int		j;
 	char	*body;
 
 	body = ft_memalloc(sizeof(char) * CHAMP_MAX_SIZE + 1);
@@ -80,7 +90,7 @@ void	write_info(t_vm *vm, int fd, int *x, int i)
 	free(body);
 }
 
-void 	init_players(int ac, char **av, t_vm *vm)
+void	init_players(int ac, char **av, t_vm *vm)
 {
 	int i;
 

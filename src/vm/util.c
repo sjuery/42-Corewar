@@ -15,11 +15,12 @@
 void	error(void)
 {
 	ft_printf("Corewar Usage\n");
-	ft_printf("./corewar { d <value> | g | b | v } { n <value> | champion.cor }\n");
+	ft_printf("./corewar { d <value> | g | b | v }");
+	ft_printf(" { n <value> | champion.cor }\n");
 	ft_printf("-dump, -d			dump mode\n");
 	ft_printf("-graphic, -g			graphic mode\n");
 	ft_printf("-debug, -b			debug mode\n");
-	ft_printf("-verbose, -v			verbose mode\n");\
+	ft_printf("-verbose, -v			verbose mode\n");
 	ft_printf("-number, -n			designate champ slot\n");
 	exit(0);
 }
@@ -33,7 +34,6 @@ int		blank_pos(char **av)
 		++i;
 	return (i);
 }
-
 
 void	print_core(unsigned char *core, int i)
 {
@@ -64,5 +64,6 @@ void	assign_player_num(t_vm *vm, int i, unsigned char **reg)
 
 int		valid_acb(t_instr instr, int b1, int b2, int b3)
 {
-	return (ACB1(instr.acb) == b1 && ACB2(instr.acb) == b2 && ACB3(instr.acb) == b3);
+	return (ACB1(instr.acb) == b1 && ACB2(instr.acb)
+			== b2 && ACB3(instr.acb) == b3);
 }
