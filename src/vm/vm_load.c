@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/23 13:00:02 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/23 16:27:30 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	vm_lldi(t_vm *vm, int i)
 		+ get_index_two(instr.l1, instr.l2)) % 4096];
 	reg_copy(instr.l3, instr.s);
 	vm->info[i].carry = 1;
-	ft_printf("\n");
 }
 
 void	vm_ldi(t_vm *vm, int i)
@@ -67,7 +66,7 @@ void	vm_ldi(t_vm *vm, int i)
 	instr.s = &vm->core[(vm->info[i].start + vm->info[i].index
 		+ get_index_two(instr.l1, instr.l2)) % 4096];
 	reg_copy(instr.l3, instr.s);
-	vm->info[i].carry = 1;
+	vm->info[i].carry = 1;//this might actually NOT modify the carry
 }
 
 void	vm_ld(t_vm *vm, int i)

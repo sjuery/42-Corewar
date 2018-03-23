@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/22 22:01:53 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/23 15:58:13 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,5 +88,14 @@ int		valid_acb3(t_instr instr, int op)
 			g_optab[op].ptype[1] & ACB2(instr.acb) &&
 			g_optab[op].ptype[2] & ACB3(instr.acb))
 		return (1);
+	else if ((op == 9 || op == 13) && g_optab[op].ptype[0] &
+			ACB1(instr.acb) && g_optab[op].ptype[1] ^ ACB2(instr.acb) &&
+			g_optab[op].ptype[2] & ACB3(instr.acb))
+		return (1);
+	else if (op == 10 && g_optab[op].ptype[0] & ACB1(instr.acb) &&
+			g_optab[op].ptype[1] & ACB2(instr.acb) &&
+			g_optab[op].ptype[2] ^ ACB3(instr.acb))
+		return (1);
+	ft_printf("INVALID BITCH! op[%s]\n", g_optab[op].opstr);
 	return (0);
 }

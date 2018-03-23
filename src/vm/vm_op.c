@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/23 12:39:26 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/23 15:21:23 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	vm_or(t_vm *vm, int i)
 		return ;
 	vm->info[i].index = instr.core_index;
 	reg_or(instr.l1, instr.l2, instr.l3);
+	vm->info[i].carry = 1;
 }
 
 void	vm_xor(t_vm *vm, int i)
@@ -44,6 +45,7 @@ void	vm_xor(t_vm *vm, int i)
 		return ;
 	vm->info[i].index = instr.core_index;
 	reg_xor(instr.l1, instr.l2, instr.l3);
+	vm->info[i].carry = 1;
 }
 
 void	vm_and(t_vm *vm, int i)
@@ -61,6 +63,7 @@ void	vm_and(t_vm *vm, int i)
 		return ;
 	vm->info[i].index = instr.core_index;
 	reg_and(instr.l1, instr.l2, instr.l3);
+	vm->info[i].carry = 1;
 }
 
 void	vm_sub(t_vm *vm, int i)
@@ -78,6 +81,7 @@ void	vm_sub(t_vm *vm, int i)
 		return ;
 	vm->info[i].index = instr.core_index;
 	reg_sub(instr.l1, instr.l2, instr.l3);
+	vm->info[i].carry = 1;
 }
 
 void	vm_add(t_vm *vm, int i)
@@ -95,4 +99,5 @@ void	vm_add(t_vm *vm, int i)
 		return ;
 	vm->info[i].index = instr.core_index;
 	reg_add(instr.l1, instr.l2, instr.l3);
+	vm->info[i].carry = 1;
 }

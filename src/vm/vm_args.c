@@ -6,20 +6,18 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/23 12:38:00 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/23 16:27:10 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
-//why are we incrementing indexes before checking to see if the instruction is 
-//valid?
 
 void	vm_st(t_vm *vm, int i)
 {
 	t_instr		instr;
 
 	instr = init_instr(vm, i);
-	vm->info[i].index++;;
+	vm->info[i].index++;
 	instr.core_index += 2;
 	if(!valid_acb2(instr, 2))
 		return ;
@@ -40,7 +38,7 @@ void	vm_sti(t_vm *vm, int i)
 	t_instr		instr;
 
 	instr = init_instr(vm, i);
-	vm->info[i].index++;;
+	vm->info[i].index++;
 	instr.core_index += 2;
 	if(!valid_acb3(instr, 10))
 		return ;
@@ -57,7 +55,7 @@ void	vm_sti(t_vm *vm, int i)
 	vis_update(vm, vm->info[i].start + instr.opcode_pos + instr.index);
 }
 
-void	vm_zjmp(t_vm *vm, int i)//need to work on this more
+void	vm_zjmp(t_vm *vm, int i)
 {
 	t_instr instr;
 
@@ -66,17 +64,23 @@ void	vm_zjmp(t_vm *vm, int i)//need to work on this more
 	vm->info[i].index++;
 	if (!vm->info[i].carry)
 		return ;
+	ft_printf("zjmp will just %i indexes\n", get_index_one(&vm->core[vm->info[i].start + vm->info[i].index]));
 	vm->info[i].index += get_index_one(&vm->core[vm->info[i].start +
-		vm->info[i].index + 1]);
+		vm->info[i].index]) - 1;
 	vm->info[i].carry = 0;
 }
 
 void	vm_live(t_vm *vm, int i)
 {
-	vm->info[i].index += 5;
+	if (vm->core[PARAM1 + 1] == 0xff && vm->core[PARAM1 + 2] == 0xff
+			&& vm->core[PARAM1 + 3] == 0xff
+			&& (vm->core[PARAM1 + 4] >= 0xff - (vm->num_players - 1)
+				&& vm->core[PARAM1 + 4] <= 0xff))
+		vm->win_player = vm->core[PARAM1 + 4] - 0xff + 1;
 	vm->info[i].live++;
 	vm->live++;
 	vm->info[i].alive = 1;
+	vm->info[i].index += 5;
 }
 
 void	vm_aff(t_vm *vm, int i)
