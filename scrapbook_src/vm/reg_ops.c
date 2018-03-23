@@ -12,15 +12,23 @@
 
 #include <corewar.h>
 
+void 	into_reg(unsigned int val, unsigned char *reg)
+{
+	reg[3] = val & 0xFF;
+	reg[2] = (val >> 8) & 0xFF;
+	reg[1] = (val >> 16) & 0xFF;
+	reg[0] = (val >> 24) & 0xFF;
+}
+
 int		reg_add(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3)
 {
 	unsigned int	r1;
 	unsigned int	r2;
 
 	r1 = (reg1[3] & 0xFF) + ((reg1[2] & 0xFF) << 8) +
-		((reg1[1] & 0xFF) << 16) + ((reg1[0] & 0xFF) << 24);
+        ((reg1[1] & 0xFF) << 16) + ((reg1[0] & 0xFF) << 24);
 	r2 = (reg2[3] & 0xFF) + ((reg2[2] & 0xFF) << 8) +
-		((reg2[1] & 0xFF) << 16) + ((reg2[0] & 0xFF) << 24);
+        ((reg2[1] & 0xFF) << 16) + ((reg2[0] & 0xFF) << 24);
 	into_reg(r1 + r2, reg3);
 	return (1);
 }
@@ -31,9 +39,9 @@ int		reg_sub(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3)
 	unsigned int	r2;
 
 	r1 = (reg1[3] & 0xFF) + ((reg1[2] & 0xFF) << 8) +
-		((reg1[1] & 0xFF) << 16) + ((reg1[0] & 0xFF) << 24);
+        ((reg1[1] & 0xFF) << 16) + ((reg1[0] & 0xFF) << 24);
 	r2 = (reg2[3] & 0xFF) + ((reg2[2] & 0xFF) << 8) +
-		((reg2[1] & 0xFF) << 16) + ((reg2[0] & 0xFF) << 24);
+        ((reg2[1] & 0xFF) << 16) + ((reg2[0] & 0xFF) << 24);
 	into_reg(r1 - r2, reg3);
 	return (1);
 }

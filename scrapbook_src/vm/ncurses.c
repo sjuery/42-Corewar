@@ -12,7 +12,7 @@
 
 #include "corewar.h"
 
-void	init_curses(void)
+void	init_curses(void) 
 {
 	initscr();
 	curs_set(false);
@@ -48,11 +48,12 @@ void	print_border(void)
 	attroff(COLOR_PAIR(5));
 }
 
-void	print_curses(t_vm *vm, int i, int x, int y)
+void	print_curses(t_vm *vm)
 {
-	int color;
-
-	color = 0;
+	int i = -1;
+	int x = 0;
+	int y = 0;
+	int color = 0;
 	clear();
 	print_border();
 	while (++i < 4096)

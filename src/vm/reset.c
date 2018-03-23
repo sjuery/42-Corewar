@@ -1,32 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   reset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
+/*   By: ihodge <ihodge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/21 21:49:32 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/21 23:37:14 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+#include "asm.h"
 
-int		main(int ac, char **av)
+void	reset_alive_all(t_vm *vm)
 {
-	t_vm			vm;
-	int				ch;
+	int i;
 
-	if (ac < 2)
-		error();
-	ft_bzero(&vm, sizeof(vm));
-	init_players(ac, av, &vm);
-	init_vm(&vm);
-	if (vm.f.g)
+	i = 0;
+	while (i < vm->process_count)
 	{
-		init_curses();
-		print_curses(&vm, -1, 0, 0);
+		if (vm->info[i].alive == 0)
+			vm->info[i].executing = 0;
+		vm->info[i].alive = 0;
+		i++;
 	}
-	read_bytes(&vm, -1, 1, 1);
-	return (0);
+}
+
+void	reset_alive(t_vm *vm, int i)
+{
+	if (vm->info[i].alive == 0)
+		vm->info[i].executing = 0;
+	vm->info[i].alive = 0;
 }
