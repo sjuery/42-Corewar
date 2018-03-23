@@ -6,20 +6,20 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/21 21:49:32 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/23 11:35:45 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-int		indirect(t_vm *vm, int i, unsigned char opcode)
+int		indirect(t_vm *vm, int i, unsigned char opcode, t_instr *instr)
 {
 	if (opcode)
-		return ((vm->core[vm->info[i].start + vm->info[i].index] * 0x100 +
-				vm->core[vm->info[i].start + vm->info[i].index + 1]) % IDX_MOD);
+		return ((vm->core[vm->info[i].start + OFF2] * 0x100 +
+				vm->core[vm->info[i].start + OFF2 + 1]) % IDX_MOD);
 	else
-		return (vm->core[vm->info[i].start + vm->info[i].index] * 0x100 +
-				vm->core[vm->info[i].start + vm->info[i].index + 1]);
+		return (vm->core[vm->info[i].start + OFF2] * 0x100 +
+				vm->core[vm->info[i].start + OFF2 + 1]);
 }
 
 int		get_index_one(unsigned char *l)

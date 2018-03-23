@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/21 21:45:46 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/23 11:41:38 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@
 # define PARAM3			vm->info[i].start + vm->info[i].index + 2
 
 # define OFF1			instr->vm->info[instr->i].start
-# define OFF2			instr->vm->info[instr->i].index
+//# define OFF2			instr->vm->info[instr->i].index
+# define OFF2			instr->core_index
 
 # define OPC			instr->opcode_pos
 # define REGI			instr->reg_index[instr->ri]
@@ -116,11 +117,16 @@ typedef struct			s_instr
 	unsigned int		ri;
 	int					opcode_pos;
 	short				index;
+	int					core_index;
 }						t_instr;
 
 t_instr					init_instr(t_vm *vm, int i);
 
 void					print_core(unsigned char *test, int i);
+
+int						valid_acb1(t_instr instr, int op);
+int						valid_acb2(t_instr instr, int op);
+int						valid_acb3(t_instr instr, int op);
 
 /*
 ** parse_file.c
@@ -233,7 +239,8 @@ void					vm_ld(t_vm *vm, int i);
 /*
 ** vm_util.c
 */
-int						indirect(t_vm *vm, int i, unsigned char opcode);
+int						indirect(t_vm *vm, int i, unsigned char opcode,
+		t_instr *instr);
 int						get_index_one(unsigned char *l);
 int						get_index_two(unsigned char *l1, unsigned char *l2);
 void					vm_lfork(t_vm *vm, int i);

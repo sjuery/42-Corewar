@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/21 21:49:32 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/22 22:01:53 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,27 @@ int		valid_acb(t_instr instr, int b1, int b2, int b3)
 {
 	return (ACB1(instr.acb) == b1 && ACB2(instr.acb)
 			== b2 && ACB3(instr.acb) == b3);
+}
+
+#include "asm.h"
+int		valid_acb1(t_instr instr, int op)
+{
+	return (g_optab[op].ptype[0] & ACB1(instr.acb));
+}
+
+int		valid_acb2(t_instr instr, int op)
+{
+	if (g_optab[op].ptype[0] & ACB1(instr.acb) &&
+			g_optab[op].ptype[1] & ACB2(instr.acb))
+		return (1);
+	return (0);
+}
+
+int		valid_acb3(t_instr instr, int op)
+{
+	if (g_optab[op].ptype[0] & ACB1(instr.acb) &&
+			g_optab[op].ptype[1] & ACB2(instr.acb) &&
+			g_optab[op].ptype[2] & ACB3(instr.acb))
+		return (1);
+	return (0);
 }

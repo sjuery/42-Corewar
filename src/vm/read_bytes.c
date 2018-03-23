@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/21 23:37:14 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/23 13:00:24 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	process_update(t_vm *vm, int i)
 	if ((op > 0 && op < 17) &&
 		vm->info[i].wait_cycle == g_optab[op - 1].cycles - 1)
 	{
+		//ft_printf("cycle[%i], instr[%i], index[%i]\n", vm->cycles, op, PARAM1);
 		previous_index = PARAM1;
 		jumptable(op, vm, i);
 		vm->info[i].wait_cycle = 0;
@@ -88,7 +89,7 @@ void	read_bytes(t_vm *vm, int i, int game_end, int counter)
 		if (vm->f.g)
 		{
 			refresh();
-			usleep(50000);
+			usleep(90000);
 		}
 		check_executing_processes(vm, &game_end);
 		cycle_scheduler(vm, &counter);

@@ -105,5 +105,3 @@ Handle size restriction
 Handle command-line bugs
 Convert t_io into a linked list
 Figure out endianness, and clean up all related bugs
-Decrement CYCLE_TO_DIE ?
-load player number into r1
