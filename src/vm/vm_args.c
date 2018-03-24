@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/23 16:27:10 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/23 22:10:40 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,15 +59,16 @@ void	vm_zjmp(t_vm *vm, int i)
 {
 	t_instr instr;
 
+	ft_printf("zjmp called\n");
 	instr = init_instr(vm, i);
 	instr.acb = 0;
 	vm->info[i].index++;
 	if (!vm->info[i].carry)
 		return ;
-	ft_printf("zjmp will just %i indexes\n", get_index_one(&vm->core[vm->info[i].start + vm->info[i].index]));
 	vm->info[i].index += get_index_one(&vm->core[vm->info[i].start +
 		vm->info[i].index]) - 1;
 	vm->info[i].carry = 0;
+	ft_printf("zjmp finished\n");
 }
 
 void	vm_live(t_vm *vm, int i)

@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/20 23:14:47 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/23 21:32:55 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init_curses(void)
 	init_pair(2, COLOR_RED, COLOR_BLACK);
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(4, COLOR_GREEN, COLOR_BLACK);
-	init_pair(5, COLOR_WHITE, COLOR_WHITE);
+	init_pair(5, COLOR_BLACK, COLOR_WHITE);
 	init_pair(6, COLOR_CYAN, COLOR_CYAN);
 }
 

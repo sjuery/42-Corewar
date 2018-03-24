@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/23 13:00:24 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/23 23:01:47 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,25 @@ void	process_update(t_vm *vm, int i)
 	if ((op > 0 && op < 17) &&
 		vm->info[i].wait_cycle == g_optab[op - 1].cycles - 1)
 	{
-		//ft_printf("cycle[%i], instr[%i], index[%i]\n", vm->cycles, op, PARAM1);
+		ft_printf("cycle[%i], instr[%i], index[%i], process[%i]\n", vm->cycles, op, PARAM1, i);
 		previous_index = PARAM1;
 		jumptable(op, vm, i);
 		vm->info[i].wait_cycle = 0;
-		vm->vis[PARAM1].previous_index = previous_index;
+		ft_printf("previous index = %i PARAM1 = %i\n", previous_index, PARAM1);
+		vm->vis[PARAM1].previous_index = previous_index;//causing segfault
 	}
 	else if (op > 0 && op < 17)
+	{
+		if (vm->info[i].wait_cycle == 0)
+			ft_printf("cycle[%i], instr[%i], process[%i] waiting to execute\n", vm->cycles, op, i);
 		vm->info[i].wait_cycle++;
+	}
 	else
 	{
 		vm->vis[PARAM2].previous_index = PARAM1;
 		vm->info[i].index++;
 	}
+	ft_printf("cycle[%i]\n", vm->cycles);
 	vm->info[i].cycles++;
 }
 
@@ -89,7 +95,7 @@ void	read_bytes(t_vm *vm, int i, int game_end, int counter)
 		if (vm->f.g)
 		{
 			refresh();
-			usleep(90000);
+			usleep(50000);
 		}
 		check_executing_processes(vm, &game_end);
 		cycle_scheduler(vm, &counter);
