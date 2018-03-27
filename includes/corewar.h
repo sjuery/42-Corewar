@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/23 23:03:08 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/27 15:07:43 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@
 # define ACB			vm->info[i].start + vm->info[i].index - 1
 # define VAL(a)			(a[3] + (a[2] << 8) + (a[1] << 16) + (a[0] << 24))
 # define VAL2(a)		((a[1]) + (a[0] << 8))
+# define VAL3(a)		((a[3]) + (a[2] << 8))
 
 # define PARAM1			vm->info[i].start + vm->info[i].index
 # define PARAM2			vm->info[i].start + vm->info[i].index + 1
 # define PARAM3			vm->info[i].start + vm->info[i].index + 2
 
 # define OFF1			instr->vm->info[instr->i].start
-//# define OFF2			instr->vm->info[instr->i].index
 # define OFF2			instr->core_index
 
 # define OPC			instr->opcode_pos
@@ -74,6 +74,7 @@ typedef struct			s_io
 	int					start;
 	int					cycles;
 	int					wait_cycle;
+	int					waiting;
 }						t_io;
 
 typedef struct			s_flags
@@ -124,9 +125,11 @@ t_instr					init_instr(t_vm *vm, int i);
 
 void					print_core(unsigned char *test, int i);
 
-int						valid_acb1(t_instr instr, int op);
-int						valid_acb2(t_instr instr, int op);
-int						valid_acb3(t_instr instr, int op);
+int						valid_acb(int op, int acb, t_vm *vm, int i);
+int						valid_acb1(int acb, int op);
+int						valid_acb2(int acb, int op);
+int						valid_acb3(int acb, int op);
+int						valid_register(t_vm *vm, int acb, int op, int);
 
 /*
 ** parse_file.c
@@ -192,7 +195,6 @@ void					jumptable(int a, t_vm *vm, int i);
 int						blank_pos(char **av);
 void					assign_player_num(t_vm *vm, int i, unsigned char **reg);
 void					print_core(unsigned char *core, int i);
-int						valid_acb(t_instr instr, int b1, int b2, int b3);
 void					error(void);
 
 /*
@@ -242,7 +244,7 @@ void					vm_ld(t_vm *vm, int i);
 int						indirect(t_vm *vm, int i, unsigned char opcode,
 		t_instr *instr);
 int						get_index_one(unsigned char *l);
-int						get_index_two(unsigned char *l1, unsigned char *l2);
+int						get_index_two(t_instr instr);
 void					vm_lfork(t_vm *vm, int i);
 void					vm_fork(t_vm *vm, int i);
 

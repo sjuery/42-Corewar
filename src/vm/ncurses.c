@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/23 21:32:55 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/25 20:44:07 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	init_curses(void)
 	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(4, COLOR_GREEN, COLOR_BLACK);
 	init_pair(5, COLOR_BLACK, COLOR_WHITE);
-	init_pair(6, COLOR_CYAN, COLOR_CYAN);
+	init_pair(6, COLOR_WHITE, COLOR_WHITE);
 }
 
 void	print_border(void)
@@ -34,7 +34,7 @@ void	print_border(void)
 
 	x = -1;
 	y = -1;
-	attron(COLOR_PAIR(5));
+	attron(COLOR_PAIR(6));
 	while (x <= 230)
 		mvprintw(0, ++x, "b");
 	while (y < 65)
@@ -45,7 +45,7 @@ void	print_border(void)
 	x = -1;
 	while (x <= 230)
 		mvprintw(y, ++x, "b");
-	attroff(COLOR_PAIR(5));
+	attroff(COLOR_PAIR(6));
 }
 
 void	print_curses(t_vm *vm, int i, int x, int y)

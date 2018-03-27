@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/23 14:42:12 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/25 19:32:14 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ void	vis_unhighlight_process(t_vm *vm, int i)
 void	vis_print_debug(t_vm *vm)
 {
 	attron(0);
-	mvprintw(5, VWRAP + 5, "Cycle : %i", vm->cycles);
-	mvprintw(7, VWRAP + 5, "Processes : %i", vm->process_count);
-	mvprintw(9, VWRAP + 5, "Cycle_To_Die : %i", vm->cycle_to_die);
-	mvprintw(11, VWRAP + 5, "Live called in current period : %i", vm->live);
-	mvprintw(13, VWRAP + 5, "Winning Player : %i", vm->win_player);
-	mvprintw(15, VWRAP + 5, "MAX_CHECKS : %i", MAX_CHECKS);
-	mvprintw(17, VWRAP + 5, "NBR_LIVE : %i", NBR_LIVE);
-	mvprintw(19, VWRAP + 5, "CYCLE_DELTA : %i", CYCLE_DELTA);
+	mvprintw(5, VWRAP + 4, "Cycle : %i", vm->cycles);
+	mvprintw(7, VWRAP + 4, "Processes : %i", vm->process_count);
+	mvprintw(9, VWRAP + 4, "Cycle_To_Die : %i", vm->cycle_to_die);
+	mvprintw(11, VWRAP + 4, "Live called in current period : %i", vm->live);
+	mvprintw(13, VWRAP + 4, "Winning Player : %i", vm->win_player);
+	mvprintw(15, VWRAP + 4, "MAX_CHECKS : %i", MAX_CHECKS);
+	mvprintw(17, VWRAP + 4, "NBR_LIVE : %i", NBR_LIVE);
+	mvprintw(19, VWRAP + 4, "CYCLE_DELTA : %i", CYCLE_DELTA);
 	attroff(0);
 }
 

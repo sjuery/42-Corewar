@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/23 23:03:23 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/27 15:06:08 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,31 @@ int		indirect(t_vm *vm, int i, unsigned char opcode, t_instr *instr)
 
 int		get_index_one(unsigned char *l)
 {
-	return (VAL2(l) & 0xFFFF);
+	short val;
+
+	val = l[1] + (l[0] << 8);
+	return (val);
 }
 
-int		get_index_two(unsigned char *l1, unsigned char *l2)
+int		get_index_two(t_instr instr)
 {
-	unsigned char l3[4];
+	int	out1;
+	int	out2;
 
-	reg_add(l1, l2, l3);
-	return (VAL2(l3));
+	out1 = 0;
+	out2 = 0;
+	if (ACB1(instr.acb) == 1)
+		out1 = VAL3(instr.l1);
+	else if (ACB1(instr.acb) == 2)
+		out1 = VAL2(instr.l1);
+	else if (ACB1(instr.acb) == 3)
+		out1 = VAL(instr.l1);
+	if (ACB2(instr.acb) == 1)
+		out2 = VAL3(instr.l2);
+	else if (ACB2(instr.acb) == 2)
+		out2 = VAL2(instr.l2);
+	//ft_printf("%i\n", out1 + out2 );
+	return (out1 + out2);
 }
 
 void	vm_lfork(t_vm *vm, int i)
@@ -53,6 +69,9 @@ void	vm_lfork(t_vm *vm, int i)
 	copy_io(vm, j, i);
 	vm->info[j].start = vm->info[i].start + instr.opcode_pos +
 	(instr.l1[1] << 8 | instr.l1[0]);
+	vm->info[j].carry = 0;
+	vm->info[j].wait_cycle = 0;
+	vm->info[j].waiting = 0;
 	vm->info[j].index = 0;
 	vm->info[i].index += 3;
 }
@@ -75,9 +94,9 @@ void	vm_fork(t_vm *vm, int i)
 	copy_io(vm, j, i);
 	vm->info[j].start = (vm->info[i].start + instr.opcode_pos +
 		(instr.l1[0] << 8 | instr.l1[1]) % IDX_MOD) % 4096;
-	//ft_printf("fork [%i]\n", ((instr.l1[0] << 8 | instr.l1[1]) % IDX_MOD) % 4096);
-	//ft_printf("fork start at [%i]\n", vm->info[j].start);
+	vm->info[j].carry = 0;
 	vm->info[j].wait_cycle = 0;
+	vm->info[j].waiting = 0;
 	vm->info[j].index = 0;
 	vm->info[i].index += 1;
 }

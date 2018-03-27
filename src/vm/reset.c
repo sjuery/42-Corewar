@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/21 23:37:14 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/27 13:11:52 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ void	reset_alive_all(t_vm *vm)
 	while (i < vm->process_count)
 	{
 		if (vm->info[i].alive == 0)
+		{
 			vm->info[i].executing = 0;
+			vis_unhighlight_process(vm , i);
+		}
 		vm->info[i].alive = 0;
 		i++;
 	}
