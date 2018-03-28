@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/27 15:07:43 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/27 20:35:04 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,6 +130,7 @@ int						valid_acb1(int acb, int op);
 int						valid_acb2(int acb, int op);
 int						valid_acb3(int acb, int op);
 int						valid_register(t_vm *vm, int acb, int op, int);
+void					modify_carry(t_vm *vm, int i, unsigned char *reg);
 
 /*
 ** parse_file.c

@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/27 15:09:47 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/27 21:01:30 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,7 @@ void	vm_sti(t_vm *vm, int i)
 	if(ACB2(instr.acb) == 3)
 	{
 		instr.core_index -= 2;
-		//instr.index = indirect(instr.vm, instr.i, 1, &instr);
 		ind = indirect(instr.vm, instr.i, 1, &instr);
-	//ft_printf("indirect = %i, OFF2[%i], idx[%i]\n", indirect(instr.vm, instr.i, idx, &instr), instr.core_index, idx);
 		instr.core_index += 2;
 	}
 	get_offset_index(&instr, ACB3(instr.acb), &instr.l3);
@@ -90,7 +88,6 @@ void	vm_zjmp(t_vm *vm, int i)
 	vm->info[i].index += get_index_one(&vm->core[vm->info[i].start +
 		vm->info[i].index]) - 1;
 	vm->info[i].index += 2;
-	vm->info[i].carry = 0;
 }
 
 void	vm_live(t_vm *vm, int i)
@@ -115,7 +112,6 @@ void	vm_aff(t_vm *vm, int i)
 	instr = init_instr(vm, i);
 	vm->info[i].index++;
 	instr.core_index += 2;
-	if (!get_offset(&instr, ACB1(instr.acb), &instr.l1))
-		return ;
+	get_offset(&instr, ACB1(instr.acb), &instr.l1);
 	vm->info[i].index = instr.core_index;
 }
