@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/21 21:49:32 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/28 16:04:03 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	init_vm(t_vm *vm)
 	}
 	vm->win_player = vm->num_players;
 }
-
+/*
 void	jumptable(int a, t_vm *vm, int i)
 {
 	void (*jt[16])(t_vm *vm, int i);
@@ -69,7 +69,7 @@ void	jumptable(int a, t_vm *vm, int i)
 	jt[14] = vm_lfork;
 	jt[15] = vm_aff;
 	jt[a - 1](vm, i);
-}
+}*/
 
 void	write_info(t_vm *vm, int fd, int *x, int i)
 {

@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/27 20:35:04 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/28 16:09:17 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ typedef struct			s_instr
 	int					core_index;
 }						t_instr;
 
+void    (*g_jt[16])(t_vm *vm, int i);
 t_instr					init_instr(t_vm *vm, int i);
 
 void					print_core(unsigned char *test, int i);

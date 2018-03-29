@@ -18,7 +18,7 @@ FILES	= 	main parse_file ncurses \
 			read_bytes reg_ops op \
 			vm_args flags init util vis \
 			reg_util acb reset vm_op \
-			vm_load vm_util
+			vm_load vm_util jumptable
 ASMFILES= 	assembler convert_to_hex op \
 			parse
 DASMFILES= 	disassembler convert_to_asmbly op \

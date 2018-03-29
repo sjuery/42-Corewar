@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/27 15:03:14 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/28 16:07:39 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ void	process_update(t_vm *vm, int i)
 	{
 		//ft_printf("cycle[%i], op[%i] %s process [%i]\n", vm->cycles, op, g_optab[op -1].opstr, i);
 		previous_index = PARAM1;
-		jumptable(op, vm, i);
+		g_jt[op - 1](vm, i);
+		//jumptable(op, vm, i);
 		vm->info[i].wait_cycle = 0;
 		vm->info[i].waiting = 0;
 		vm->vis[PARAM1].previous_index = previous_index;
