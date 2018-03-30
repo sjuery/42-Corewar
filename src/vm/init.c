@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/28 16:04:03 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/30 15:47:13 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,13 @@ void	init_vm(t_vm *vm)
 	while (++i < vm->num_players)
 	{
 		vm->process_count++;
+		vm->info[i].head = &vm->head[i];
 		fd = open(vm->players[i], O_RDONLY);
 		write_info(vm, fd, &x, i);
 		vm->info[i].location = i * (MEM_SIZE / vm->num_players);
 		vm->info[i].start = vm->info[i].location;
 		assign_player_num(vm, i, &reg);
-		x += ((MEM_SIZE / vm->num_players) - vm->info[i].head.prog_size);
+		x += ((MEM_SIZE / vm->num_players) - vm->info[i].head->prog_size);
 	}
 	vm->win_player = vm->num_players;
 }
@@ -80,7 +81,7 @@ void	write_info(t_vm *vm, int fd, int *x, int i)
 	if (!read_input(fd, &vm->info[i], body))
 		error();
 	j = -1;
-	while (++j < vm->info[i].head.prog_size)
+	while (++j < vm->info[i].head->prog_size)
 	{
 		vm->vis[*x].player = i + 1;
 		vm->core[*x] = body[j];

@@ -105,3 +105,21 @@ Handle size restriction
 Handle command-line bugs
 Convert t_io into a linked list
 Figure out endianness, and clean up all related bugs
+
+
+priority queue implementation:
+
+min heap
+    giving executing == 0 high priority and executing == 1 low priority
+list
+    foreach process in processes
+        if !process.executing
+            remove from list
+            process->last = process->next
+            process->next = process->front
+array
+    for each node i
+        arr[i/2] = parent
+        arr[2*i + 1] = left child
+        arr[2*i + 2] = right child
+    if bad access, realloc array and try again

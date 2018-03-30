@@ -36,7 +36,8 @@ DASMOBJ 	= $(addprefix ./objects/dassembler/, $(patsubst %, %.o, $(DASMFILES)))
 #CFLAGS	= -Wall -Wextra -Werror -g
 CFLAGS	= -g
 IFLAGS	= -I libft/includes -I includes
-LFLAGS	= -L libft -lft -lcurses -Wl,-stack_size -Wl,0x1000000
+#LFLAGS	= -L libft -lft -lcurses -Wl,-stack_size -Wl,0x1000000
+LFLAGS = -L libft -lft -lcurses
 
 .SILENT:
 

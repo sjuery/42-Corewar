@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/28 16:07:39 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/30 15:41:15 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,5 +119,5 @@ void	read_bytes(t_vm *vm, int i, int game_end, int counter)
 	}
 	endwin();
 	ft_printf("\nContestant %i, \"%s\", has won !\n", vm->win_player,
-		vm->info[vm->win_player - 1].head.prog_name);
+		vm->info[vm->win_player - 1].head->prog_name);
 }
