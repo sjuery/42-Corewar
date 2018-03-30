@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/21 21:49:32 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/29 16:21:31 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,7 @@ void	init_vm(t_vm *vm)
 		vm->process_count++;
 		fd = open(vm->players[i], O_RDONLY);
 		write_info(vm, fd, &x, i);
-		vm->info[i].location = i * (MEM_SIZE / vm->num_players);
-		vm->info[i].start = vm->info[i].location;
+		vm->info[i].start = i * (MEM_SIZE / vm->num_players);
 		assign_player_num(vm, i, &reg);
 		x += ((MEM_SIZE / vm->num_players) - vm->info[i].head.prog_size);
 	}
