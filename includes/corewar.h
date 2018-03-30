@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/30 15:55:43 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/30 16:12:44 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ typedef struct			s_flags
 
 typedef struct			s_vm
 {
-	t_io				info[64000];
+	t_io				info[65014];
 	t_header			head[4];
 	int					process_count;
 	char				*players[4];
