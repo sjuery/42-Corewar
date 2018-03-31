@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/29 16:21:31 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/30 17:29:49 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,16 @@ void	init_vm(t_vm *vm)
 	while (++i < vm->num_players)
 	{
 		vm->process_count++;
+		vm->info[i].head = &vm->head[i];
 		fd = open(vm->players[i], O_RDONLY);
 		write_info(vm, fd, &x, i);
 		vm->info[i].start = i * (MEM_SIZE / vm->num_players);
 		assign_player_num(vm, i, &reg);
-		x += ((MEM_SIZE / vm->num_players) - vm->info[i].head.prog_size);
+		x += ((MEM_SIZE / vm->num_players) - vm->info[i].head->prog_size);
 	}
 	vm->win_player = vm->num_players;
 }
-
+/*
 void	jumptable(int a, t_vm *vm, int i)
 {
 	void (*jt[16])(t_vm *vm, int i);
@@ -68,7 +69,7 @@ void	jumptable(int a, t_vm *vm, int i)
 	jt[14] = vm_lfork;
 	jt[15] = vm_aff;
 	jt[a - 1](vm, i);
-}
+}*/
 
 void	write_info(t_vm *vm, int fd, int *x, int i)
 {
@@ -79,7 +80,7 @@ void	write_info(t_vm *vm, int fd, int *x, int i)
 	if (!read_input(fd, &vm->info[i], body))
 		error();
 	j = -1;
-	while (++j < vm->info[i].head.prog_size)
+	while (++j < vm->info[i].head->prog_size)
 	{
 		vm->vis[*x].player = i + 1;
 		vm->core[*x] = body[j];

@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/30 00:09:38 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/30 17:29:23 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ typedef struct			s_flags
 
 typedef struct			s_vm
 {
-	t_io				info[3600];
+	t_io				info[65014];
+	t_header			head[4];
 	int					process_count;
 	char				*players[4];
 	int					num_players;
@@ -119,6 +120,7 @@ typedef struct			s_instr
 	int					core_index;
 }						t_instr;
 
+void    (*g_jt[16])(t_vm *vm, int i);
 t_instr					init_instr(t_vm *vm, int i);
 
 void					print_core(unsigned char *test, int i);
