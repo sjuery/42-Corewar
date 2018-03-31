@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vm_util.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/30 00:10:43 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/31 15:33:10 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,19 @@ void	modify_carry(t_vm *vm, int i, unsigned char *reg)
 		vm->info[i].carry = 0;
 }
 
+//void vm_lfork(t_vm *vm, t_io *proc)
 void	vm_lfork(t_vm *vm, int i)
 {
 	int			j;
 	t_instr		instr;
+	//t_io		*new_process;
 
+	//assign instr
+	//new_process = (t_io *)ft_memalloc(sizeof(t_io));
+	//ft_memcpy(new_process, proc, sizeof(t_io));
+	//++vm->process_count;
+	//new_process.regs[0] = VAL(PC) + VAL2(instr.l1) % MEM_SIZE // may need to do (instr.l1[0] << 8 | instr.l1[1])
+	//enqueue(vm->queue, new_process, get_priority(new_process))
 	instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
@@ -74,7 +82,7 @@ void	vm_lfork(t_vm *vm, int i)
 	get_offset_index(&instr, 2, &instr.l1);
 	copy_io(vm, j, i);
 	vm->info[j].start = (vm->info[i].start + instr.opcode_pos +
-	(instr.l1[1] << 8 | instr.l1[0])) % MEM_SIZE;
+	(instr.l1[0] << 8 | instr.l1[1])) % MEM_SIZE;
 	vm->info[j].carry = 0;
 	vm->info[j].wait_cycle = 0;
 	vm->info[j].waiting = 0;
@@ -86,7 +94,14 @@ void	vm_fork(t_vm *vm, int i)
 {
 	int			j;
 	t_instr		instr;
+	//t_io		*new_process;
 
+	//assign instr
+	//new_process = (t_io *)ft_memalloc(sizeof(t_io));
+	//ft_memcpy(new_process, proc, sizeof(t_io));
+	//++vm->process_count;
+	//new_process.regs[0] = VAL(PC) + VAL2(instr.l1) % IDX_MOD // may need to do (instr.l1[0] << 8 | instr.l1[1])
+	//enqueue(vm->queue, new_process, get_priority(new_process))
 	instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
