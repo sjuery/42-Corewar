@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/30 16:12:44 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/31 13:32:48 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@
 # define REGI			instr->reg_index[instr->ri]
 
 # define VWRAP			192
+# define PRIORITY(a, b) (a > b)
 
 typedef	struct			s_vis
 {
@@ -121,6 +122,18 @@ typedef struct			s_instr
 	short				index;
 	int					core_index;
 }						t_instr;
+
+typedef struct			node {
+    t_io				*data;
+    int 				priority;
+    struct node			*next;
+}						t_node;
+
+typedef struct			p_queue {
+    t_node				*max_p;
+    t_node				*min_p;
+}						t_queue;
+
 
 void    (*g_jt[16])(t_vm *vm, int i);
 t_instr					init_instr(t_vm *vm, int i);
@@ -259,5 +272,16 @@ void					vm_sti(t_vm *vm, int i);
 void					vm_zjmp(t_vm *vm, int i);
 void					vm_live(t_vm *vm, int i);
 void					vm_aff(t_vm *vm, int i);
+
+/*
+**	queue_utils.c
+*/
+
+t_queue 			    *init_queue(void);
+t_node					*init_node(t_data *data, int priority);
+void					enqueue(t_queue *queue, t_data *num, int priority);
+t_data					*dequeue(t_queue *queue);
+t_data					*peek(t_queue *queue);
+int						isEmpty(t_queue *queue);
 
 #endif
