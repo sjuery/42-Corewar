@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/30 15:41:15 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/30 17:30:11 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	process_update(t_vm *vm, int i)
 	int previous_index;
 
 	if (PARAM1 > MEM_SIZE - 1)
-		vm->info[i].index = vm->info[i].start * -1;
+		into_reg(vm->info[i].start * -1, PC);
 	op = vm->core[PARAM1];
 	vis_unhighlight_process(vm, i);
 	vis_highlight_process(vm, i);
@@ -40,7 +40,7 @@ void	process_update(t_vm *vm, int i)
 	if ((op > 0 && op < 17) &&
 		vm->info[i].wait_cycle == g_optab[op - 1].cycles - 1)
 	{
-		//ft_printf("cycle[%i], op[%i] %s process [%i]\n", vm->cycles, op, g_optab[op -1].opstr, i);
+		ft_printf("cycle[%i], op[%i] %s process [%i]\n", vm->cycles, op, g_optab[op -1].opstr, i);
 		previous_index = PARAM1;
 		g_jt[op - 1](vm, i);
 		//jumptable(op, vm, i);
@@ -62,17 +62,16 @@ void	process_update(t_vm *vm, int i)
 		}
 		else
 		{
-			//ft_printf("INVALID; op[%i] cycle[%i]\n", op, vm->cycles);
+			ft_printf("INVALID; op[%i] cycle[%i]\n", op, vm->cycles);
 			vm->vis[PARAM2].previous_index = PARAM1;
-			vm->info[i].index++;
+			into_reg(VAL(PC) + 1, PC);//update_pc function according to ACB
 		}
 	}
 	else
 	{
 		vm->vis[PARAM2].previous_index = PARAM1;
-		vm->info[i].index++;
+		into_reg(VAL(PC) + 1, PC);
 	}
-	vm->info[i].cycles++;
 }
 
 void	cycle_scheduler(t_vm *vm, int *counter)

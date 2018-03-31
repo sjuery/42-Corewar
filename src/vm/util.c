@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/27 15:08:09 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/29 16:23:20 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,6 @@ void	assign_player_num(t_vm *vm, int i, unsigned char **reg)
 	(*reg)[1] = 0xff;
 	(*reg)[2] = 0xff;
 	(*reg)[3] = 0xff - i;
-	vm->info[i].player_num[0] = 0xff;
-	vm->info[i].player_num[1] = 0xff;
-	vm->info[i].player_num[2] = 0xff;
-	vm->info[i].player_num[3] = 0xff - i;
 	vm->info[i].player_int = i + 1;
 }
 

@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 16:43:45 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/25 16:56:58 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/30 00:11:05 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,13 @@ t_instr	init_instr(t_vm *vm, int i)
 	n.s = NULL;
 	n.vm = vm;
 	n.i = i;
-	n.acb = vm->core[vm->info[i].start + vm->info[i].index + 1];
-	n.opcode_pos = vm->info[i].index;
+	n.acb = vm->core[PARAM2];
+	n.opcode_pos = VAL(PC);;
 	n.reg_index[0] = 0;
 	n.reg_index[1] = 0;
 	n.reg_index[2] = 0;
 	n.ri = 0;
-	n.core_index = vm->info[i].index;
+	n.core_index = VAL(PC);
 	return (n);
 }
 

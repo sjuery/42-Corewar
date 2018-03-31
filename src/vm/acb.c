@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/27 13:59:45 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/29 23:53:26 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ int	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 	{
 		instr->reg_index[instr->ri] = instr->vm->core[OFF1 + OFF2];
 		if (REGI >= REG_NUMBER || REGI == 0)
+		{
+			ft_printf("INVALID REGISTER REGI[%i]\n", REGI);
 			return (0);
+		}
 		*l = instr->vm->info[instr->i].regs[instr->reg_index[instr->ri]];
 		instr->core_index += 1;
 		++instr->ri;
