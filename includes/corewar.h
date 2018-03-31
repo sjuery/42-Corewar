@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/31 13:33:48 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/31 14:48:43 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ typedef	struct			s_vis
 
 typedef struct			s_io
 {
-	t_header			head;//move out of here
+	t_header			*head;//move out of here
 	int					player_int;
 	int					alive;
 	int					executing;
@@ -276,10 +276,10 @@ void					vm_aff(t_vm *vm, int i);
 */
 
 t_queue 			    *init_queue(void);
-t_node					*init_node(t_data *data, int priority);
-void					enqueue(t_queue *queue, t_data *num, int priority);
-t_data					*dequeue(t_queue *queue);
-t_data					*peek(t_queue *queue);
+t_node					*init_node(t_io *data, int priority);
+void					enqueue(t_queue *queue, t_io *num, int priority);
+t_io					*dequeue(t_queue *queue);
+t_io					*peek(t_queue *queue);
 int						isEmpty(t_queue *queue);
 
 #endif

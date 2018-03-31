@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/31 13:29:06 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/31 13:32:42 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/31 14:50:35 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_queue     *init_queue(void)
 	return (new);
 }
 
-t_node      *init_node(t_data *data, int priority)
+t_node      *init_node(t_io *data, int priority)
 {
     t_node  *new;
 
@@ -33,7 +33,7 @@ t_node      *init_node(t_data *data, int priority)
     return (new);
 }
 
-void			enqueue(t_queue *queue, t_data *num, int priority)
+void			enqueue(t_queue *queue, t_io *num, int priority)
 {
 	t_node	*new;
     t_node  *tmp;
@@ -66,10 +66,10 @@ void			enqueue(t_queue *queue, t_data *num, int priority)
 	}
 }
 
-t_data			*dequeue(t_queue *queue)
+t_io			*dequeue(t_queue *queue)
 {
 	t_node	*tmp;
-	t_data			*tmp_num;
+	t_io			*tmp_num;
 
 	if (!queue->max_p)
 		return (NULL);
@@ -83,7 +83,7 @@ t_data			*dequeue(t_queue *queue)
 	return (tmp_num);
 }
 
-t_data			*peek(t_queue *queue)
+t_io			*peek(t_queue *queue)
 {
 	if (!queue->max_p)
 		return (NULL);
