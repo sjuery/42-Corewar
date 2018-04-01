@@ -6,15 +6,22 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 16:36:34 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/01 16:37:39 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
+//int		indirect(unsigned char opcode, t_instr *instr)
 int		indirect(t_vm *vm, int i, unsigned char opcode, t_instr *instr)
 {
 	printf("opcode %i\n", (int)opcode);
+	/*if (opcode)
+		return ((vm->core[OFF2] * 0x100 +
+				vm->core[OFF2 + 1]) % IDX_MOD);
+	else
+		return ((vm->core[OFF2] * 0x100 +
+				vm->core[OFF2 + 1]) % MEM_SIZE);*/
 	if (opcode)
 		return ((vm->core[vm->info[i].start + OFF2] * 0x100 +
 				vm->core[vm->info[i].start + OFF2 + 1]) % IDX_MOD);

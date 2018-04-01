@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/30 15:53:29 by anazar           ###   ########.fr       */
+/*   Updated: 2018/03/31 15:20:55 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int		main(int ac, char **av)
 {
 	t_vm			vm;
-	int				ch;
 
 	if (ac < 2)
 		error();
@@ -28,6 +27,7 @@ int		main(int ac, char **av)
 		init_curses();
 		print_curses(&vm, -1, 0, 0);
 	}
+	//read_bytes(&vm, 1, 1);
 	read_bytes(&vm, -1, 1, 1);
 	return (0);
 }

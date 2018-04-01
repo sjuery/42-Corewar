@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/29 16:23:20 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/31 12:24:54 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,16 @@ void	print_core(unsigned char *core, int i)
 	ft_putchar('\n');
 }
 
+//void	assign_player_num(t_io *proc, int i, unsigned char **reg)
 void	assign_player_num(t_vm *vm, int i, unsigned char **reg)
 {
+	//*reg = proc->regs[1];
 	*reg = vm->info[i].regs[1];
 	(*reg)[0] = 0xff;
 	(*reg)[1] = 0xff;
 	(*reg)[2] = 0xff;
 	(*reg)[3] = 0xff - i;
+	//proc->player_int = i + 1;
 	vm->info[i].player_int = i + 1;
 }
 

@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 16:43:45 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/30 00:11:05 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/31 15:20:58 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	into_reg(unsigned int val, unsigned char *reg)
 	reg[0] = (val >> 24) & 0xFF;
 }
 
+//t_instr	init_instr(t_vm *vm, t_io *proc)
 t_instr	init_instr(t_vm *vm, int i)
 {
 	t_instr	n;
@@ -29,9 +30,10 @@ t_instr	init_instr(t_vm *vm, int i)
 	n.l3 = NULL;
 	n.s = NULL;
 	n.vm = vm;
-	n.i = i;
+	//n.proc = proc
+	n.i = i;//not needed
 	n.acb = vm->core[PARAM2];
-	n.opcode_pos = VAL(PC);;
+	n.opcode_pos = VAL(PC);
 	n.reg_index[0] = 0;
 	n.reg_index[1] = 0;
 	n.reg_index[2] = 0;
@@ -45,7 +47,7 @@ int		print_reg(unsigned char *l)
 	return (VAL(l));
 }
 
-void	copy_io(t_vm *vm, int dest, int src)
+void	copy_io(t_vm *vm, int dest, int src)//this might be a problem
 {
 	ft_memcpy(&vm->info[dest], &vm->info[src], sizeof(t_io));
 }
