@@ -6,13 +6,14 @@
 /*   By: ihodge <ihodge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/25 19:32:14 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/31 15:20:32 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 #include "asm.h"
 
+//void	vis_highlight_process(t_vm *vm, t_io *proc)
 void	vis_highlight_process(t_vm *vm, int i)
 {
 	attron(COLOR_PAIR(5));
@@ -21,6 +22,7 @@ void	vis_highlight_process(t_vm *vm, int i)
 	attroff(COLOR_PAIR(5));
 }
 
+//void	vis_unhighlight_process(t_vm *vm, t_io *proc)
 void	vis_unhighlight_process(t_vm *vm, int i)
 {
 	attron(COLOR_PAIR(vm->vis[vm->vis[PARAM1].previous_index].player));
@@ -44,6 +46,7 @@ void	vis_print_debug(t_vm *vm)
 	attroff(0);
 }
 
+//void	vis_copy(t_vis *dest, unsigned char *src, t_io *proc)
 void	vis_copy(t_vis *dest, unsigned char *src, t_vm *vm, int i)
 {
 	dest[0].byte = src[0];
@@ -54,6 +57,10 @@ void	vis_copy(t_vis *dest, unsigned char *src, t_vm *vm, int i)
 	dest[1].player = vm->info[i].player_int;
 	dest[2].player = vm->info[i].player_int;
 	dest[3].player = vm->info[i].player_int;
+	/*dest[0].player = proc->player_int;
+	dest[1].player = proc->player_int;
+	dest[2].player = proc->player_int;
+	dest[3].player = proc->player_int;*/
 }
 
 void	vis_update(t_vm *vm, int index)

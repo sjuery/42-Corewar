@@ -18,7 +18,7 @@ FILES	= 	main parse_file ncurses \
 			read_bytes reg_ops op \
 			vm_args flags init util vis \
 			reg_util acb reset vm_op \
-			vm_load vm_util jumptable
+			vm_load vm_util jumptable queue_utils
 ASMFILES= 	assembler convert_to_hex op \
 			parse
 DASMFILES= 	disassembler convert_to_asmbly op \
@@ -33,8 +33,8 @@ ASMSRC	= $(addprefix ./src/assembler/, $(patsubst %, %.c, $(ASMFILES)))
 ASMOBJ 	= $(addprefix ./objects/assembler/, $(patsubst %, %.o, $(ASMFILES)))
 DASMSRC		= $(addprefix ./src/dassembler/, $(patsubst %, %.c, $(DASMFILES)))
 DASMOBJ 	= $(addprefix ./objects/dassembler/, $(patsubst %, %.o, $(DASMFILES)))
-#CFLAGS	= -Wall -Wextra -Werror -g
-CFLAGS	= -g
+CFLAGS	= -Wall -Wextra -Werror -g
+#CFLAGS	= -g
 IFLAGS	= -I libft/includes -I includes
 #LFLAGS	= -L libft -lft -lcurses -Wl,-stack_size -Wl,0x1000000
 LFLAGS = -L libft -lft -lcurses

@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/30 17:29:23 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 14:24:48 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,16 @@
 # define VAL3(a)		((a[3]) + (a[2] << 8))
 
 # define PC				vm->info[i].regs[0]
+//# define PC				proc->regs[0]
 
 # define PARAM1			vm->info[i].start + VAL(PC)
 # define PARAM2			vm->info[i].start + VAL(PC) + 1
 # define PARAM3			vm->info[i].start + VAL(PC) + 2
+/*# define PARAM1			VAL(PC)
+# define PARAM2			VAL(PC) + 1
+# define PARAM3			VAL(PC) + 2*/
 
-# define OFF1			instr->vm->info[instr->i].start
+//# define OFF1			instr->vm->info[instr->i].start//not needed
 # define OFF2			instr->core_index
 
 # define OPC			instr->opcode_pos
@@ -61,18 +65,19 @@ typedef	struct			s_vis
 
 typedef struct			s_io
 {
-	t_header			head;//move out of here
+	t_header			*head;
+	int					process;
 	int					player_int;
+	int					op;
 	int					alive;
 	int					executing;
 	unsigned char		regs[REG_NUMBER + 1][REG_SIZE];
 	int					carry;
-	int					start;
-	int					wait_cycle;
+	int					start;//not needed if the PC starts off at start
+	int					wait_cycle;//not needed
 	int					waiting;//not needed
-	//int op
-	//int (double?) cycle_to_execute
-	//int process#
+	int					cycle_to_execute;
+	int					priority;
 }						t_io;
 
 typedef struct			s_flags
@@ -87,7 +92,8 @@ typedef struct			s_flags
 
 typedef struct			s_vm
 {
-	t_io				info[65014];
+	//t_io				info[65014];
+	t_queue				*q;
 	t_header			head[4];
 	int					process_count;
 	char				*players[4];
@@ -107,7 +113,8 @@ typedef struct			s_vm
 typedef struct			s_instr
 {
 	t_vm				*vm;
-	int					i;
+	int					i;//not needed
+	//t_io				*proc;
 	unsigned char		acb;
 	unsigned char		*l1;
 	unsigned char		*l2;
@@ -120,6 +127,7 @@ typedef struct			s_instr
 	int					core_index;
 }						t_instr;
 
+//void    (*g_jt[16])(t_vm *vm, t_io *proc);
 void    (*g_jt[16])(t_vm *vm, int i);
 t_instr					init_instr(t_vm *vm, int i);
 

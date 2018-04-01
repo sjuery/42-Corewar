@@ -6,18 +6,20 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/30 00:10:08 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/03/31 15:20:42 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
+//void	vm_st(t_vm *vm, t_io *proc)
 void	vm_st(t_vm *vm, int i)
 {
 	t_instr		instr;
 	int			idx;
 
 	idx = ((ACB2(instr.acb) & 0b100) != 0);
+	//instr = init_instr(vm, proc);
 	instr = init_instr(vm, i);
 	instr.core_index += 2;
 	get_offset(&instr, ACB1(instr.acb), &instr.l1);
@@ -27,10 +29,14 @@ void	vm_st(t_vm *vm, int i)
 	else
 	{
 		instr.core_index -= 2;
+		//instr.index = indirect(1, &instr);
 		instr.index = indirect(instr.vm, instr.i, 1, &instr);
 		instr.core_index += 2;
 	}
 	into_reg(instr.core_index, PC);
+	//reg_copy(&vm->core[instr.opcode_pos + instr.index], instr.l1);
+	//vis_copy(&vm->vis[instr.opcode_pos + instr.index], instr.l1, proc);
+	//vis_update(vm, instr.opcode_pos + instr.index);
 	reg_copy(&vm->core[vm->info[i].start + instr.opcode_pos + instr.index], instr.l1);
 	vis_copy(&vm->vis[vm->info[i].start + instr.opcode_pos +
 		instr.index], instr.l1, vm, i);
@@ -80,7 +86,6 @@ void	vm_zjmp(t_vm *vm, int i)
 		return ;
 	}
 	into_reg(VAL(PC) + get_index_one(&vm->core[PARAM1]) - 1, PC);
-	into_reg(VAL(PC) + 2, PC);
 }
 
 void	vm_live(t_vm *vm, int i)
