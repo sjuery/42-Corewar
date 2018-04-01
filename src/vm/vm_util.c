@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 14:17:47 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/01 16:36:34 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,21 +69,23 @@ void	vm_lfork(t_vm *vm, int i)
 {
 	int			j;
 	t_instr		instr;
-	//t_io		*new_proc;
+/*
+	t_io		*new_proc;
 
-	//instr = init_instr(vm, i);
-	//instr.acb = 0;
-	//instr.core_index++;
-	//get_offset_index(&instr, 2, &instr.l1);
-	//new_proc = (t_io *)ft_memalloc(sizeof(t_io));
-	//ft_memcpy(new_proc, proc, sizeof(t_io));
-	//++vm->process_count;
-	//new_proc->carry = 0;
-	//new_proc->wait_cycle = 0;
-	//new_proc->waiting = 0;
-	//into_reg(VAL2(instr.l1) % MEM_SIZE, new_proc.regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
-	//into_reg(VAL(PC) + 3, PC);
-	//enqueue(vm->queue, new_proc, get_priority(vm, new_proc))
+	instr = init_instr(vm, i);
+	instr.acb = 0;
+	instr.core_index++;
+	get_offset_index(&instr, 2, &instr.l1);
+	new_proc = (t_io *)ft_memalloc(sizeof(t_io));
+	ft_memcpy(new_proc, proc, sizeof(t_io));
+	++vm->process_count;
+	new_proc->carry = 0;
+	new_proc->wait_cycle = 0;
+	new_proc->waiting = 0;
+	into_reg(VAL2(instr.l1) % MEM_SIZE, new_proc.regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
+	into_reg(VAL(PC) + 3, PC);
+	enqueue(vm->queue, new_proc, get_priority(vm, new_proc));
+*/
 	instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
@@ -102,25 +104,29 @@ void	vm_lfork(t_vm *vm, int i)
 	into_reg(VAL(PC) + 3, PC);
 }
 
+//void vm_fork(t_vm *vm, t_io *proc)
 void	vm_fork(t_vm *vm, int i)
 {
 	int			j;
 	t_instr		instr;
-	//t_io		*new_proc;
+/*
+	t_io		*new_proc;
 
-	//instr = init_instr(vm, i);
-	//instr.acb = 0;
-	//instr.core_index++;
-	//get_offset_index(&instr, 2, &instr.l1);
-	//new_proc = (t_io *)ft_memalloc(sizeof(t_io));
-	//ft_memcpy(new_proc, proc, sizeof(t_io));
-	//++vm->process_count;
-	//new_proc->carry = 0;
-	//new_proc->wait_cycle = 0;
-	//new_proc->waiting = 0;
-	//into_reg(VAL2(instr.l1) % IDX_MOD, new_proc.regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
-	//into_reg(VAL(PC) + 3, PC);
-	//enqueue(vm->queue, new_proc, get_priority(vm, new_proc))
+	instr = init_instr(vm, i);
+	instr.acb = 0;
+	instr.core_index++;
+	get_offset_index(&instr, 2, &instr.l1);
+	new_proc = (t_io *)ft_memalloc(sizeof(t_io));
+	ft_memcpy(new_proc, proc, sizeof(t_io));
+	++vm->process_count;
+	new_proc->carry = 0;
+	new_proc->wait_cycle = 0;
+	new_proc->waiting = 0;
+	into_reg(VAL2(instr.l1) % IDX_MOD, new_proc.regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
+	into_reg(VAL(PC) + 3, PC);
+	enqueue(vm->queue, new_proc, get_priority(vm, new_proc));
+*/
+
 	instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
