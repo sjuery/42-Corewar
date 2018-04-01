@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/31 14:48:43 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/01 14:20:30 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,5 +281,6 @@ void					enqueue(t_queue *queue, t_io *num, int priority);
 t_io					*dequeue(t_queue *queue);
 t_io					*peek(t_queue *queue);
 int						isEmpty(t_queue *queue);
+int						get_priority(t_vm *vm, t_io *proc);
 
 #endif

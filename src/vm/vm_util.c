@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/31 15:57:21 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/01 14:17:47 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,11 @@ void	modify_carry(t_vm *vm, int i, unsigned char *reg)
 		vm->info[i].carry = 0;
 }
 
+int		get_priority(t_vm *vm, t_io *proc)
+{
+	return (proc->executing * (proc->cycle_to_execute - vm->cycles));
+}
+
 //void vm_lfork(t_vm *vm, t_io *proc)
 void	vm_lfork(t_vm *vm, int i)
 {
@@ -78,7 +83,7 @@ void	vm_lfork(t_vm *vm, int i)
 	//new_proc->waiting = 0;
 	//into_reg(VAL2(instr.l1) % MEM_SIZE, new_proc.regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
 	//into_reg(VAL(PC) + 3, PC);
-	//enqueue(vm->queue, new_proc, get_priority(new_proc))
+	//enqueue(vm->queue, new_proc, get_priority(vm, new_proc))
 	instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
@@ -115,7 +120,7 @@ void	vm_fork(t_vm *vm, int i)
 	//new_proc->waiting = 0;
 	//into_reg(VAL2(instr.l1) % IDX_MOD, new_proc.regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
 	//into_reg(VAL(PC) + 3, PC);
-	//enqueue(vm->queue, new_proc, get_priority(new_proc))
+	//enqueue(vm->queue, new_proc, get_priority(vm, new_proc))
 	instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
