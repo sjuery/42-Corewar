@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:03:01 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:20:34 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void					write_info(t_vm *vm, int fd, int *x, int i);
 ** util.c
 */
 int						blank_pos(char **av);
-void					assign_player_num(t_vm *vm, int i, unsigned char **reg);
+void					assign_player_num(t_io *proc, int i, unsigned char **reg);
 void					print_core(unsigned char *core, int i);
 void					error(void);
 

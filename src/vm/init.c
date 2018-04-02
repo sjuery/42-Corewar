@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:06:46 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:20:39 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	write_info(t_vm *vm, int fd, int *x, int i)
 		error();
 	j = -1;
 	//while (++j < (int)vm->info[i].head->prog_size)
-	while (++j < (int)vm->head->prog_size)
+	while (++j < (int)vm->head[i]->prog_size)
 	{
 		vm->vis[*x].player = i + 1;
 		vm->core[*x] = body[j];
