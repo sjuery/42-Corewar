@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:40:15 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:50:55 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 # define REGI			instr->reg_index[instr->ri]
 
 # define VWRAP			192
-# define PRIORITY(a, b) (a > b)
+# define PRIORITY(a, b) (a < b)
 
 typedef	struct			s_vis
 {
