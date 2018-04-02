@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:58:32 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 23:36:13 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,6 @@ void	vm_ld(t_vm *vm, t_io *proc)
 	get_offset(&instr, ACB2(instr.acb), &instr.l2);
 	into_reg(instr.core_index, PC);
 	reg_copy(instr.l2, instr.l1);
+	ft_printf("%i\n", VAL(instr.l1));
 	modify_carry(proc, instr.l2);
 }

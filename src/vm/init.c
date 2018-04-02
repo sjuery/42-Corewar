@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 21:45:15 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 23:36:15 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	init_vm(t_vm *vm)
 	{
 		proc = (t_io*)ft_memalloc(sizeof(t_io));
 		proc->executing = 1;
+		proc->player_int = i + 1;
 		vm->process_count++;
 		proc->head = &vm->head[i];
 		fd = open(vm->players[i], O_RDONLY);
@@ -47,6 +48,7 @@ void	init_vm(t_vm *vm)
 		into_reg(i * (MEM_SIZE / vm->num_players), PC);
 		assign_player_num(proc, i, &reg);
 		proc->op = vm->core[PARAM1];
+		proc->process = i;
 		set_cycle_to_execute(vm, proc);
 		enqueue(vm->q, proc, proc->cycle_to_execute);
 		x += ((MEM_SIZE / vm->num_players) - proc->head->prog_size);

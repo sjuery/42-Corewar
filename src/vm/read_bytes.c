@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 22:06:08 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 23:31:04 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,66 +75,63 @@ void	process_update(t_vm *vm)
 	int		op;
 	int		previous_index;
 	t_io	*proc;
-	t_node	*node;
+	t_node	**node;
 
-	node = vm->q->max_p;
-	proc = node->data;
-	ft_printf("node->priority[%i], cycle[%i]\n", node->priority, vm->cycles);
-	while (node && node->priority <= vm->cycles)
+	node = &(vm->q->max_p);
+	while (*node && (*node)->priority <= vm->cycles)
 	{
+		proc = dequeue(vm->q);
 		if (PARAM1 >= MEM_SIZE)
 			into_reg(PARAM1 % MEM_SIZE, PC);
 		op = proc->op;
 		vis_unhighlight_process(vm, proc);
 		vis_print_debug(vm);
-		if ((op > 0 && op < 17) && node->priority == vm->cycles &&
+		//dequeue(vm->q);//proc = dequeue?
+		if ((op > 0 && op < 17) && proc->cycle_to_execute == vm->cycles &&
 				((g_optab[op - 1].acb &&
 				  valid_acb(op - 1, vm->core[PARAM2], vm, proc)) ||
 				 !g_optab[op - 1].acb) && proc->executing)
 		{//execute instruction
-			ft_printf("cycle[%i], op[%i] %s process [%i]\n", vm->cycles, op, g_optab[op -1].opstr, proc->process);
+			ft_printf("cycle[%i], op[%i] %s process [%i]\n", vm->cycles, op, g_optab[op - 1].opstr, proc->process + 1);
+			vis_highlight_process(vm, proc);
 			previous_index = PARAM1;
-			dequeue(vm->q);
 			g_jt[op - 1](vm, proc);
 			vm->vis[PARAM1].previous_index = previous_index;
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
 			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
-			vis_highlight_process(vm, proc);
 		}
-		else if (op > 0 && op < 17 && node->priority == vm->cycles && proc->executing)
+		else if (op > 0 && op < 17 && proc->cycle_to_execute == vm->cycles && proc->executing)
 		{//invalid instruction//update pc function(moves the pc according to acb)
+			vis_highlight_process(vm, proc);
 			ft_printf("INVALID; op[%i] cycle[%i]\n", op, vm->cycles);
 			previous_index = PARAM1;
-			dequeue(vm->q);
 			update_pc(proc, op, vm->core[PARAM2]);
 			vm->vis[PARAM1].previous_index = previous_index;
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
 			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
-			vis_highlight_process(vm, proc);
 		}
-		else if (node->priority == vm->cycles && proc->executing)
+		else if (proc->cycle_to_execute == vm->cycles && proc->executing)
 		{//invalid opcode//move pc by 1
-			ft_printf("INVALID OP\n");
-			dequeue(vm->q);
+			//ft_printf("INVALID OP\n");
+			vis_highlight_process(vm, proc);
 			vm->vis[PARAM2].previous_index = PARAM1;
 			into_reg(VAL(PC) + 1, PC);
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
 			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
-			vis_highlight_process(vm, proc);
 		}
-		else if (!proc->executing && node->priority == 0)
+		else if (!proc->executing && proc->cycle_to_execute == 0)
 		{//dead process//decrease process count
 			ft_printf("DEAD PROCESS\n");
-			dequeue(vm->q);
 		}
 		//node = vm->q->max_p;
-		node = node->next;
-		if (!node)
-			break;
-		proc = node->data;
+		//node = node->next;
+		//if (!node)
+		//	break;
+//		node = dequeue(vm->q);
+//		proc = node->data;
 	}
 }
 
@@ -149,7 +146,7 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 			refresh();
 			usleep(10000);
 		}
-		ft_printf("processes[%i], cycle[%i]\n", vm->process_count, vm->cycles);
+		//ft_printf("cycle[%i]\n", vm->cycles);
 		check_executing_processes(vm, &game_end);
 		cycle_scheduler(vm, &counter);
 		if (game_end)
