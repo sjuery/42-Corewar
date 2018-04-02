@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/31 15:20:42 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 16:39:51 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@
 void	vm_st(t_vm *vm, int i)
 {
 	t_instr		instr;
-	int			idx;
 
-	idx = ((ACB2(instr.acb) & 0b100) != 0);
 	//instr = init_instr(vm, proc);
 	instr = init_instr(vm, i);
 	instr.core_index += 2;
@@ -46,11 +44,9 @@ void	vm_st(t_vm *vm, int i)
 void	vm_sti(t_vm *vm, int i)
 {
 	t_instr		instr;
-	int			idx;
 	int			ind;
 
 	ind = 0;
-	idx = ((ACB2(instr.acb) & 0b100) != 0);
 	instr = init_instr(vm, i);
 	instr.core_index += 2;
 	get_offset_index(&instr, ACB1(instr.acb), &instr.l1);
