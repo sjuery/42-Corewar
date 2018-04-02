@@ -6,14 +6,13 @@
 /*   By: ihodge <ihodge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 18:30:20 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:46:41 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 #include "asm.h"
 
-//void	vis_highlight_process(t_vm *vm, int i)
 void	vis_highlight_process(t_vm *vm, t_io *proc)
 {
 	attron(COLOR_PAIR(5));
@@ -22,7 +21,6 @@ void	vis_highlight_process(t_vm *vm, t_io *proc)
 	attroff(COLOR_PAIR(5));
 }
 
-//void	vis_unhighlight_process(t_vm *vm, int i)
 void	vis_unhighlight_process(t_vm *vm, t_io *proc)
 {
 	attron(COLOR_PAIR(vm->vis[vm->vis[PARAM1].previous_index].player));
@@ -46,7 +44,6 @@ void	vis_print_debug(t_vm *vm)
 	attroff(0);
 }
 
-//void	vis_copy(t_vis *dest, unsigned char *src, t_vm *vm, int i)
 void	vis_copy(t_vis *dest, unsigned char *src, t_io *proc)
 {
 	dest[0].byte = src[0];

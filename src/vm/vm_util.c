@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:34:06 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:38:51 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int		get_index_two(t_instr instr)
 	return (out1 + out2);
 }
 
-void	modify_carry(t_vm *vm, t_io *proc, unsigned char *reg)
+void	modify_carry(t_io *proc, unsigned char *reg)
 {
 	if (reg[0] == 0 && reg[1] == 0 && reg[2] == 0 && reg[3] == 0)
 		proc->carry = 1;
@@ -66,7 +66,6 @@ int		get_priority(t_vm *vm, t_io *proc)
 
 void vm_lfork(t_vm *vm, t_io *proc)
 {
-	int			j;
 	t_instr		instr;
 	t_io		*new_proc;
 
@@ -80,9 +79,9 @@ void vm_lfork(t_vm *vm, t_io *proc)
 	new_proc->carry = 0;
 	into_reg(VAL2(instr.l1) % MEM_SIZE, new_proc->regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
 	new_proc->op = vm->core[VAL(new_proc->regs[0])];
-	set_cycle_to_execute(vm, new->proc);
+	set_cycle_to_execute(vm, new_proc);
 	into_reg(VAL(PC) + 3, PC);
-	enqueue(vm->queue, new_proc, new->proc->cycle_to_execute);
+	enqueue(vm->q, new_proc, new_proc->cycle_to_execute);
 	/*instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
@@ -103,7 +102,6 @@ void vm_lfork(t_vm *vm, t_io *proc)
 
 void	vm_fork(t_vm *vm, t_io *proc)
 {
-	int			j;
 	t_instr		instr;
 	t_io		*new_proc;
 
@@ -118,8 +116,8 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	into_reg(VAL2(instr.l1) % IDX_MOD, new_proc->regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
 	into_reg(VAL(PC) + 3, PC);
 	new_proc->op = vm->core[VAL(new_proc->regs[0])];
-	set_cycle_to_execute(vm, new->proc);
-	enqueue(vm->queue, new_proc, new_proc->cycle_to_execute);
+	set_cycle_to_execute(vm, new_proc);
+	enqueue(vm->q, new_proc, new_proc->cycle_to_execute);
 	/*instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;

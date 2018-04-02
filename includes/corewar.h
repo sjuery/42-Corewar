@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:27:56 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:40:15 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ typedef struct			s_flags
 typedef struct			s_node {
     t_io				*data;
     int 				priority;
-    struct node			*next;
+    struct s_node			*next;
 }						t_node;
 
 typedef struct			s_queue {
@@ -138,7 +138,7 @@ int						valid_acb1(int acb, int op);
 int						valid_acb2(int acb, int op);
 int						valid_acb3(int acb, int op);
 int						valid_register(t_vm *vm, int acb, int op, t_io *proc);
-void					modify_carry(t_vm *vm, t_io *proc, unsigned char *reg);
+void					modify_carry(t_io *proc, unsigned char *reg);
 void					set_cycle_to_execute(t_vm *vm, t_io *proc);
 
 /*
