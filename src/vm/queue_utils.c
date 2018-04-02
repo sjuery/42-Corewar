@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/31 13:29:06 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/02 16:18:59 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/02 16:34:12 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ t_io			*dequeue(t_queue *queue)
 
 	if (!queue->max_p)
     {
-        queue->min_p = NULL;
 		return (NULL);
     }
 	tmp = queue->max_p;
