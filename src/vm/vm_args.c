@@ -6,13 +6,31 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/01 16:39:51 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:10:53 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-//void	vm_st(t_vm *vm, t_io *proc)
+/*
+void	vm_st(t_vm *vm, t_io *proc)
+{
+	t_instr		instr;
+
+	instr = init_instr(proc);
+	instr.core_index += 2;
+	get_offset(&instr, ACB1(instr.acb), &instr.l1);
+	get_offset(&instr, ACB2(instr.acb) | 0b100, &instr.l2);
+	if (ACB2(instr.acb) == 1)
+		instr.index = (VAL3(instr.l2) & 0xFFFF) % IDX_MOD;
+	else
+	{
+		instr.core_index -= 2;
+		instr.reg_index = indirect(vm, 1, &instr);
+		instr.core_index += 2;
+	}
+}
+*/
 void	vm_st(t_vm *vm, int i)
 {
 	t_instr		instr;

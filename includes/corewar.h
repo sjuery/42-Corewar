@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 19:05:22 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:03:01 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,12 @@
 # define VAL2(a)		((a[1]) + (a[0] << 8))
 # define VAL3(a)		((a[3]) + (a[2] << 8))
 
-//# define PC				vm->info[i].regs[0]
 # define PC				proc->regs[0]
 
-//# define PARAM1			vm->info[i].start + VAL(PC)
-//# define PARAM2			vm->info[i].start + VAL(PC) + 1
-//# define PARAM3			vm->info[i].start + VAL(PC) + 2
 # define PARAM1			VAL(PC)
 # define PARAM2			VAL(PC) + 1
 # define PARAM3			VAL(PC) + 2
 
-//# define OFF1			instr->vm->info[instr->i].start//not needed
 # define OFF2			instr->core_index
 
 # define OPC			instr->opcode_pos
@@ -74,9 +69,6 @@ typedef struct			s_io
 	int					executing;
 	unsigned char		regs[REG_NUMBER + 1][REG_SIZE];
 	int					carry;
-	//int					start;//not needed if the PC starts off at start
-	//int					wait_cycle;//not needed
-	//int					waiting;//not needed
 	int					cycle_to_execute;
 }						t_io;
 
@@ -103,7 +95,6 @@ typedef struct			s_queue {
 
 typedef struct			s_vm
 {
-	//t_io				info[65014];
 	t_queue				*q;
 	t_header			head[4];
 	int					process_count;
@@ -124,7 +115,6 @@ typedef struct			s_vm
 typedef struct			s_instr
 {
 	t_vm				*vm;
-	//int					i;//not needed
 	t_io				*proc;
 	unsigned char		acb;
 	unsigned char		*l1;
@@ -138,29 +128,17 @@ typedef struct			s_instr
 	int					core_index;
 }						t_instr;
 
-typedef struct			node {
-    t_io				*data;
-    int 				priority;
-    struct node			*next;
-}						t_node;
-
-typedef struct			p_queue {
-    t_node				*max_p;
-    t_node				*min_p;
-}						t_queue;
-
 void    (*g_jt[16])(t_vm *vm, t_io *proc);
-//void    (*g_jt[16])(t_vm *vm, int i);
-t_instr					init_instr(t_vm *vm, int i);
+t_instr					init_instr(t_vm *vm, t_io *proc);
 
 void					print_core(unsigned char *test, int i);
 
-int						valid_acb(int op, int acb, t_vm *vm, int i);
+int						valid_acb(int op, int acb, t_vm *vm, t_io *proc);
 int						valid_acb1(int acb, int op);
 int						valid_acb2(int acb, int op);
 int						valid_acb3(int acb, int op);
-int						valid_register(t_vm *vm, int acb, int op, int);
-void					modify_carry(t_vm *vm, int i, unsigned char *reg);
+int						valid_register(t_vm *vm, int acb, int op, t_io *proc);
+void					modify_carry(t_vm *vm, t_io *proc, unsigned char *reg);
 void					set_cycle_to_execute(t_vm *vm, t_io *proc);
 
 /*
@@ -179,7 +157,7 @@ void					init_curses(void);
 */
 
 int						*read_acb(unsigned char a);
-void					read_bytes(t_vm *vm, int i, int game_end, int counter);
+void					read_bytes(t_vm *vm, int game_end, int counter);
 
 /*
 ** reg_ops.c
@@ -199,7 +177,7 @@ int						reg_and(unsigned char *reg1,
 ** reg_util.c
 */
 void					into_reg(unsigned int val, unsigned char *reg);
-t_instr					init_instr(t_vm *vm, int i);
+t_instr					init_instr(t_vm *vm, t_io *proc);
 int						print_reg(unsigned char *l);
 void					copy_io(t_vm *vm, int dest, int src);
 void					reg_copy(unsigned char *dest, unsigned char *src);
@@ -219,7 +197,6 @@ void					zero_flags(t_vm *vm);
 void					init_vm(t_vm *vm);
 void					init_players(int ac, char **av, t_vm *vm);
 void					write_info(t_vm *vm, int fd, int *x, int i);
-void					jumptable(int a, t_vm *vm, int i);
 
 /*
 ** util.c
@@ -232,11 +209,10 @@ void					error(void);
 /*
 ** vis.c
 */
-void					vis_highlight_process(t_vm *vm, int i);
-void					vis_unhighlight_process(t_vm *vm, int i);
+void					vis_highlight_process(t_vm *vm, t_io *proc);
+void					vis_unhighlight_process(t_vm *vm, t_io *proc);
 void					vis_print_debug(t_vm *vm);
-void					vis_copy(t_vis *dest, unsigned char *src,
-							t_vm *vm, int i);
+void					vis_copy(t_vis *dest, unsigned char *src, t_io *proc);
 void					vis_update(t_vm *vm, int index);
 
 /*
@@ -289,7 +265,7 @@ void					vm_ld(t_vm *vm, t_io *proc);
 /*
 ** vm_util.c
 */
-int						indirect(t_vm *vm, int i, unsigned char opcode,
+int						indirect(t_vm *vm, unsigned char opcode,
 		t_instr *instr);
 int						get_index_one(unsigned char *l);
 int						get_index_two(t_instr instr);

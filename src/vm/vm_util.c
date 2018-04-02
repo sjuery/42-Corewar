@@ -6,32 +6,28 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2018/04/01 16:40:24 by ihodge           ###   ########.fr       */
-=======
-/*   Updated: 2018/04/01 16:37:39 by anazar           ###   ########.fr       */
->>>>>>> 12811eca2fd17d49ea4de0a8d59c9ee7f80b4939
+/*   Updated: 2018/04/01 20:10:56 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-//int		indirect(t_vm *vm, int i, unsigned char opcode, t_instr *instr)
-int		indirect(t_vm *vm, unsigned char opcode, t_instr *instr)
+//int		indirect(t_vm *vm, unsigned char opcode, t_instr *instr)
+int		indirect(t_vm *vm, int i, unsigned char opcode, t_instr *instr)
 {
 	printf("opcode %i\n", (int)opcode);
-	if (opcode)
+	/*if (opcode)
 		return ((vm->core[OFF2] * 0x100 +
 				vm->core[OFF2 + 1]) % IDX_MOD);
 	else
 		return ((vm->core[OFF2] * 0x100 +
-				vm->core[OFF2 + 1]) % MEM_SIZE);
-	/*if (opcode)
+				vm->core[OFF2 + 1]) % MEM_SIZE);*/
+	if (opcode)
 		return ((vm->core[vm->info[i].start + OFF2] * 0x100 +
 				vm->core[vm->info[i].start + OFF2 + 1]) % IDX_MOD);
 	else
 		return ((vm->core[vm->info[i].start + OFF2] * 0x100 +
-				vm->core[vm->info[i].start + OFF2 + 1]) % MEM_SIZE);*/
+				vm->core[vm->info[i].start + OFF2 + 1]) % MEM_SIZE);
 }
 
 int		get_index_one(unsigned char *l)
@@ -75,11 +71,12 @@ int		get_priority(t_vm *vm, t_io *proc)
 	return (proc->executing * (proc->cycle_to_execute - vm->cycles));
 }
 
-//void	vm_lfork(t_vm *vm, int i)
-void vm_lfork(t_vm *vm, t_io *proc)
+//void vm_lfork(t_vm *vm, t_io *proc)
+void	vm_lfork(t_vm *vm, int i)
 {
 	int			j;
 	t_instr		instr;
+/*
 	t_io		*new_proc;
 
 	instr = init_instr(vm, i);
@@ -94,8 +91,9 @@ void vm_lfork(t_vm *vm, t_io *proc)
 	new_proc->waiting = 0;
 	into_reg(VAL2(instr.l1) % MEM_SIZE, new_proc.regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
 	into_reg(VAL(PC) + 3, PC);
-	enqueue(vm->queue, new_proc, get_priority(vm, new_proc))
-	/*instr = init_instr(vm, i);
+	enqueue(vm->queue, new_proc, get_priority(vm, new_proc));
+*/
+	instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
 	j = vm->process_count;
@@ -110,14 +108,15 @@ void vm_lfork(t_vm *vm, t_io *proc)
 	vm->info[j].wait_cycle = 0;
 	vm->info[j].waiting = 0;
 	into_reg(0, vm->info[j].regs[0]);
-	into_reg(VAL(PC) + 3, PC);*/
+	into_reg(VAL(PC) + 3, PC);
 }
 
-//void	vm_fork(t_vm *vm, int i)
-void	vm_fork(t_vm *vm, t_io *proc)
+//void vm_fork(t_vm *vm, t_io *proc)
+void	vm_fork(t_vm *vm, int i)
 {
 	int			j;
 	t_instr		instr;
+/*
 	t_io		*new_proc;
 
 	instr = init_instr(vm, i);
@@ -132,8 +131,10 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	new_proc->waiting = 0;
 	into_reg(VAL2(instr.l1) % IDX_MOD, new_proc.regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
 	into_reg(VAL(PC) + 3, PC);
-	enqueue(vm->queue, new_proc, get_priority(vm, new_proc))
-	/*instr = init_instr(vm, i);
+	enqueue(vm->queue, new_proc, get_priority(vm, new_proc));
+*/
+
+	instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
 	j = vm->process_count;
@@ -148,5 +149,5 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	vm->info[j].wait_cycle = 0;
 	vm->info[j].waiting = 0;
 	into_reg(0, vm->info[j].regs[0]);
-	into_reg(VAL(PC) + 1, PC);*/
+	into_reg(VAL(PC) + 1, PC);
 }

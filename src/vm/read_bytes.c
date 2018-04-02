@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 18:42:29 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 19:59:28 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	set_cycle_to_execute(t_vm *vm, t_io *proc)
 		proc->cycle_to_execute = vm->cycles + 1;
 }
 
-//void	process_update(t_vm *vm, int i)
 void	process_update(t_vm *vm)
 {
 	int		op;
@@ -94,8 +93,9 @@ void	process_update(t_vm *vm)
 		vis_unhighlight_process(vm, proc);
 		vis_print_debug(vm);
 		if ((op > 0 && op < 17) && node->priority == vm->cycles &&
-				(g_optab[op - 1].acb && valid_acb(op - 1, vm->core[PARAM2], vm, i)
-				 || !g_optab[op - 1].acb) && proc->executing)
+				((g_optab[op - 1].acb &&
+				  valid_acb(op - 1, vm->core[PARAM2], vm, proc)) ||
+				 !g_optab[op - 1].acb) && proc->executing)
 		{//execute instruction
 			ft_printf("cycle[%i], op[%i] %s process [%i]\n", vm->cycles, op, g_optab[op -1].opstr, proc->process);
 			previous_index = PARAM1;
@@ -121,7 +121,7 @@ void	process_update(t_vm *vm)
 		}
 		else if (node->priority == vm->cycles && proc->executing)
 		{//invalid opcode//move pc by 1
-			dequeue(vm->q)
+			dequeue(vm->q);
 			vm->vis[PARAM2].previous_index = PARAM1;
 			into_reg(VAL(PC) + 1, PC);
 			proc->op = vm->core[PARAM1];
@@ -138,21 +138,12 @@ void	process_update(t_vm *vm)
 	}
 }
 
-//void	read_bytes(t_vm *vm, int game_end, int counter)
-void	read_bytes(t_vm *vm, int i, int game_end, int counter)
+void	read_bytes(t_vm *vm, int game_end, int counter)
 {
 	while (1)
 	{
-		//i = vm->process_count - 1;
 		vm->cycles++;
 		process_update(vm);
-		//process_update(vm, i);
-		//while (i >= 0)
-	//	{
-	//		if (vm->info[i].executing == 1)
-	//			process_update(vm, i);
-	//		i--;
-	//	}
 		if (vm->f.g)
 		{
 			refresh();
@@ -167,5 +158,5 @@ void	read_bytes(t_vm *vm, int i, int game_end, int counter)
 	}
 	endwin();
 	ft_printf("\nContestant %i, \"%s\", has won !\n", vm->win_player,
-		vm->info[vm->win_player - 1].head->prog_name);
+		vm->head[vm->win_player - 1].prog_name);
 }
