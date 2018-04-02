@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 19:59:28 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:57:55 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	process_update(t_vm *vm)
 
 	node = vm->q->max_p;
 	proc = node->data;
-	while (node->priority <= vm->cycles)
+	while (node && node->priority <= vm->cycles)
 	{
 		if (PARAM1 >= MEM_SIZE)
 			into_reg(PARAM1 % MEM_SIZE, PC);
@@ -133,7 +133,10 @@ void	process_update(t_vm *vm)
 		{//dead process//decrease process count
 			dequeue(vm->q);
 		}
-		node = vm->q->max_p;
+		//node = vm->q->max_p;
+		node = node->next;
+		if (!node)
+			break;
 		proc = node->data;
 	}
 }
