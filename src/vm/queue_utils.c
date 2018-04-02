@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/31 13:29:06 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/02 16:12:25 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/02 16:18:59 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void			enqueue(t_queue *queue, t_io *num, int priority)
             tmp = queue->max_p;
             while (tmp && !PRIORITY(tmp->priority, priority))
                 tmp = tmp->next;
-            new->next = tmp;
+            new->next = tmp->next;
             tmp->next = new;
         }
 	}
