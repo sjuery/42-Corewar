@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/31 13:29:06 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/02 16:18:59 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/02 16:38:35 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,22 @@ t_io			*dequeue(t_queue *queue)
 	free(tmp);
 	tmp = NULL;
 	return (tmp_num);
+}
+
+void print_proc(t_io *proc)
+{
+    ft_printf("[proc: %d op: %d]| -> ", proc->process, proc->op);
+}
+
+void print_queue(t_queue *queue)
+{
+    t_node  *tmp;
+
+    tmp = queue->max_p;
+    while (tmp) {
+        print_proc(tmp->data);
+        tmp = tmp->next;
+    }
 }
 
 t_io			*peek(t_queue *queue)
