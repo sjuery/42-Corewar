@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:57:03 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 21:45:15 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,14 @@ void	init_vm(t_vm *vm)
 		proc->executing = 1;
 		vm->process_count++;
 		proc->head = &vm->head[i];
-		//vm->info[i].head = &vm->head[i];
 		fd = open(vm->players[i], O_RDONLY);
 		write_info(vm, fd, &x, i);
-		//write_info(vm, fd, &x, i);
 		into_reg(i * (MEM_SIZE / vm->num_players), PC);
-		//vm->info[i].start = i * (MEM_SIZE / vm->num_players);
 		assign_player_num(proc, i, &reg);
-		//assign_player_num(vm, i, &reg);
-		enqueue(vm->q, proc, i);
+		proc->op = vm->core[PARAM1];
+		set_cycle_to_execute(vm, proc);
+		enqueue(vm->q, proc, proc->cycle_to_execute);
 		x += ((MEM_SIZE / vm->num_players) - proc->head->prog_size);
-		//x += ((MEM_SIZE / vm->num_players) - vm->info[i].head->prog_size);
 	}
 	vm->win_player = vm->num_players;
 }
@@ -63,11 +60,9 @@ void	write_info(t_vm *vm, int fd, int *x, int i)
 	char	*body;
 
 	body = ft_memalloc(sizeof(char) * CHAMP_MAX_SIZE + 1);
-	//if (!read_input(fd, &vm->info[i], body))
 	if (!read_input(fd, &vm->head[i], body))
 		error();
 	j = -1;
-	//while (++j < (int)vm->info[i].head->prog_size)
 	while (++j < (int)vm->head[i].prog_size)
 	{
 		vm->vis[*x].player = i + 1;

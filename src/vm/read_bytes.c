@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 21:40:11 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 22:06:08 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,8 @@
 
 void	check_executing_processes(t_vm *vm, int *game_end)
 {
-	if (isEmpty(vm->q))
+	if (!isEmpty(vm->q))
 		*game_end = 0;
-	/*while (i < vm->process_count)
-	{
-		if (vm->info[i].executing == 1)
-			*game_end = 0;
-		i++;
-	}*/
 }
 
 void	add_acb_bytes(int op, int *acb_val, int acb)
@@ -85,7 +79,8 @@ void	process_update(t_vm *vm)
 
 	node = vm->q->max_p;
 	proc = node->data;
-	while (node->priority <= vm->cycles)
+	ft_printf("node->priority[%i], cycle[%i]\n", node->priority, vm->cycles);
+	while (node && node->priority <= vm->cycles)
 	{
 		if (PARAM1 >= MEM_SIZE)
 			into_reg(PARAM1 % MEM_SIZE, PC);
@@ -104,7 +99,7 @@ void	process_update(t_vm *vm)
 			vm->vis[PARAM1].previous_index = previous_index;
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
-			enqueue(vm->q, proc, proc->cycle_to_execute);
+			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
 			vis_highlight_process(vm, proc);
 		}
 		else if (op > 0 && op < 17 && node->priority == vm->cycles && proc->executing)
@@ -116,24 +111,29 @@ void	process_update(t_vm *vm)
 			vm->vis[PARAM1].previous_index = previous_index;
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
-			enqueue(vm->q, proc, proc->cycle_to_execute);
+			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
 			vis_highlight_process(vm, proc);
 		}
 		else if (node->priority == vm->cycles && proc->executing)
 		{//invalid opcode//move pc by 1
+			ft_printf("INVALID OP\n");
 			dequeue(vm->q);
 			vm->vis[PARAM2].previous_index = PARAM1;
 			into_reg(VAL(PC) + 1, PC);
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
-			enqueue(vm->q, proc, proc->cycle_to_execute);
+			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
 			vis_highlight_process(vm, proc);
 		}
 		else if (!proc->executing && node->priority == 0)
 		{//dead process//decrease process count
+			ft_printf("DEAD PROCESS\n");
 			dequeue(vm->q);
 		}
-		node = vm->q->max_p;
+		//node = vm->q->max_p;
+		node = node->next;
+		if (!node)
+			break;
 		proc = node->data;
 	}
 }
@@ -149,7 +149,7 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 			refresh();
 			usleep(10000);
 		}
-		//ft_printf("processes[%i], cycle[%i]\n", vm->process_count, vm->cycles);
+		ft_printf("processes[%i], cycle[%i]\n", vm->process_count, vm->cycles);
 		check_executing_processes(vm, &game_end);
 		cycle_scheduler(vm, &counter);
 		if (game_end)
