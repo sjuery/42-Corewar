@@ -6,28 +6,21 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:10:56 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:34:06 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-//int		indirect(t_vm *vm, unsigned char opcode, t_instr *instr)
-int		indirect(t_vm *vm, int i, unsigned char opcode, t_instr *instr)
+int		indirect(t_vm *vm, unsigned char opcode, t_instr *instr)
 {
 	printf("opcode %i\n", (int)opcode);
-	/*if (opcode)
+	if (opcode)
 		return ((vm->core[OFF2] * 0x100 +
 				vm->core[OFF2 + 1]) % IDX_MOD);
 	else
 		return ((vm->core[OFF2] * 0x100 +
-				vm->core[OFF2 + 1]) % MEM_SIZE);*/
-	if (opcode)
-		return ((vm->core[vm->info[i].start + OFF2] * 0x100 +
-				vm->core[vm->info[i].start + OFF2 + 1]) % IDX_MOD);
-	else
-		return ((vm->core[vm->info[i].start + OFF2] * 0x100 +
-				vm->core[vm->info[i].start + OFF2 + 1]) % MEM_SIZE);
+				vm->core[OFF2 + 1]) % MEM_SIZE);
 }
 
 int		get_index_one(unsigned char *l)
@@ -58,12 +51,12 @@ int		get_index_two(t_instr instr)
 	return (out1 + out2);
 }
 
-void	modify_carry(t_vm *vm, int i, unsigned char *reg)
+void	modify_carry(t_vm *vm, t_io *proc, unsigned char *reg)
 {
 	if (reg[0] == 0 && reg[1] == 0 && reg[2] == 0 && reg[3] == 0)
-		vm->info[i].carry = 1;
+		proc->carry = 1;
 	else
-		vm->info[i].carry = 0;
+		proc->carry = 0;
 }
 
 int		get_priority(t_vm *vm, t_io *proc)
@@ -71,15 +64,13 @@ int		get_priority(t_vm *vm, t_io *proc)
 	return (proc->executing * (proc->cycle_to_execute - vm->cycles));
 }
 
-//void vm_lfork(t_vm *vm, t_io *proc)
-void	vm_lfork(t_vm *vm, int i)
+void vm_lfork(t_vm *vm, t_io *proc)
 {
 	int			j;
 	t_instr		instr;
-/*
 	t_io		*new_proc;
 
-	instr = init_instr(vm, i);
+	instr = init_instr(vm, proc);
 	instr.acb = 0;
 	instr.core_index++;
 	get_offset_index(&instr, 2, &instr.l1);
@@ -87,13 +78,12 @@ void	vm_lfork(t_vm *vm, int i)
 	ft_memcpy(new_proc, proc, sizeof(t_io));
 	++vm->process_count;
 	new_proc->carry = 0;
-	new_proc->wait_cycle = 0;
-	new_proc->waiting = 0;
-	into_reg(VAL2(instr.l1) % MEM_SIZE, new_proc.regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
+	into_reg(VAL2(instr.l1) % MEM_SIZE, new_proc->regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
+	new_proc->op = vm->core[VAL(new_proc->regs[0])];
+	set_cycle_to_execute(vm, new->proc);
 	into_reg(VAL(PC) + 3, PC);
-	enqueue(vm->queue, new_proc, get_priority(vm, new_proc));
-*/
-	instr = init_instr(vm, i);
+	enqueue(vm->queue, new_proc, new->proc->cycle_to_execute);
+	/*instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
 	j = vm->process_count;
@@ -108,18 +98,16 @@ void	vm_lfork(t_vm *vm, int i)
 	vm->info[j].wait_cycle = 0;
 	vm->info[j].waiting = 0;
 	into_reg(0, vm->info[j].regs[0]);
-	into_reg(VAL(PC) + 3, PC);
+	into_reg(VAL(PC) + 3, PC);*/
 }
 
-//void vm_fork(t_vm *vm, t_io *proc)
-void	vm_fork(t_vm *vm, int i)
+void	vm_fork(t_vm *vm, t_io *proc)
 {
 	int			j;
 	t_instr		instr;
-/*
 	t_io		*new_proc;
 
-	instr = init_instr(vm, i);
+	instr = init_instr(vm, proc);
 	instr.acb = 0;
 	instr.core_index++;
 	get_offset_index(&instr, 2, &instr.l1);
@@ -127,14 +115,12 @@ void	vm_fork(t_vm *vm, int i)
 	ft_memcpy(new_proc, proc, sizeof(t_io));
 	++vm->process_count;
 	new_proc->carry = 0;
-	new_proc->wait_cycle = 0;
-	new_proc->waiting = 0;
-	into_reg(VAL2(instr.l1) % IDX_MOD, new_proc.regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
+	into_reg(VAL2(instr.l1) % IDX_MOD, new_proc->regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
 	into_reg(VAL(PC) + 3, PC);
-	enqueue(vm->queue, new_proc, get_priority(vm, new_proc));
-*/
-
-	instr = init_instr(vm, i);
+	new_proc->op = vm->core[VAL(new_proc->regs[0])];
+	set_cycle_to_execute(vm, new->proc);
+	enqueue(vm->queue, new_proc, new_proc->cycle_to_execute);
+	/*instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
 	j = vm->process_count;
@@ -149,5 +135,5 @@ void	vm_fork(t_vm *vm, int i)
 	vm->info[j].wait_cycle = 0;
 	vm->info[j].waiting = 0;
 	into_reg(0, vm->info[j].regs[0]);
-	into_reg(VAL(PC) + 1, PC);
+	into_reg(VAL(PC) + 1, PC);*/
 }
