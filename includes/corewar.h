@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:20:34 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:27:56 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void					set_cycle_to_execute(t_vm *vm, t_io *proc);
 /*
 ** parse_file.c
 */
-int						read_input(int fd, t_io *info, char *body);
+int						read_input(int fd, t_header *head, char *body);
 
 /*
 ** ncurses.c

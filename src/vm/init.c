@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:20:39 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 20:28:27 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,12 @@ void	init_vm(t_vm *vm)
 	while (++i < vm->num_players)
 	{
 		proc = (t_io*)ft_memalloc(sizeof(t_io));
+		proc->executing = 1;
 		vm->process_count++;
 		proc->head = &vm->head[i];
 		//vm->info[i].head = &vm->head[i];
 		fd = open(vm->players[i], O_RDONLY);
-		write_info(vm, fd, &x, proc);
+		write_info(vm, fd, &x, i);
 		//write_info(vm, fd, &x, i);
 		into_reg(i * (MEM_SIZE / vm->num_players), PC);
 		//vm->info[i].start = i * (MEM_SIZE / vm->num_players);
@@ -63,11 +64,11 @@ void	write_info(t_vm *vm, int fd, int *x, int i)
 
 	body = ft_memalloc(sizeof(char) * CHAMP_MAX_SIZE + 1);
 	//if (!read_input(fd, &vm->info[i], body))
-	if (!read_input(fd, proc, body))
+	if (!read_input(fd, &vm->head[i], body))
 		error();
 	j = -1;
 	//while (++j < (int)vm->info[i].head->prog_size)
-	while (++j < (int)vm->head[i]->prog_size)
+	while (++j < (int)vm->head[i].prog_size)
 	{
 		vm->vis[*x].player = i + 1;
 		vm->core[*x] = body[j];
