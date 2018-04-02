@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 14:32:54 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 16:53:03 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,17 @@ typedef struct			s_flags
 	int					flags;
 }						t_flags;
 
+typedef struct			s_node {
+    t_io				*data;
+    int 				priority;
+    struct node			*next;
+}						t_node;
+
+typedef struct			s_queue {
+    t_node				*max_p;
+    t_node				*min_p;
+}						t_queue;
+
 typedef struct			s_vm
 {
 	//t_io				info[65014];
@@ -126,17 +137,6 @@ typedef struct			s_instr
 	short				index;
 	int					core_index;
 }						t_instr;
-
-typedef struct			node {
-    t_io				*data;
-    int 				priority;
-    struct node			*next;
-}						t_node;
-
-typedef struct			p_queue {
-    t_node				*max_p;
-    t_node				*min_p;
-}						t_queue;
 
 //void    (*g_jt[16])(t_vm *vm, t_io *proc);
 void    (*g_jt[16])(t_vm *vm, int i);
@@ -244,19 +244,35 @@ int						get_offset(t_instr *instr, unsigned char acb,
 /*
 ** vm_op.c
 */
+
+/*
 void					vm_or(t_vm *vm, int i);
 void					vm_xor(t_vm *vm, int i);
 void					vm_and(t_vm *vm, int i);
 void					vm_sub(t_vm *vm, int i);
 void					vm_add(t_vm *vm, int i);
+*/
+
+void					vm_or(t_vm *vm, t_io *proc);
+void					vm_xor(t_vm *vm, t_io *proc);
+void					vm_and(t_vm *vm, t_io *proc);
+void					vm_sub(t_vm *vm, t_io *proc);
+void					vm_add(t_vm *vm, t_io *proc);
 
 /*
 ** vm_load.c
 */
+/*
 void					vm_lld(t_vm *vm, int i);
 void					vm_lldi(t_vm *vm, int i);
 void					vm_ldi(t_vm *vm, int i);
 void					vm_ld(t_vm *vm, int i);
+*/
+
+void					vm_lld(t_vm *vm, t_io *proc);
+void					vm_lldi(t_vm *vm, t_io *proc);
+void					vm_ldi(t_vm *vm, t_io *proc);
+void					vm_ld(t_vm *vm, t_io *proc);
 
 /*
 ** vm_util.c
@@ -265,17 +281,31 @@ int						indirect(t_vm *vm, int i, unsigned char opcode,
 		t_instr *instr);
 int						get_index_one(unsigned char *l);
 int						get_index_two(t_instr instr);
+void					vm_lfork(t_vm *vm, t_io *proc);
+void					vm_fork(t_vm *vm, t_io *proc);
+
+/*
 void					vm_lfork(t_vm *vm, int i);
 void					vm_fork(t_vm *vm, int i);
+*/
+
 
 /*
 ** vm_args.c
 */
+/*
 void					vm_st(t_vm *vm, int i);
 void					vm_sti(t_vm *vm, int i);
 void					vm_zjmp(t_vm *vm, int i);
 void					vm_live(t_vm *vm, int i);
 void					vm_aff(t_vm *vm, int i);
+*/
+
+void					vm_st(t_vm *vm, t_io *proc);
+void					vm_sti(t_vm *vm, t_io *proc);
+void					vm_zjmp(t_vm *vm, t_io *proc);
+void					vm_live(t_vm *vm, t_io *proc);
+void					vm_aff(t_vm *vm, t_io *proc);
 
 /*
 **	queue_utils.c
