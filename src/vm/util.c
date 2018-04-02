@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/03/31 12:24:54 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 17:13:42 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,21 @@ void	print_core(unsigned char *core, int i)
 	ft_putchar('\n');
 }
 
-//void	assign_player_num(t_io *proc, int i, unsigned char **reg)
-void	assign_player_num(t_vm *vm, int i, unsigned char **reg)
+//void	assign_player_num(t_vm *vm, int i, unsigned char **reg)
+void	assign_player_num(t_io *proc, int i, unsigned char **reg)
 {
-	//*reg = proc->regs[1];
-	*reg = vm->info[i].regs[1];
+	*reg = proc->regs[1];
+	//*reg = vm->info[i].regs[1];
 	(*reg)[0] = 0xff;
 	(*reg)[1] = 0xff;
 	(*reg)[2] = 0xff;
 	(*reg)[3] = 0xff - i;
-	//proc->player_int = i + 1;
-	vm->info[i].player_int = i + 1;
+	proc->player_int = i + 1;
+	//vm->info[i].player_int = i + 1;
 }
 
-int		valid_acb(int op, int acb, t_vm *vm, int i)
+//int		valid_acb(int op, int acb, t_vm *vm, int i)
+int		valid_acb(int op, int acb, t_vm *vm, t_io *proc)
 {
 	int params;
 
@@ -70,14 +71,15 @@ int		valid_acb(int op, int acb, t_vm *vm, int i)
 	if (params == 1)
 		return (valid_acb1(acb, op));
 	if (params == 2)
-		return (valid_acb2(acb, op) & valid_register(vm, acb, op, i));
+		return (valid_acb2(acb, op) & valid_register(vm, acb, op, proc));
 	if (params == 3)
-		return (valid_acb3(acb, op) & valid_register(vm, acb, op, i));
+		return (valid_acb3(acb, op) & valid_register(vm, acb, op, proc));
 	ft_printf("INVALID BITCH valid_acb\n");
 	return (0);
 }
 
-int		valid_reg_num(int reg_offset, t_vm *vm, int i)
+//int		valid_reg_num(int reg_offset, t_vm *vm, int i)
+int		valid_reg_num(int reg_offset, t_vm *vm, t_io *proc)
 {
 	int reg;
 
@@ -94,14 +96,15 @@ void	add_to_reg_offset(int *reg_offset, int acb, int op)
 		*reg_offset += 2;
 }
 
-int		valid_register(t_vm *vm, int acb, int op, int i)
+//int		valid_register(t_vm *vm, int acb, int op, int i)
+int		valid_register(t_vm *vm, int acb, int op, t_io *proc)
 {
 	int	reg_offset;
 
 	reg_offset = 2;
 	if (ACB1(acb) == 1)
 	{
-		if (valid_reg_num(reg_offset, vm, i))
+		if (valid_reg_num(reg_offset, vm, proc))
 			reg_offset++;
 		else
 			return (0);
@@ -110,7 +113,7 @@ int		valid_register(t_vm *vm, int acb, int op, int i)
 		add_to_reg_offset(&reg_offset, ACB1(acb), op); 
 	if (ACB2(acb) == 1)
 	{
-		if (valid_reg_num(reg_offset, vm, i))
+		if (valid_reg_num(reg_offset, vm, proc))
 			reg_offset++;
 		else
 			return (0);
@@ -118,7 +121,7 @@ int		valid_register(t_vm *vm, int acb, int op, int i)
 	else
 		add_to_reg_offset(&reg_offset, ACB2(acb), op);
 	if (g_optab[op].params == 3 && ACB3(acb) == 1)
-		return (valid_reg_num(reg_offset, vm, i) ? 1 : 0);
+		return (valid_reg_num(reg_offset, vm, proc) ? 1 : 0);
 	return (1);
 }
 

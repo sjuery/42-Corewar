@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 16:43:45 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/31 15:20:58 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 19:02:00 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ void	into_reg(unsigned int val, unsigned char *reg)
 	reg[0] = (val >> 24) & 0xFF;
 }
 
-//t_instr	init_instr(t_vm *vm, t_io *proc)
-t_instr	init_instr(t_vm *vm, int i)
+//t_instr	init_instr(t_vm *vm, int i)
+t_instr	init_instr(t_vm *vm, t_io *proc)
 {
 	t_instr	n;
 
@@ -30,8 +30,8 @@ t_instr	init_instr(t_vm *vm, int i)
 	n.l3 = NULL;
 	n.s = NULL;
 	n.vm = vm;
-	//n.proc = proc
-	n.i = i;//not needed
+	n.proc = proc
+	//n.i = i;//not needed
 	n.acb = vm->core[PARAM2];
 	n.opcode_pos = VAL(PC);
 	n.reg_index[0] = 0;

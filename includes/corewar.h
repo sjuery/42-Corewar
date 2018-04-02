@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 14:32:54 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/01 18:39:34 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,15 @@
 # define VAL2(a)		((a[1]) + (a[0] << 8))
 # define VAL3(a)		((a[3]) + (a[2] << 8))
 
-# define PC				vm->info[i].regs[0]
-//# define PC				proc->regs[0]
+//# define PC				vm->info[i].regs[0]
+# define PC				proc->regs[0]
 
-# define PARAM1			vm->info[i].start + VAL(PC)
-# define PARAM2			vm->info[i].start + VAL(PC) + 1
-# define PARAM3			vm->info[i].start + VAL(PC) + 2
-/*# define PARAM1			VAL(PC)
+//# define PARAM1			vm->info[i].start + VAL(PC)
+//# define PARAM2			vm->info[i].start + VAL(PC) + 1
+//# define PARAM3			vm->info[i].start + VAL(PC) + 2
+# define PARAM1			VAL(PC)
 # define PARAM2			VAL(PC) + 1
-# define PARAM3			VAL(PC) + 2*/
+# define PARAM3			VAL(PC) + 2
 
 //# define OFF1			instr->vm->info[instr->i].start//not needed
 # define OFF2			instr->core_index
@@ -74,9 +74,9 @@ typedef struct			s_io
 	int					executing;
 	unsigned char		regs[REG_NUMBER + 1][REG_SIZE];
 	int					carry;
-	int					start;//not needed if the PC starts off at start
-	int					wait_cycle;//not needed
-	int					waiting;//not needed
+	//int					start;//not needed if the PC starts off at start
+	//int					wait_cycle;//not needed
+	//int					waiting;//not needed
 	int					cycle_to_execute;
 }						t_io;
 
@@ -113,8 +113,8 @@ typedef struct			s_vm
 typedef struct			s_instr
 {
 	t_vm				*vm;
-	int					i;//not needed
-	//t_io				*proc;
+	//int					i;//not needed
+	t_io				*proc;
 	unsigned char		acb;
 	unsigned char		*l1;
 	unsigned char		*l2;
@@ -138,8 +138,8 @@ typedef struct			p_queue {
     t_node				*min_p;
 }						t_queue;
 
-//void    (*g_jt[16])(t_vm *vm, t_io *proc);
-void    (*g_jt[16])(t_vm *vm, int i);
+void    (*g_jt[16])(t_vm *vm, t_io *proc);
+//void    (*g_jt[16])(t_vm *vm, int i);
 t_instr					init_instr(t_vm *vm, int i);
 
 void					print_core(unsigned char *test, int i);
@@ -150,6 +150,7 @@ int						valid_acb2(int acb, int op);
 int						valid_acb3(int acb, int op);
 int						valid_register(t_vm *vm, int acb, int op, int);
 void					modify_carry(t_vm *vm, int i, unsigned char *reg);
+void					set_cycle_to_execute(t_vm *vm, t_io *proc);
 
 /*
 ** parse_file.c
