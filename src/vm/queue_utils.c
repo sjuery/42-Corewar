@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/31 13:29:06 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/02 20:58:22 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/02 22:01:03 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,26 @@ void			enqueue(t_queue *queue, t_io *num, int priority)
 		queue->min_p = new;
 	else
 	{
-        if (PRIORITY(priority, queue->min_p->priority))//if new node priority is greater than min_priority, add the new node to the end
+        if (PRIORITY(priority, queue->min_p->priority) ||
+				(priority == queue->min_p->priority &&
+				 num->process < queue->min_p->data->process))
         {
             queue->min_p->next = new;
     		queue->min_p = queue->min_p->next;
         }
-        else if (PRIORITY(queue->max_p->priority, priority))//if max_p priority is greater than new node priority, new node becomes the max_p
+        else if (PRIORITY(queue->max_p->priority, priority) ||
+				(priority == queue->max_p->priority &&
+				 num->process > queue->max_p->data->process))
         {
             new->next = queue->max_p;
     		queue->max_p = new;
         }
         else
-        {//we want the new node to go after tmp->priority if the priority of the new node is greater than tmp->priority
+        {
             tmp = queue->max_p;
-            while (tmp->next && PRIORITY(priority, tmp->next->priority))//this should be, while the priority of the new node is greater than tmp, we keep iterating over tmp because we want the lowest priority node to be first
+            while (tmp->next && (PRIORITY(priority, tmp->next->priority) ||
+						(priority == tmp->next->priority && 
+						 num->process < tmp->next->data->process)))
                 tmp = tmp->next;
             new->next = tmp->next;
             tmp->next = new;

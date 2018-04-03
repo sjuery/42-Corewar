@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 21:04:22 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/02 22:01:00 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,17 +98,17 @@ void	process_update(t_vm *vm)
 				  valid_acb(op - 1, vm->core[PARAM2], vm, proc)) ||
 				 !g_optab[op - 1].acb) && proc->executing)
 		{//execute instruction
-			ft_printf("AFTER DEQUEUE\n");
-			print_queue(vm->q);
+			//ft_printf("AFTER DEQUEUE\n");
+			//print_queue(vm->q);
 			ft_printf("cycle[%i], op[%i] %s process[%i] pc[%i]\n", vm->cycles, op, g_optab[op - 1].opstr, proc->process + 1, PARAM1);
 			previous_index = PARAM1;
 			g_jt[op - 1](vm, proc);
 			vm->vis[PARAM1].previous_index = previous_index;
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
-			enqueue(vm->q, proc, proc->executing * (proc->cycle_to_execute - proc->process));
-			ft_printf("AFTER ENQUE\n");
-			print_queue(vm->q);
+			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
+			//ft_printf("AFTER ENQUE\n");
+			//print_queue(vm->q);
 			//ft_printf("cycle to execute [%i]\n", proc->cycle_to_execute);
 			vis_highlight_process(vm, proc);
 		}
@@ -120,7 +120,7 @@ void	process_update(t_vm *vm)
 			vm->vis[PARAM1].previous_index = previous_index;
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
-			enqueue(vm->q, proc, proc->executing * (proc->cycle_to_execute - proc->process));
+			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
 			vis_highlight_process(vm, proc);
 		}
 		else if (proc->cycle_to_execute == vm->cycles && proc->executing)
@@ -130,7 +130,7 @@ void	process_update(t_vm *vm)
 			into_reg(VAL(PC) + 1, PC);
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
-			enqueue(vm->q, proc, proc->executing * (proc->cycle_to_execute - proc->process));
+			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
 			vis_highlight_process(vm, proc);
 		}
 		else if (!proc->executing && proc->cycle_to_execute == 0)

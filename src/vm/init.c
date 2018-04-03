@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 17:38:25 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/02 21:39:14 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	init_vm(t_vm *vm)
 		proc->op = vm->core[PARAM1];
 		proc->process = i;
 		set_cycle_to_execute(vm, proc);
-		enqueue(vm->q, proc, (proc->cycle_to_execute - proc->process));
+		enqueue(vm->q, proc, proc->cycle_to_execute);
 		x += ((MEM_SIZE / vm->num_players) - proc->head->prog_size);
 	}
 	vm->win_player = vm->num_players;

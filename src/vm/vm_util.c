@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 19:54:45 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/02 21:38:48 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void vm_lfork(t_vm *vm, t_io *proc)
 	new_proc->op = vm->core[VAL(new_proc->regs[0])];
 	set_cycle_to_execute(vm, new_proc);
 	into_reg(VAL(PC) + 3, PC);
-	enqueue(vm->q, new_proc, new_proc->executing * (new_proc->cycle_to_execute - new_proc->process));
+	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
 	/*instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;
@@ -119,7 +119,7 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	new_proc->op = vm->core[VAL(new_proc->regs[0])];
 	ft_printf("new_proc->op[%i] PC[%i]\n", new_proc->op, VAL(new_proc->regs[0]));
 	set_cycle_to_execute(vm, new_proc);
-	enqueue(vm->q, new_proc, new_proc->executing * (new_proc->cycle_to_execute - new_proc->process));
+	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
 	ft_printf("new_proc cycle to execute[%i]\n", new_proc->cycle_to_execute);
 	/*instr = init_instr(vm, i);
 	instr.acb = 0;
