@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 23:36:18 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/02 17:09:42 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 # define REGI			instr->reg_index[instr->ri]
 
 # define VWRAP			192
-# define PRIORITY(a, b) (a < b)
+# define PRIORITY(a, b) (a > b)
 
 typedef	struct			s_vis
 {
@@ -306,5 +306,6 @@ t_io					*dequeue(t_queue *queue);
 t_io					*peek(t_queue *queue);
 int						isEmpty(t_queue *queue);
 int						get_priority(t_vm *vm, t_io *proc);
+void					print_queue(t_queue *queue);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/31 13:29:06 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/02 16:34:12 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/02 17:06:34 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void			enqueue(t_queue *queue, t_io *num, int priority)
         else
         {
             tmp = queue->max_p;
-            while (tmp && !PRIORITY(tmp->priority, priority))
+            while (tmp && PRIORITY(tmp->priority, priority))
                 tmp = tmp->next;
             new->next = tmp->next;
             tmp->next = new;
@@ -83,6 +83,23 @@ t_io			*dequeue(t_queue *queue)
 	free(tmp);
 	tmp = NULL;
 	return (tmp_num);
+}
+
+void print_proc(t_io *proc)
+{
+    ft_printf("[proc: %d op: %d priority: %d]| -> ", proc->process + 1, proc->op, proc->cycle_to_execute);
+}
+
+void print_queue(t_queue *queue)
+{
+    t_node  *tmp;
+
+    tmp = queue->max_p;
+    while (tmp) {
+        print_proc(tmp->data);
+        tmp = tmp->next;
+    }
+	ft_printf("\n");
 }
 
 t_io			*peek(t_queue *queue)
