@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 21:38:48 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/02 22:56:57 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,6 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	ft_memcpy(new_proc, proc, sizeof(t_io));
 	++vm->process_count;
 	new_proc->process = vm->process_count - 1;
-	new_proc->carry = 0;
 	into_reg(((VAL2(instr.l1)  + instr.opcode_pos) % IDX_MOD), new_proc->regs[0]);
 	into_reg(VAL(PC) + 3, PC);
 	new_proc->op = vm->core[VAL(new_proc->regs[0])];

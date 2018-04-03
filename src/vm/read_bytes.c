@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 22:01:00 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/02 22:59:22 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 		//ft_printf("cycle[%i]\n", vm->cycles);
 		check_executing_processes(vm, &game_end);
 		cycle_scheduler(vm, &counter);
-		if (game_end)
+		if (game_end || vm->cycles == 3000)
 			break ;
 		game_end = 1;
 	}

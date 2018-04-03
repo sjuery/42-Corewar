@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 17:09:42 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/02 22:41:33 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ typedef struct			s_vm
 {
 	t_queue				*q;
 	t_header			head[4];
-	int					process_count;
 	char				*players[4];
 	int					num_players;
 	unsigned char		core[4096];
@@ -109,6 +108,7 @@ typedef struct			s_vm
 	int					checks;
 	int					cycles;
 	int					live;
+	int					process_count;
 	t_flags				f;
 }						t_vm;
 
