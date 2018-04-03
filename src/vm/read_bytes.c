@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 17:31:30 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/02 17:42:11 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	process_update(t_vm *vm)
 			vm->vis[PARAM1].previous_index = previous_index;
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
-			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
+			enqueue(vm->q, proc, proc->executing * (proc->cycle_to_execute - proc->process));
 			//ft_printf("cycle to execute [%i]\n", proc->cycle_to_execute);
 			vis_highlight_process(vm, proc);
 		}
@@ -117,7 +117,7 @@ void	process_update(t_vm *vm)
 			vm->vis[PARAM1].previous_index = previous_index;
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
-			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
+			enqueue(vm->q, proc, proc->executing * (proc->cycle_to_execute - proc->process));
 			vis_highlight_process(vm, proc);
 		}
 		else if (proc->cycle_to_execute == vm->cycles && proc->executing)
@@ -127,7 +127,7 @@ void	process_update(t_vm *vm)
 			into_reg(VAL(PC) + 1, PC);
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
-			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
+			enqueue(vm->q, proc, proc->executing * (proc->cycle_to_execute - proc->process));
 			vis_highlight_process(vm, proc);
 		}
 		else if (!proc->executing && proc->cycle_to_execute == 0)
