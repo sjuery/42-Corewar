@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 17:37:59 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/02 19:54:45 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,10 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	++vm->process_count;
 	new_proc->process = vm->process_count - 1;
 	new_proc->carry = 0;
-	into_reg((VAL2(instr.l1)  + instr.opcode_pos) % IDX_MOD, new_proc->regs[0]); // may need to do (instr.l1[0] << 8 | instr.l1[1])
+	into_reg(((VAL2(instr.l1)  + instr.opcode_pos) % IDX_MOD), new_proc->regs[0]);
 	into_reg(VAL(PC) + 3, PC);
 	new_proc->op = vm->core[VAL(new_proc->regs[0])];
+	ft_printf("new_proc->op[%i] PC[%i]\n", new_proc->op, VAL(new_proc->regs[0]));
 	set_cycle_to_execute(vm, new_proc);
 	enqueue(vm->q, new_proc, new_proc->executing * (new_proc->cycle_to_execute - new_proc->process));
 	ft_printf("new_proc cycle to execute[%i]\n", new_proc->cycle_to_execute);
