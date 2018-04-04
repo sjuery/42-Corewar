@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 22:41:33 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/03 14:08:48 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,10 @@ typedef struct			s_vm
 	t_header			head[4];
 	char				*players[4];
 	int					num_players;
-	unsigned char		core[4096];
-	t_vis				vis[4096];
+	//unsigned char		core[4096];
+	//t_vis				vis[4096];
+	unsigned char		*core;
+	t_vis				*vis;
 	int					win_player;
 	int					cycle_to_die;
 	int					counter;
@@ -124,7 +126,7 @@ typedef struct			s_instr
 	unsigned int		reg_index[3];
 	unsigned int		ri;
 	int					opcode_pos;
-	short				index;
+	int					index;
 	int					core_index;
 }						t_instr;
 

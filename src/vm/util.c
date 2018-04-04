@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:58:28 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/03 18:01:18 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,10 @@ int		valid_acb(int op, int acb, t_vm *vm, t_io *proc)
 	if (params == 2)
 		return (valid_acb2(acb, op) & valid_register(vm, acb, op, proc));
 	if (params == 3)
+	{
+		//ft_printf("cycle[%i] process[%i] ", vm->cycles, proc->process);
 		return (valid_acb3(acb, op) & valid_register(vm, acb, op, proc));
-	ft_printf("INVALID BITCH valid_acb\n");
+	}
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 22:43:20 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/03 14:11:29 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,10 @@ void	init_vm(t_vm *vm)
 	x = 0;
 	vm->cycle_to_die = CYCLE_TO_DIE;
 	vm->q = init_queue();;
-	ft_bzero(vm->core, MEM_SIZE);
-	ft_bzero(vm->vis, MEM_SIZE);
+	//ft_bzero(vm->core, MEM_SIZE);
+	//ft_bzero(vm->vis, MEM_SIZE);
+	vm->core = (unsigned char*)ft_memalloc(sizeof(unsigned char) * MEM_SIZE);
+	vm->vis = (t_vis*)ft_memalloc(sizeof(t_vis) * MEM_SIZE);
 	while (++i < vm->num_players)
 	{
 		proc = (t_io*)ft_memalloc(sizeof(t_io));

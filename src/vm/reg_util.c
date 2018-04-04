@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 16:43:45 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/01 20:29:55 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/03 11:38:09 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_instr	init_instr(t_vm *vm, t_io *proc)
 	n.reg_index[1] = 0;
 	n.reg_index[2] = 0;
 	n.ri = 0;
+	n.index = 0;
 	n.core_index = VAL(PC);
 	return (n);
 }

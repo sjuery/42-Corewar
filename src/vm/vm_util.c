@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 22:56:57 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/03 17:11:58 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,8 @@
 
 int		indirect(t_vm *vm, unsigned char opcode, t_instr *instr)
 {
-	printf("opcode %i\n", (int)opcode);
 	if (opcode)
-		return ((vm->core[OFF2] * 0x100 +
+		return ((short)(vm->core[OFF2] * 0x100 +
 				vm->core[OFF2 + 1]) % IDX_MOD);
 	else
 		return ((vm->core[OFF2] * 0x100 +
@@ -25,10 +24,11 @@ int		indirect(t_vm *vm, unsigned char opcode, t_instr *instr)
 
 int		get_index_one(unsigned char *l)
 {
-	short val;
+	int val;
 
 	val = l[1] + (l[0] << 8);
-	return (val);
+	//ft_printf("%i\n", val % MEM_SIZE);
+	return (val);//% MEM_SIZE
 }
 
 int		get_index_two(t_instr instr)
@@ -112,14 +112,13 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	new_proc = (t_io *)ft_memalloc(sizeof(t_io));
 	ft_memcpy(new_proc, proc, sizeof(t_io));
 	++vm->process_count;
+	new_proc->alive = 0;
 	new_proc->process = vm->process_count - 1;
 	into_reg(((VAL2(instr.l1)  + instr.opcode_pos) % IDX_MOD), new_proc->regs[0]);
 	into_reg(VAL(PC) + 3, PC);
 	new_proc->op = vm->core[VAL(new_proc->regs[0])];
-	ft_printf("new_proc->op[%i] PC[%i]\n", new_proc->op, VAL(new_proc->regs[0]));
 	set_cycle_to_execute(vm, new_proc);
 	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
-	ft_printf("new_proc cycle to execute[%i]\n", new_proc->cycle_to_execute);
 	/*instr = init_instr(vm, i);
 	instr.acb = 0;
 	instr.core_index++;

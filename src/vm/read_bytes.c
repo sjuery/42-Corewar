@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 22:59:22 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/03 18:00:03 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	update_pc(t_io *proc, int op, int acb)
 {
 	int acb_val;
 
-	acb_val = 0;
+	acb_val = 2;
 	add_acb_bytes(op, &acb_val, ACB1(acb));
 	if (g_optab[op].params >= 2)
 		add_acb_bytes(op, &acb_val, ACB2(acb));
@@ -114,9 +114,9 @@ void	process_update(t_vm *vm)
 		}
 		else if (op > 0 && op < 17 && proc->cycle_to_execute == vm->cycles && proc->executing)
 		{//invalid instruction//update pc function(moves the pc according to acb)
-			ft_printf("INVALID; op[%i] cycle[%i]\n", op, vm->cycles);
+			//ft_printf("INVALID; op[%i] cycle[%i]\n", op, vm->cycles);
 			previous_index = PARAM1;
-			update_pc(proc, op, vm->core[PARAM2]);
+			update_pc(proc, op - 1, vm->core[PARAM2]);
 			vm->vis[PARAM1].previous_index = previous_index;
 			proc->op = vm->core[PARAM1];
 			set_cycle_to_execute(vm, proc);
@@ -155,11 +155,11 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 		//ft_printf("cycle[%i]\n", vm->cycles);
 		check_executing_processes(vm, &game_end);
 		cycle_scheduler(vm, &counter);
-		if (game_end || vm->cycles == 3000)
+		if (game_end || vm->cycles == 6000)
 			break ;
 		game_end = 1;
 	}
 	endwin();
-	ft_printf("\nContestant %i, \"%s\", has won ! CTD[%i] cycle[%i]\n", vm->win_player,
-		vm->head[vm->win_player - 1].prog_name, vm->cycle_to_die, vm->cycles);
+	ft_printf("\nContestant %i, \"%s\", has won ! CTD[%i] cycle[%i] process_count[%i]\n", vm->win_player,
+		vm->head[vm->win_player - 1].prog_name, vm->cycle_to_die, vm->cycles, vm->process_count);
 }

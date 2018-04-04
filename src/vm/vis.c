@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/01 20:46:41 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/03 15:26:22 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	vis_copy(t_vis *dest, unsigned char *src, t_io *proc)
 	dest[1].player = vm->info[i].player_int;
 	dest[2].player = vm->info[i].player_int;
 	dest[3].player = vm->info[i].player_int;*/
+
 	dest[0].player = proc->player_int;
 	dest[1].player = proc->player_int;
 	dest[2].player = proc->player_int;
