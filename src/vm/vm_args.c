@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/05 13:04:23 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 15:28:38 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	vm_st(t_vm *vm, t_io *proc)
 	//ft_printf("st r%i %i cycle [%i]\n", instr.reg_index[--instr.ri], (short)instr.index, vm->cycles);
 	//ft_printf("-> with mod and pc %i\n", (instr.opcode_pos + instr.index) % MEM_SIZE);
 	into_reg(instr.core_index, PC);
-	reg_copy(&vm->core[(instr.opcode_pos + instr.index) % MEM_SIZE], instr.l1);
-	vis_copy(&vm->vis[(instr.opcode_pos + instr.index) % MEM_SIZE], instr.l1, proc);
+	reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
+	vis_copy(vm->vis, instr.l1, proc, (instr.opcode_pos + instr.index) % MEM_SIZE);
 	vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
 }
 
@@ -64,10 +64,8 @@ void	vm_sti(t_vm *vm, t_io *proc)
 	//ft_printf("-> store to %i + %hi = %i", (short)VAL2(instr.l2), (short)VAL3(instr.l3), (short)(instr.index));
 	//ft_printf(" (with pc and mod %i)\n", (short)(instr.opcode_pos + instr.index) % MEM_SIZE);
 	//ft_printf("storing in %i\n", (instr.opcode_pos + instr.index) % MEM_SIZE);
-	reg_copy(&vm->core[(instr.opcode_pos + instr.index) % MEM_SIZE],
-		instr.l1);
-	vis_copy(&vm->vis[(instr.opcode_pos + instr.index) % MEM_SIZE],
-		instr.l1, proc);
+	reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
+	vis_copy(vm->vis, instr.l1, proc, instr.opcode_pos + instr.index);
 	vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
 }
 
@@ -93,14 +91,14 @@ void	vm_zjmp(t_vm *vm, t_io *proc)
 
 void	vm_live(t_vm *vm, t_io *proc)
 {
-	//vm->win_player = vm->info[i].player_int;
-	if (vm->core[PARAM1 + 1] == 0xff && vm->core[PARAM1 + 2] == 0xff
-			&& vm->core[PARAM1 + 3] == 0xff
-			&& (vm->core[PARAM1 + 4] >= 0xff - (vm->num_players - 1)
-				&& vm->core[PARAM1 + 4] <= 0xff))
-	{
-		vm->win_player = vm->core[PARAM1 + 4] - 0xff + 1;
-	}
+	int				val;
+	unsigned char	*l;
+
+	l =  &(vm->core[PARAM2]);
+	val = VAL(l);
+	//ft_printf("LIVE %i\n", val);
+	if (val <= -1 && val >= (vm->num_players * -1))
+		vm->win_player = val * -1;
 	vm->live++;
 	proc->alive = 1;
 	into_reg(VAL(PC) + 5, PC);
@@ -113,6 +111,6 @@ void	vm_aff(t_vm *vm, t_io *proc)
 	instr = init_instr(vm, proc);
 	instr.core_index += 2;
 	get_offset(&instr, ACB1(instr.acb), &instr.l1);
-	ft_printf("%i\n", VAL(instr.l1) % 256);//if not VAL, sue VAL3
+	ft_printf("%c\n",  VAL(instr.l1) % 256);
 	into_reg(instr.core_index, PC);
 }

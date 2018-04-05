@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/04 21:52:44 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 15:20:40 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ void					into_reg(unsigned int val, unsigned char *reg);
 t_instr					init_instr(t_vm *vm, t_io *proc);
 int						print_reg(unsigned char *l);
 void					copy_io(t_vm *vm, int dest, int src);
-void					reg_copy(unsigned char *dest, unsigned char *src);
+void					reg_copy(unsigned char *dest, unsigned char *src, int index);
 
 /*
 ** flags.c
@@ -221,7 +221,7 @@ void					error(void);
 void					vis_highlight_process(t_vm *vm, t_io *proc);
 void					vis_unhighlight_process(t_vm *vm, t_io *proc);
 void					vis_print_debug(t_vm *vm);
-void					vis_copy(t_vis *dest, unsigned char *src, t_io *proc);
+void					vis_copy(t_vis *dest, unsigned char *src, t_io *proc, int index);
 void					vis_update(t_vm *vm, int index);
 
 /*

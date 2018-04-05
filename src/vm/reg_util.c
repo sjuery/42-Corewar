@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 16:43:45 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/03 22:47:20 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 15:24:05 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,10 @@ int		print_reg(unsigned char *l)
 	return (VAL(l));
 }
 
-void	reg_copy(unsigned char *dest, unsigned char *src)
+void	reg_copy(unsigned char *dest, unsigned char *src, int index)
 {
-	dest[0] = src[0];
-	dest[1] = src[1];
-	dest[2] = src[2];
-	dest[3] = src[3];
+	dest[index % MEM_SIZE] = src[0];
+	dest[(index + 1) % MEM_SIZE] = src[1];
+	dest[(index + 2) % MEM_SIZE] = src[2];
+	dest[(index + 3) % MEM_SIZE] = src[3];
 }

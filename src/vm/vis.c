@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/04 16:46:40 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 15:38:02 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	vis_print_debug(t_vm *vm)
 		i++;
 	}
 	attron(0);
-	mvprintw(19, VWRAP + 4, "Live called in current period : %i", vm->live);
+	mvprintw(19, VWRAP + 4, "Lives in current period : %i", vm->live);
 	mvprintw(21, VWRAP + 4, "Winning Player : %i", vm->win_player);
 	mvprintw(23, VWRAP + 4, "MAX_CHECKS : %i", MAX_CHECKS);
 	mvprintw(25, VWRAP + 4, "NBR_LIVE : %i", NBR_LIVE);
@@ -57,28 +57,28 @@ void	vis_print_debug(t_vm *vm)
 	attroff(0);
 }
 
-void	vis_copy(t_vis *dest, unsigned char *src, t_io *proc)
+void	vis_copy(t_vis *dest, unsigned char *src, t_io *proc, int index)
 {
-	dest[0].byte = src[0];
-	dest[1].byte = src[1];
-	dest[2].byte = src[2];
-	dest[3].byte = src[3];
-	dest[0].player = proc->player_int;
-	dest[1].player = proc->player_int;
-	dest[2].player = proc->player_int;
-	dest[3].player = proc->player_int;
+	dest[index % MEM_SIZE].byte = src[0];
+	dest[(index + 1) % MEM_SIZE].byte = src[1];
+	dest[(index + 2) % MEM_SIZE].byte = src[2];
+	dest[(index + 3) % MEM_SIZE].byte = src[3];
+	dest[index % MEM_SIZE].player = proc->player_int;
+	dest[(index + 1) % MEM_SIZE].player = proc->player_int;
+	dest[(index + 2) % MEM_SIZE].player = proc->player_int;
+	dest[(index + 3) % MEM_SIZE].player = proc->player_int;
 }
 
 void	vis_update(t_vm *vm, int index)
 {
 	attron(COLOR_PAIR(vm->vis[index].player));
-	mvprintw(index / 64 + 1, (index * 3) % VWRAP, "%02hhx",
+	mvprintw((index % MEM_SIZE / 64 + 1) % MEM_SIZE, (index * 3) % VWRAP, "%02hhx",
 		vm->vis[index].byte);
-	mvprintw((index + 1) / 64 + 1, ((index + 1) * 3) % VWRAP, "%02hhx",
+	mvprintw(((index + 1) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 1) * 3) % VWRAP, "%02hhx",
 		vm->vis[index + 1].byte);
-	mvprintw((index + 2) / 64 + 1, ((index + 2) * 3) % VWRAP, "%02hhx",
+	mvprintw(((index + 2) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 2) * 3) % VWRAP, "%02hhx",
 		vm->vis[index + 2].byte);
-	mvprintw((index + 3) / 64 + 1, ((index + 3) * 3) % VWRAP, "%02hhx",
+	mvprintw(((index + 3) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 3) * 3) % VWRAP, "%02hhx",
 		vm->vis[index + 3].byte);
 	attroff(COLOR_PAIR(vm->vis[index].player));
 	refresh();
