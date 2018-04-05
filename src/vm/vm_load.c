@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/02 16:52:04 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/04 15:59:32 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,18 @@ void	vm_lldi(t_vm *vm, t_io *proc)
 void	vm_ldi(t_vm *vm, t_io *proc)
 {
 	t_instr		instr;
+	int			val;
 
 	instr = init_instr(vm, proc);
 	instr.core_index += 2;
-	get_offset_index(&instr, ACB1(instr.acb) | 0b100, &instr.l1);
+	get_offset_index(&instr, ACB1(instr.acb) | 0b100, &instr.l1);//might have to take out | 0b100
 	get_offset_index(&instr, ACB2(instr.acb), &instr.l2);
 	get_offset_index(&instr, ACB3(instr.acb), &instr.l3);
 	into_reg(instr.core_index, PC);
-	instr.s = &vm->core[(instr.opcode_pos
-		+ get_index_two(instr)) % IDX_MOD];
+	val = get_index_two(instr);
+	//ft_printf("-> load from %i ", (short)val);
+	//ft_printf("(with pc and mod %i)\n", (short)(instr.opcode_pos + val) % MEM_SIZE);
+	instr.s = &vm->core[(instr.opcode_pos + val) % MEM_SIZE];
 	reg_copy(instr.l3, instr.s);
 }
 
@@ -64,6 +67,7 @@ void	vm_ld(t_vm *vm, t_io *proc)
 	instr.core_index += 2;
 	get_offset(&instr, ACB1(instr.acb) | 0b100, &instr.l1);
 	get_offset(&instr, ACB2(instr.acb), &instr.l2);
+	//ft_printf("ld %i r%i\n", VAL(instr.l1), instr.reg_index[--instr.ri]);
 	into_reg(instr.core_index, PC);
 	reg_copy(instr.l2, instr.l1);
 	modify_carry(proc, instr.l2);

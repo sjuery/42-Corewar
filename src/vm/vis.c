@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/03 15:26:22 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/04 16:46:40 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,28 @@ void	vis_unhighlight_process(t_vm *vm, t_io *proc)
 
 void	vis_print_debug(t_vm *vm)
 {
+	int i;
+
+	i = 0;
 	attron(0);
 	mvprintw(5, VWRAP + 4, "Cycle : %i", vm->cycles);
 	mvprintw(7, VWRAP + 4, "Processes : %i", vm->process_count);
 	mvprintw(9, VWRAP + 4, "Cycle_To_Die : %i", vm->cycle_to_die);
-	mvprintw(11, VWRAP + 4, "Live called in current period : %i", vm->live);
-	mvprintw(13, VWRAP + 4, "Winning Player : %i", vm->win_player);
-	mvprintw(15, VWRAP + 4, "MAX_CHECKS : %i", MAX_CHECKS);
-	mvprintw(17, VWRAP + 4, "NBR_LIVE : %i", NBR_LIVE);
-	mvprintw(19, VWRAP + 4, "CYCLE_DELTA : %i", CYCLE_DELTA);
+	attroff(0);
+	while (i < vm->num_players)
+	{
+		attron(COLOR_PAIR(i + 1));
+		mvprintw(11 + (i * 2), VWRAP + 4, "Player %i : %s", i + 1,
+				vm->head[i].prog_name);
+		attroff(COLOR_PAIR(i + 1));
+		i++;
+	}
+	attron(0);
+	mvprintw(19, VWRAP + 4, "Live called in current period : %i", vm->live);
+	mvprintw(21, VWRAP + 4, "Winning Player : %i", vm->win_player);
+	mvprintw(23, VWRAP + 4, "MAX_CHECKS : %i", MAX_CHECKS);
+	mvprintw(25, VWRAP + 4, "NBR_LIVE : %i", NBR_LIVE);
+	mvprintw(27, VWRAP + 4, "CYCLE_DELTA : %i", CYCLE_DELTA);
 	attroff(0);
 }
 
@@ -50,11 +63,6 @@ void	vis_copy(t_vis *dest, unsigned char *src, t_io *proc)
 	dest[1].byte = src[1];
 	dest[2].byte = src[2];
 	dest[3].byte = src[3];
-	/*dest[0].player = vm->info[i].player_int;
-	dest[1].player = vm->info[i].player_int;
-	dest[2].player = vm->info[i].player_int;
-	dest[3].player = vm->info[i].player_int;*/
-
 	dest[0].player = proc->player_int;
 	dest[1].player = proc->player_int;
 	dest[2].player = proc->player_int;

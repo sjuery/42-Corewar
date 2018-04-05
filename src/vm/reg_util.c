@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/27 16:43:45 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/03 11:38:09 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/03 22:47:20 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,6 @@ int		print_reg(unsigned char *l)
 {
 	return (VAL(l));
 }
-
-/*void	copy_io(t_vm *vm, int dest, int src)
-{
-	ft_memcpy(&vm->info[dest], &vm->info[src], sizeof(t_io));
-}*/
 
 void	reg_copy(unsigned char *dest, unsigned char *src)
 {
