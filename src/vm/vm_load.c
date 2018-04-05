@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/04 15:59:32 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/04 22:02:41 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	vm_ldi(t_vm *vm, t_io *proc)
 
 	instr = init_instr(vm, proc);
 	instr.core_index += 2;
-	get_offset_index(&instr, ACB1(instr.acb) | 0b100, &instr.l1);//might have to take out | 0b100
+	get_offset_index(&instr, ACB1(instr.acb) | 0b100, &instr.l1);
 	get_offset_index(&instr, ACB2(instr.acb), &instr.l2);
 	get_offset_index(&instr, ACB3(instr.acb), &instr.l3);
 	into_reg(instr.core_index, PC);

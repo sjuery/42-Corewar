@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/04 20:39:41 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 13:03:46 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	process_update(t_vm *vm)
 		}
 		else if (op > 0 && op < 17 && proc->cycle_to_execute == vm->cycles && proc->executing)
 		{
-			//ft_printf("INVALID; op[%i] cycle[%i]\n", op, vm->cycles);
+			//ft_printf("INVALID; op[%i] cycle[%i] pc[%i]\n", op, vm->cycles, PARAM1);
 			previous_index = PARAM1;
 			update_pc(proc, op - 1, vm->core[PARAM2]);
 			vm->vis[PARAM1].previous_index = previous_index;
@@ -120,7 +120,7 @@ void	process_update(t_vm *vm)
 		}
 		else if (proc->cycle_to_execute == vm->cycles && proc->executing)
 		{
-			//ft_printf("INVALID OP\n");
+			//ft_printf("INVALID OPCODE [%i] process[%i] pc[%i]\n", op, proc->process + 1, PARAM1);
 			vm->vis[PARAM2].previous_index = PARAM1;
 			into_reg(VAL(PC) + 1, PC);
 			proc->op = vm->core[PARAM1];
@@ -136,8 +136,8 @@ void	process_update(t_vm *vm)
 						vm->vis[PARAM1].byte);
 			attroff(COLOR_PAIR(vm->vis[PARAM1].player));
 			vm->process_count--;
-			ft_printf("DEAD PROCESS\n");
-			ft_printf("process count %i proc->num %i\n", vm->process_count, proc->process);
+			//ft_printf("DEAD PROCESS\n");
+			//ft_printf("process count %i proc->num %i\n", vm->process_count, proc->process);
 		}
 	}
 }
@@ -163,6 +163,9 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 		game_end = 1;
 	}
 	endwin();
+	free(vm->vis);
+	free(vm->core);
+	free(vm->q);
 	ft_printf("\nContestant %i, \"%s\", has won ! CTD[%i] cycle[%i] process_count[%i]\n", vm->win_player,
 		vm->head[vm->win_player - 1].prog_name, vm->cycle_to_die, vm->cycles, vm->process_count);
 }

@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/04 19:27:43 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 13:03:51 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,15 +71,15 @@ void vm_lfork(t_vm *vm, t_io *proc)
 	instr = init_instr(vm, proc);
 	instr.acb = 0;
 	instr.core_index++;
-	get_offset_index(&instr, 2, &instr.l1);//change 2?
+	get_offset_index(&instr, 2, &instr.l1);
 	new_proc = (t_io *)ft_memalloc(sizeof(t_io));
 	ft_memcpy(new_proc, proc, sizeof(t_io));
 	++vm->process_count;
 	++vm->process_num;
 	new_proc->alive = 0;
 	new_proc->process = vm->process_num - 1;
-	into_reg(VAL2(instr.l1) % MEM_SIZE, new_proc->regs[0]);
-	new_proc->op = vm->core[VAL(new_proc->regs[0])];
+	into_reg(instr.opcode_pos + VAL2(instr.l1), new_proc->regs[0]);//opcode + instr.l1?
+	new_proc->op = vm->core[VAL(new_proc->regs[0]) % MEM_SIZE];
 	set_cycle_to_execute(vm, new_proc);
 	into_reg(VAL(PC) + 3, PC);
 	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
@@ -100,7 +100,9 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	++vm->process_num;
 	new_proc->alive = 0;
 	new_proc->process = vm->process_num - 1;
-	into_reg(((VAL2(instr.l1)  + instr.opcode_pos) % IDX_MOD), new_proc->regs[0]);
+	//ft_printf("FORKING TO %i\n", instr.opcode_pos + (VAL2(instr.l1)  % IDX_MOD));
+	//ft_printf("DIR %i\n", (short)VAL2(instr.l1));
+	into_reg(instr.opcode_pos + ((short)VAL2(instr.l1)  % IDX_MOD), new_proc->regs[0]);
 	into_reg(VAL(PC) + 3, PC);
 	new_proc->op = vm->core[VAL(new_proc->regs[0])];
 	set_cycle_to_execute(vm, new_proc);
