@@ -18,6 +18,11 @@ void	convert_header(t_header *head, char *header, int i, int x)
 						(header[2] & 0x000000FF) << 8 |
 						(header[1] & 0x000000FF) << 16 |
 						(header[0] & 0x000000FF) << 24;
+	if (head->magic != COREWAR_EXEC_MAGIC)
+	{
+		ft_printf("Invalid file type\n");
+		exit(0);
+	}
 	ft_bzero(head->prog_name, PROG_NAME_LENGTH + 1);
 	while (header[++i] != 0)
 		head->prog_name[++x] = header[i];
