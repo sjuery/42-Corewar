@@ -88,6 +88,7 @@ typedef struct			s_flags
 	int					b;
 	int					v;
 	int					flags;
+	long				delay;
 	int					noise;
 	int					s;
 	int					r;

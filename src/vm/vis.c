@@ -54,6 +54,10 @@ void	vis_print_debug(t_vm *vm)
 	mvprintw(23, VWRAP + 4, "MAX_CHECKS : %i", MAX_CHECKS);
 	mvprintw(25, VWRAP + 4, "NBR_LIVE : %i", NBR_LIVE);
 	mvprintw(27, VWRAP + 4, "CYCLE_DELTA : %i", CYCLE_DELTA);
+	if (vm->f.r == 1)
+		mvprintw(29, VWRAP + 4, "DELAY : NOT APPLICABLE");
+	else
+		mvprintw(29, VWRAP + 4, "DELAY : %7i", vm->f.delay);
 	attroff(0);
 }
 
@@ -71,10 +75,27 @@ void	vis_copy(t_vis *dest, unsigned char *src, t_io *proc, int index)
 
 void	vis_update(t_vm *vm, int index)
 {
+	static short	schizo[] = {
+		COLOR_CYAN, COLOR_RED, COLOR_YELLOW, COLOR_GREEN,
+		COLOR_BLACK, COLOR_WHITE, COLOR_MAGENTA };
+
+	static long		pain;
+
+	if (vm->f.r == 1 && pain % 200 == 0)
+	{
+		init_pair(7, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(8, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(9, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(10, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(11, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(12, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(13, schizo[rand() % 6], schizo[rand() % 6]);
+	}
 	if (vm->f.r == 1)
-		attron(COLOR_PAIR(rand() % 6));
+		attron(COLOR_PAIR(rand() % 7 + 7));
 	else
 		attron(COLOR_PAIR(vm->vis[index].player));
+	pain++;
 	mvprintw((index % MEM_SIZE / 64 + 1) % MEM_SIZE, (index * 3) % VWRAP, "%02hhx",
 		vm->vis[(index) % MEM_SIZE].byte);
 	mvprintw(((index + 1) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 1) * 3) % VWRAP, "%02hhx",

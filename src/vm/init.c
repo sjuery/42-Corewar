@@ -19,6 +19,7 @@ void	zero_flags(t_vm *vm)
 	vm->f.g = 0;
 	vm->f.b = 0;
 	vm->f.s = 0;
+	vm->f.delay = 10000;
 	vm->f.flags = 1;
 }
 

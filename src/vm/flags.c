@@ -49,7 +49,10 @@ void	check_more_flags(t_vm *vm, char **av, int *i)
 		vm->f.b = 1;
 	else if ((!ft_strcmp(av[*i], "-rainbow") || !ft_strcmp(av[*i], "-r"))
 			&& vm->f.flags == 1 && vm->f.r == 0)
+	{
 		vm->f.r = 1;
+		vm->f.delay = 0;
+	}
 	else if ((!ft_strcmp(av[*i], "-sound") || !ft_strcmp(av[*i], "-s"))
 			&& ft_general_validate("%d", av[*i + 1])
 			&& vm->f.flags == 1 && vm->f.s == 0)

@@ -26,6 +26,8 @@ int		main(int ac, char **av)
 	if (vm->f.g)
 	{
 		init_curses();
+		keypad(stdscr, TRUE);
+   		nodelay(stdscr, TRUE);
 		print_curses(vm, -1, 0, 0);
 	}
 	read_bytes(vm, 1, 1);
