@@ -16,18 +16,18 @@
 void	vis_highlight_process(t_vm *vm, t_io *proc)
 {
 	attron(COLOR_PAIR(5));
-	mvprintw((PARAM1) / 64 + 1, ((PARAM1) * 3) % VWRAP, "%02hhx",
-			vm->vis[PARAM1].byte);
+	mvprintw((PARAM1M) / 64 + 1, ((PARAM1M) * 3) % VWRAP, "%02hhx",
+			vm->vis[PARAM1M].byte);
 	attroff(COLOR_PAIR(5));
 }
 
 void	vis_unhighlight_process(t_vm *vm, t_io *proc)
 {
-	attron(COLOR_PAIR(vm->vis[vm->vis[PARAM1].previous_index].player));
-	mvprintw((vm->vis[PARAM1].previous_index) / 64 + 1,
-			((vm->vis[PARAM1].previous_index) * 3) % VWRAP,
-			"%02hhx", vm->vis[vm->vis[PARAM1].previous_index].byte);
-	attroff(COLOR_PAIR(vm->vis[vm->vis[PARAM1].previous_index].player));
+	attron(COLOR_PAIR(vm->vis[vm->vis[PARAM1M].previous_index].player));
+	mvprintw((vm->vis[PARAM1M].previous_index) / 64 + 1,
+			((vm->vis[PARAM1M].previous_index) * 3) % VWRAP,
+			"%02hhx", vm->vis[vm->vis[PARAM1M].previous_index].byte);
+	attroff(COLOR_PAIR(vm->vis[vm->vis[PARAM1M].previous_index].player));
 }
 
 void	vis_print_debug(t_vm *vm)
@@ -73,13 +73,13 @@ void	vis_update(t_vm *vm, int index)
 {
 	attron(COLOR_PAIR(vm->vis[index].player));
 	mvprintw((index % MEM_SIZE / 64 + 1) % MEM_SIZE, (index * 3) % VWRAP, "%02hhx",
-		vm->vis[index].byte);
+		vm->vis[(index) % MEM_SIZE].byte);
 	mvprintw(((index + 1) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 1) * 3) % VWRAP, "%02hhx",
-		vm->vis[index + 1].byte);
+		vm->vis[(index + 1) % MEM_SIZE].byte);
 	mvprintw(((index + 2) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 2) * 3) % VWRAP, "%02hhx",
-		vm->vis[index + 2].byte);
+		vm->vis[(index + 2) % MEM_SIZE].byte);
 	mvprintw(((index + 3) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 3) * 3) % VWRAP, "%02hhx",
-		vm->vis[index + 3].byte);
+		vm->vis[(index + 3) % MEM_SIZE].byte);
 	attroff(COLOR_PAIR(vm->vis[index].player));
 	refresh();
 }

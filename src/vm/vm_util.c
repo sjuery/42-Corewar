@@ -15,11 +15,11 @@
 int		indirect(t_vm *vm, unsigned char opcode, t_instr *instr)
 {
 	if (opcode)
-		return ((short)(vm->core[OFF2] * 0x100 +
-				vm->core[OFF2 + 1]) % IDX_MOD);
+		return ((short)(vm->core[(OFF2) % MEM_SIZE] * 0x100 +
+				vm->core[(OFF2 + 1) % MEM_SIZE]) % IDX_MOD);
 	else
-		return ((vm->core[OFF2] * 0x100 +
-				vm->core[OFF2 + 1]) % MEM_SIZE);
+		return ((vm->core[(OFF2) % MEM_SIZE] * 0x100 +
+				vm->core[(OFF2 + 1) % MEM_SIZE]) % MEM_SIZE);
 }
 
 int		get_index_one(unsigned char *l)
@@ -83,6 +83,7 @@ void vm_lfork(t_vm *vm, t_io *proc)
 	set_cycle_to_execute(vm, new_proc);
 	into_reg(VAL(PC) + 3, PC);
 	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
+	// free(new_proc);
 }
 
 void	vm_fork(t_vm *vm, t_io *proc)
@@ -107,4 +108,5 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	new_proc->op = vm->core[VAL(new_proc->regs[0])];
 	set_cycle_to_execute(vm, new_proc);
 	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
+	// free(new_proc);
 }

@@ -40,9 +40,16 @@
 
 # define PC				proc->regs[0]
 
-# define PARAM1			VAL(PC)
-# define PARAM2			VAL(PC) + 1
-# define PARAM3			VAL(PC) + 2
+// # define PARAM1			VAL(PC)
+// # define PARAM2			VAL(PC) + 1
+// # define PARAM3			VAL(PC) + 2
+# define PARAM1			(VAL(PC)) % MEM_SIZE
+# define PARAM2			(VAL(PC) + 1) % MEM_SIZE
+# define PARAM3			(VAL(PC) + 2) % MEM_SIZE
+
+# define PARAM1M			(VAL(PC)) % MEM_SIZE
+# define PARAM2M			(VAL(PC) + 1) % MEM_SIZE
+# define PARAM3M			(VAL(PC) + 2) % MEM_SIZE
 
 # define OFF2			instr->core_index
 

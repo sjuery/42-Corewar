@@ -78,9 +78,7 @@ t_io			*dequeue(t_queue *queue)
 	t_io			*tmp_num;
 
 	if (!queue->max_p)
-    {
 		return (NULL);
-    }
 	tmp = queue->max_p;
 	tmp_num = queue->max_p->data;
 	queue->max_p = queue->max_p->next;

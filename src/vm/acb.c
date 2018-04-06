@@ -21,7 +21,7 @@ int	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 	acb = acb & 0b11;
 	if (acb == 1)
 	{
-		instr->reg_index[instr->ri] = instr->vm->core[OFF2];
+		instr->reg_index[instr->ri] = instr->vm->core[(OFF2) % MEM_SIZE];
 		if (REGI > REG_NUMBER || REGI == 0)
 		{
 			ft_printf("INVALID REGISTER REGI[%i]\n", REGI);
@@ -33,7 +33,7 @@ int	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 	}
 	else if (acb == 2)
 	{
-		*l = &instr->vm->core[OFF2];
+		*l = &instr->vm->core[(OFF2) % MEM_SIZE];
 		instr->core_index += 4;
 	}
 	else if (acb == 3)

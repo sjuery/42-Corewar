@@ -27,5 +27,7 @@ int		main(int ac, char **av)
 		print_curses(vm, -1, 0, 0);
 	}
 	read_bytes(vm, 1, 1);
+	free(vm);
+	while(1);
 	return (0);
 }

@@ -15,8 +15,19 @@
 
 void	check_executing_processes(t_vm *vm, int *game_end)
 {
+	t_io *tmp;
+
 	if (!isEmpty(vm->q) && vm->cycle_to_die >= 0)
 		*game_end = 0;
+	else
+	{
+		while (!isEmpty(vm->q))
+		{
+			ft_printf("%i %p %p\n",vm->process_count, vm->q->max_p, vm->q->min_p);
+			tmp = dequeue(vm->q);
+			free(tmp);
+		}
+	}
 }
 
 void	add_acb_bytes(int op, int *acb_val, int acb)
@@ -89,16 +100,16 @@ void	process_update(t_vm *vm)
 		op = proc->op;
 		if ((op > 0 && op < 17) && proc->cycle_to_execute == vm->cycles &&
 				((g_optab[op - 1].acb &&
-				  valid_acb(op - 1, vm->core[PARAM2], vm, proc)) ||
+				  valid_acb(op - 1, vm->core[PARAM2M], vm, proc)) ||
 				 !g_optab[op - 1].acb) && proc->executing)
 		{
 			//ft_printf("AFTER DEQUEUE\n");
 			//print_queue(vm->q);
 			//ft_printf("cycle[%i], op[%i] %s process[%i] pc[%i]\n", vm->cycles, op, g_optab[op - 1].opstr, proc->process + 1, PARAM1);
-			previous_index = PARAM1;
+			previous_index = PARAM1M;
 			g_jt[op - 1](vm, proc);
-			vm->vis[PARAM1].previous_index = previous_index;
-			proc->op = vm->core[PARAM1];
+			vm->vis[PARAM1M].previous_index = previous_index;
+			proc->op = vm->core[PARAM1M];
 			set_cycle_to_execute(vm, proc);
 			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
 			//ft_printf("AFTER ENQUE\n");
@@ -109,10 +120,10 @@ void	process_update(t_vm *vm)
 		else if (op > 0 && op < 17 && proc->cycle_to_execute == vm->cycles && proc->executing)
 		{
 			//ft_printf("INVALID; op[%i] cycle[%i] pc[%i]\n", op, vm->cycles, PARAM1);
-			previous_index = PARAM1;
-			update_pc(proc, op - 1, vm->core[PARAM2]);
-			vm->vis[PARAM1].previous_index = previous_index;
-			proc->op = vm->core[PARAM1];
+			previous_index = PARAM1M;
+			update_pc(proc, op - 1, vm->core[PARAM2M]);
+			vm->vis[PARAM1M].previous_index = previous_index;
+			proc->op = vm->core[PARAM1M];
 			set_cycle_to_execute(vm, proc);
 			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
 			vis_unhighlight_process(vm, proc);
@@ -121,9 +132,9 @@ void	process_update(t_vm *vm)
 		else if (proc->cycle_to_execute == vm->cycles && proc->executing)
 		{
 			//ft_printf("INVALID OPCODE [%i] process[%i] pc[%i]\n", op, proc->process + 1, PARAM1);
-			vm->vis[PARAM2].previous_index = PARAM1;
+			vm->vis[PARAM2M].previous_index = PARAM1M;
 			into_reg(VAL(PC) + 1, PC);
-			proc->op = vm->core[PARAM1];
+			proc->op = vm->core[PARAM1M];
 			set_cycle_to_execute(vm, proc);
 			enqueue(vm->q, proc, proc->executing * proc->cycle_to_execute);
 			vis_unhighlight_process(vm, proc);
@@ -131,11 +142,12 @@ void	process_update(t_vm *vm)
 		}
 		else if (!proc->executing)
 		{
-			attron(COLOR_PAIR(vm->vis[PARAM1].player));
-			mvprintw((PARAM1) / 64 + 1, ((PARAM1) * 3) % VWRAP, "%02hhx",
-						vm->vis[PARAM1].byte);
-			attroff(COLOR_PAIR(vm->vis[PARAM1].player));
+			attron(COLOR_PAIR(vm->vis[PARAM1M].player));
+			mvprintw((PARAM1M) / 64 + 1, ((PARAM1M) * 3) % VWRAP, "%02hhx",
+						vm->vis[PARAM1M].byte);
+			attroff(COLOR_PAIR(vm->vis[PARAM1M].player));
 			vm->process_count--;
+			free(proc);
 			//ft_printf("DEAD PROCESS\n");
 			//ft_printf("process count %i proc->num %i\n", vm->process_count, proc->process);
 		}
@@ -151,7 +163,7 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 		{
 			vis_print_debug(vm);
 			refresh();
-			usleep(10000);
+			// usleep(10000);
 		}
 		if (vm->f.d && vm->f.d == vm->cycles)
 			print_core(vm->core, -1);
