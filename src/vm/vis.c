@@ -71,7 +71,10 @@ void	vis_copy(t_vis *dest, unsigned char *src, t_io *proc, int index)
 
 void	vis_update(t_vm *vm, int index)
 {
-	attron(COLOR_PAIR(vm->vis[index].player));
+	if (vm->f.r == 1)
+		attron(COLOR_PAIR(rand() % 6));
+	else
+		attron(COLOR_PAIR(vm->vis[index].player));
 	mvprintw((index % MEM_SIZE / 64 + 1) % MEM_SIZE, (index * 3) % VWRAP, "%02hhx",
 		vm->vis[(index) % MEM_SIZE].byte);
 	mvprintw(((index + 1) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 1) * 3) % VWRAP, "%02hhx",

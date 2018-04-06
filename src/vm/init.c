@@ -18,7 +18,7 @@ void	zero_flags(t_vm *vm)
 	vm->f.n = 0;
 	vm->f.g = 0;
 	vm->f.b = 0;
-	vm->f.v = 0;
+	vm->f.s = 0;
 	vm->f.flags = 1;
 }
 

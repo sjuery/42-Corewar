@@ -13,8 +13,6 @@
 #include "corewar.h"
 #include "asm.h"
 
-int g_noise;
-
 void	check_executing_processes(t_vm *vm, int *game_end)
 {
 	t_io *tmp;
@@ -92,7 +90,6 @@ void	process_update(t_vm *vm)
 	t_io	*proc;
 	t_node	**node;
 
-	g_noise = 0;
 	node = &(vm->q->max_p);
 	while (*node && (*node)->data->cycle_to_execute <= vm->cycles)
 	{
@@ -150,10 +147,10 @@ void	process_update(t_vm *vm)
 			attroff(COLOR_PAIR(vm->vis[PARAM1M].player));
 			vm->process_count--;
 			free(proc);
-			if (g_noise == 0)
+			if (vm->f.noise == 0 && (vm->f.s >= 2))
 			{
 				system("afplay ./sound/death.mp3 &");
-				g_noise++;
+				vm->f.noise++;
 			}
 			//ft_printf("DEAD PROCESS\n");
 			//ft_printf("process count %i proc->num %i\n", vm->process_count, proc->process);
@@ -163,6 +160,8 @@ void	process_update(t_vm *vm)
 
 void	read_bytes(t_vm *vm, int game_end, int counter)
 {
+	if (vm->f.r == 1 && vm->f.g == 1)
+		system("afplay ./sound/star.mp3 &");
 	while (1)
 	{
 		process_update(vm);
@@ -180,6 +179,7 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 			break ;
 		vm->cycles++;
 		game_end = 1;
+		vm->f.noise = 0;
 	}
 	endwin();
 	free(vm->vis);

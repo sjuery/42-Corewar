@@ -63,6 +63,15 @@ int		get_priority(t_vm *vm, t_io *proc)
 	return (proc->executing * (proc->cycle_to_execute - vm->cycles));
 }
 
+void	play_spawn(t_vm *vm)
+{
+	if (vm->f.noise == 0 && (vm->f.s == 1 || vm->f.s == 3))
+	{
+		system("afplay ./sound/spawn.wav &");
+		vm->f.noise++;
+	}
+}
+
 void vm_lfork(t_vm *vm, t_io *proc)
 {
 	t_instr		instr;
@@ -83,7 +92,7 @@ void vm_lfork(t_vm *vm, t_io *proc)
 	set_cycle_to_execute(vm, new_proc);
 	into_reg(VAL(PC) + 3, PC);
 	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
-	// free(new_proc);
+	play_spawn(vm);
 }
 
 void	vm_fork(t_vm *vm, t_io *proc)
@@ -108,5 +117,5 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	new_proc->op = vm->core[VAL(new_proc->regs[0])];
 	set_cycle_to_execute(vm, new_proc);
 	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
-	// free(new_proc);
+	play_spawn(vm);
 }

@@ -47,9 +47,18 @@ void	check_more_flags(t_vm *vm, char **av, int *i)
 	else if ((!ft_strcmp(av[*i], "-debug") || !ft_strcmp(av[*i], "-b"))
 			&& vm->f.flags == 1 && vm->f.b == 0)
 		vm->f.b = 1;
-	else if ((!ft_strcmp(av[*i], "-verbose") || !ft_strcmp(av[*i], "-v"))
-			&& vm->f.flags == 1 && vm->f.v == 0)
-		vm->f.v = 1;
+	else if ((!ft_strcmp(av[*i], "-rainbow") || !ft_strcmp(av[*i], "-r"))
+			&& vm->f.flags == 1 && vm->f.r == 0)
+		vm->f.r = 1;
+	else if ((!ft_strcmp(av[*i], "-sound") || !ft_strcmp(av[*i], "-s"))
+			&& ft_general_validate("%d", av[*i + 1])
+			&& vm->f.flags == 1 && vm->f.s == 0)
+	{
+		if ((ft_atoi(av[*i + 1]) > 3) || (ft_atoi(av[*i + 1]) < 1))
+			error();
+		vm->f.s = ft_atoi(av[*i + 1]);
+		*i = *i + 1;
+	}
 	else if (av[*i][0] != '-' && ft_general_validate("%s", av[*i]))
 		vm->f.flags = 0;
 	else
@@ -67,8 +76,8 @@ void	check_flags(t_vm *vm, char **av, int *i)
 	else if ((!ft_strcmp(av[*i], "-number") || !ft_strcmp(av[*i], "-n"))
 		&& ft_general_validate("%d", av[*i + 1]))
 	{
-		if ((ft_atoi(av[*i + 1]) > 4) && (ft_atoi(av[*i + 1]) < 1)
-			&& !ft_general_validate("%s", av[*i + 2]))
+		if ((ft_atoi(av[*i + 1]) > 4) || (ft_atoi(av[*i + 1]) < 1)
+			|| !ft_general_validate("%s", av[*i + 2]))
 			error();
 		get_champ_position(vm, av[*i + 2], (ft_atoi(av[*i + 1]) - 1));
 		*i = *i + 2;
@@ -81,6 +90,8 @@ void	check_flags(t_vm *vm, char **av, int *i)
 void	fill_champs(t_vm *vm, char **av, int *i)
 {
 	if (!ft_strcmp(av[*i], "-d"))
+		*i = *i + 1;
+	else if (!ft_strcmp(av[*i], "-s"))
 		*i = *i + 1;
 	else if (!ft_strcmp(av[*i], "-n"))
 		*i = *i + 2;

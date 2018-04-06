@@ -26,6 +26,7 @@
 # include <inttypes.h>
 # include <ncurses.h>
 # include <curses.h>
+# include <time.h>
 # include "libft.h"
 # include "op.h"
 
@@ -87,6 +88,9 @@ typedef struct			s_flags
 	int					b;
 	int					v;
 	int					flags;
+	int					noise;
+	int					s;
+	int					r;
 }						t_flags;
 
 typedef struct			s_node {

@@ -15,9 +15,11 @@
 int		main(int ac, char **av)
 {
 	t_vm			*vm;
+	time_t			t;
 
 	if (ac < 2)
 		error();
+	srand((unsigned)time(&t));
 	vm =(t_vm *)ft_memalloc(sizeof(t_vm));
 	init_players(ac, av, vm);
 	init_vm(vm);
@@ -28,6 +30,5 @@ int		main(int ac, char **av)
 	}
 	read_bytes(vm, 1, 1);
 	free(vm);
-
 	return (0);
 }
