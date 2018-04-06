@@ -88,7 +88,7 @@ void vm_lfork(t_vm *vm, t_io *proc)
 	new_proc->alive = 0;
 	new_proc->process = vm->process_num - 1;
 	into_reg(instr.opcode_pos + VAL2(instr.l1) % MEM_SIZE, new_proc->regs[0]);//opcode + instr.l1?
-	new_proc->op = vm->core[VAL(new_proc->regs[0]) % MEM_SIZE];
+	new_proc->op = vm->core[((unsigned short)VAL(new_proc->regs[0])) % MEM_SIZE];
 	set_cycle_to_execute(vm, new_proc);
 	into_reg(VAL(PC) + 3, PC);
 	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
@@ -114,7 +114,7 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	//ft_printf("DIR %i\n", (short)VAL2(instr.l1));
 	into_reg(instr.opcode_pos + ((short)VAL2(instr.l1)  % IDX_MOD), new_proc->regs[0]);
 	into_reg(VAL(PC) + 3, PC);
-	new_proc->op = vm->core[VAL(new_proc->regs[0])];
+	new_proc->op = vm->core[((unsigned short)VAL(new_proc->regs[0])) % MEM_SIZE];
 	set_cycle_to_execute(vm, new_proc);
 	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
 	play_spawn(vm);

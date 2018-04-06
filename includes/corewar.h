@@ -36,21 +36,21 @@
 # define ACB2(a)		((a >> 4) % 4)
 # define ACB3(a)		((a >> 2) % 4)
 # define VAL(a)			(a[3] + (a[2] << 8) + (a[1] << 16) + (a[0] << 24))
-# define VAL2(a)		((a[1]) + (a[0] << 8))
-# define VAL3(a)		((a[3]) + (a[2] << 8))
+# define VAL2(a)		(unsigned short)((a[1]) + (a[0] << 8))
+# define VAL3(a)		(unsigned short)((a[3]) + (a[2] << 8))
 
 # define PC				proc->regs[0]
 
 // # define PARAM1			VAL(PC)
 // # define PARAM2			VAL(PC) + 1
 // # define PARAM3			VAL(PC) + 2
-# define PARAM1			(VAL(PC)) % MEM_SIZE
-# define PARAM2			(VAL(PC) + 1) % MEM_SIZE
-# define PARAM3			(VAL(PC) + 2) % MEM_SIZE
+# define PARAM1			((unsigned short)VAL(PC)) % MEM_SIZE
+# define PARAM2			((unsigned short)VAL(PC) + 1) % MEM_SIZE
+# define PARAM3			((unsigned short)VAL(PC) + 2) % MEM_SIZE
 
-# define PARAM1M			(VAL(PC)) % MEM_SIZE
-# define PARAM2M			(VAL(PC) + 1) % MEM_SIZE
-# define PARAM3M			(VAL(PC) + 2) % MEM_SIZE
+# define PARAM1M			((unsigned short)VAL(PC)) % MEM_SIZE
+# define PARAM2M			((unsigned short)VAL(PC) + 1) % MEM_SIZE
+# define PARAM3M			((unsigned short)VAL(PC) + 2) % MEM_SIZE
 
 # define OFF2			instr->core_index
 

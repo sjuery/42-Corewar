@@ -33,7 +33,7 @@ void	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 	}
 	else if (acb == 3)
 	{
-		*l = &instr->vm->core[OPC + indirect(instr->vm, idx, instr)];
+		*l = &instr->vm->core[(OPC + indirect(instr->vm, idx, instr)) % MEM_SIZE];
 		instr->core_index += 2;
 	}
 }
@@ -47,19 +47,19 @@ void	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 	acb = acb & 0b11;
 	if (acb == 1)
 	{
-		instr->reg_index[instr->ri] = instr->vm->core[OFF2];
+		instr->reg_index[instr->ri] = instr->vm->core[OFF2 % MEM_SIZE];
 		*l = instr->proc->regs[instr->reg_index[instr->ri]];
 		instr->core_index += 1;
 		++instr->ri;
 	}
 	else if (acb == 2)
 	{
-		*l = &instr->vm->core[OFF2];
+		*l = &instr->vm->core[OFF2 % MEM_SIZE];
 		instr->core_index += 2;
 	}
 	else if (acb == 3)
 	{
-		*l = &instr->vm->core[OPC + indirect(instr->vm, idx, instr)];
+		*l = &instr->vm->core[(OPC + indirect(instr->vm, idx, instr)) % MEM_SIZE];
 		instr->core_index += 2;
 	}
 }
