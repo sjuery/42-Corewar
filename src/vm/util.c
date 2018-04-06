@@ -125,7 +125,7 @@ int		valid_acb1(int acb, int op)
 {
 	if (g_optab[op].ptype[0] & ACB1(acb))
 		return (1);
-	ft_printf("INVALID BITCH! op[%s]\n", g_optab[op].opstr);
+	// ft_printf("INVALID BITCH! op[%s]\n", g_optab[op].opstr);
 	return (0);
 }
 
@@ -139,7 +139,7 @@ int		valid_acb2(int acb, int op)
 	if (((ACB1(acb) <= param1) && param1 & ACB1(acb))
 			&& (ACB2(acb) <= param2 && param2 & ACB2(acb)))
 		return (1);
-	ft_printf("INVALID BITCH! op[%s] valid_acb2\n", g_optab[op].opstr);
+	// ft_printf("INVALID BITCH! op[%s] valid_acb2\n", g_optab[op].opstr);
 	return (0);
 }
 
@@ -164,6 +164,6 @@ int		valid_acb3(int acb, int op)
 			&& (ACB2(acb) <= param2 && param2 & ACB2(acb))
 			&& (ACB3(acb) <= param3 && param3 ^ ACB3(acb)))
 		return (1);
-	ft_printf("INVALID BITCH! op[%s]\n", g_optab[op].opstr);
+	// ft_printf("INVALID BITCH! op[%s]\n", g_optab[op].opstr);
 	return (0);
 }

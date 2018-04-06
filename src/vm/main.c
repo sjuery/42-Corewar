@@ -28,6 +28,6 @@ int		main(int ac, char **av)
 	}
 	read_bytes(vm, 1, 1);
 	free(vm);
-	while(1);
+
 	return (0);
 }

@@ -241,9 +241,9 @@ void					reset_alive_all(t_vm *vm);
 ** acb.c
 */
 
-int						get_offset_index(t_instr *instr, unsigned char acb,
+void					get_offset_index(t_instr *instr, unsigned char acb,
 							unsigned char **l);
-int						get_offset(t_instr *instr, unsigned char acb,
+void					get_offset(t_instr *instr, unsigned char acb,
 							unsigned char **l);
 
 /*

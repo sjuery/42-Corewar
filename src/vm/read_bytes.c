@@ -23,7 +23,6 @@ void	check_executing_processes(t_vm *vm, int *game_end)
 	{
 		while (!isEmpty(vm->q))
 		{
-			ft_printf("%i %p %p\n",vm->process_count, vm->q->max_p, vm->q->min_p);
 			tmp = dequeue(vm->q);
 			free(tmp);
 		}

@@ -12,7 +12,7 @@
 
 #include <corewar.h>
 
-int	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
+void	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 {
 	int	idx;
 
@@ -22,11 +22,6 @@ int	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 	if (acb == 1)
 	{
 		instr->reg_index[instr->ri] = instr->vm->core[(OFF2) % MEM_SIZE];
-		if (REGI > REG_NUMBER || REGI == 0)
-		{
-			ft_printf("INVALID REGISTER REGI[%i]\n", REGI);
-			return (0);
-		}
 		*l = instr->proc->regs[instr->reg_index[instr->ri]];
 		instr->core_index += 1;
 		++instr->ri;
@@ -41,10 +36,9 @@ int	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 		*l = &instr->vm->core[OPC + indirect(instr->vm, idx, instr)];
 		instr->core_index += 2;
 	}
-	return (1);
 }
 
-int	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
+void	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 {
 	int	idx;
 
@@ -54,8 +48,6 @@ int	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 	if (acb == 1)
 	{
 		instr->reg_index[instr->ri] = instr->vm->core[OFF2];
-		if (REGI > REG_NUMBER || REGI == 0)
-			return (0);
 		*l = instr->proc->regs[instr->reg_index[instr->ri]];
 		instr->core_index += 1;
 		++instr->ri;
@@ -70,5 +62,4 @@ int	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 		*l = &instr->vm->core[OPC + indirect(instr->vm, idx, instr)];
 		instr->core_index += 2;
 	}
-	return (1);
 }

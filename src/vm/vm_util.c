@@ -78,7 +78,7 @@ void vm_lfork(t_vm *vm, t_io *proc)
 	++vm->process_num;
 	new_proc->alive = 0;
 	new_proc->process = vm->process_num - 1;
-	into_reg(instr.opcode_pos + VAL2(instr.l1), new_proc->regs[0]);//opcode + instr.l1?
+	into_reg(instr.opcode_pos + VAL2(instr.l1) % MEM_SIZE, new_proc->regs[0]);//opcode + instr.l1?
 	new_proc->op = vm->core[VAL(new_proc->regs[0]) % MEM_SIZE];
 	set_cycle_to_execute(vm, new_proc);
 	into_reg(VAL(PC) + 3, PC);
