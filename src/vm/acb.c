@@ -6,13 +6,13 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/05 21:40:08 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/06 11:55:04 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-int	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
+void	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 {
 	int	idx;
 
@@ -22,11 +22,6 @@ int	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 	if (acb == 1)
 	{
 		instr->reg_index[instr->ri] = instr->vm->core[(OFF2) % MEM_SIZE];
-		if (REGI > REG_NUMBER || REGI == 0)
-		{
-			ft_printf("INVALID REGISTER REGI[%i]\n", REGI);
-			return (0);
-		}
 		*l = instr->proc->regs[instr->reg_index[instr->ri]];
 		instr->core_index += 1;
 		++instr->ri;
@@ -38,13 +33,12 @@ int	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 	}
 	else if (acb == 3)
 	{
-		*l = &instr->vm->core[OPC + indirect(instr->vm, idx, instr)];
+		*l = &instr->vm->core[(OPC + indirect(instr->vm, idx, instr)) % MEM_SIZE];
 		instr->core_index += 2;
 	}
-	return (1);
 }
 
-int	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
+void	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 {
 	int	idx;
 
@@ -54,8 +48,6 @@ int	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 	if (acb == 1)
 	{
 		instr->reg_index[instr->ri] = instr->vm->core[OFF2 % MEM_SIZE];
-		if (REGI > REG_NUMBER || REGI == 0)
-			return (0);
 		*l = instr->proc->regs[instr->reg_index[instr->ri]];
 		instr->core_index += 1;
 		++instr->ri;
@@ -67,8 +59,7 @@ int	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 	}
 	else if (acb == 3)
 	{
-		*l = &instr->vm->core[OPC + indirect(instr->vm, idx, instr) % MEM_SIZE];
+		*l = &instr->vm->core[(OPC + indirect(instr->vm, idx, instr)) % MEM_SIZE];
 		instr->core_index += 2;
 	}
-	return (1);
 }

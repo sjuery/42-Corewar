@@ -29,15 +29,19 @@ void	introduce_players(t_vm *vm)
 int		main(int ac, char **av)
 {
 	t_vm			*vm;
+	time_t			t;
 
 	if (ac < 2)
 		error();
+	srand((unsigned)time(&t));
 	vm =(t_vm *)ft_memalloc(sizeof(t_vm));
 	init_players(ac, av, vm);
 	init_vm(vm);
 	if (vm->f.g)
 	{
 		init_curses();
+		keypad(stdscr, TRUE);
+   		nodelay(stdscr, TRUE);
 		print_curses(vm, -1, 0, 0);
 	}
 	else

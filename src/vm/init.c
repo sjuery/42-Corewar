@@ -18,7 +18,8 @@ void	zero_flags(t_vm *vm)
 	vm->f.n = 0;
 	vm->f.g = 0;
 	vm->f.b = 0;
-	vm->f.v = 0;
+	vm->f.s = 0;
+	vm->f.delay = 10000;
 	vm->f.flags = 1;
 }
 
@@ -34,7 +35,7 @@ void	init_vm(t_vm *vm)
 	x = 0;
 	vm->cycle_to_die = CYCLE_TO_DIE;
 	vm->q = init_queue();;
-	vm->core = (unsigned char*)ft_memalloc(sizeof(unsigned char) * MEM_SIZE);
+	vm->core = (unsigned char*)ft_memalloc(sizeof(unsigned char) * (MEM_SIZE + 4));
 	vm->vis = (t_vis*)ft_memalloc(sizeof(t_vis) * MEM_SIZE);
 	while (++i < vm->num_players)
 	{

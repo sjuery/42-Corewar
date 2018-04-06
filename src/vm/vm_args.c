@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/05 15:28:38 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 21:49:23 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,25 @@ void	vm_st(t_vm *vm, t_io *proc)
 	instr.core_index += 2;
 	get_offset(&instr, ACB1(instr.acb), &instr.l1);
 	get_offset(&instr, ACB2(instr.acb) | 0b100, &instr.l2);
-	if (ACB2(instr.acb == 1))
-		instr.index = (VAL3(instr.l2) & 0xFFFF);
+	if (ACB2(instr.acb) == 1)
+	{
+		reg_copy(instr.l2, instr.l1, 0);
+		//instr.index = (VAL3(instr.l2) & 0xFFFF);
+	ft_printf("first reg %i\n", VAL(instr.l1));
+	ft_printf("second reg %i\n", VAL(instr.l2));
+	}
 	else
 	{
 		instr.core_index -= 2;
 		instr.index = (unsigned short)(indirect(instr.vm, 1, &instr));
 		instr.core_index += 2;
+		reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
+		vis_copy(vm->vis, instr.l1, proc, (instr.opcode_pos + instr.index) % MEM_SIZE);
+		vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
 	}
 	//ft_printf("st r%i %i cycle [%i]\n", instr.reg_index[--instr.ri], (short)instr.index, vm->cycles);
 	//ft_printf("-> with mod and pc %i\n", (instr.opcode_pos + instr.index) % MEM_SIZE);
 	into_reg(instr.core_index, PC);
-	reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
-	vis_copy(vm->vis, instr.l1, proc, (instr.opcode_pos + instr.index) % MEM_SIZE);
-	vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
 }
 
 void	vm_sti(t_vm *vm, t_io *proc)
