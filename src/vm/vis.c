@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/05 15:38:02 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 18:37:33 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	vis_print_debug(t_vm *vm)
 	attron(0);
 	mvprintw(5, VWRAP + 4, "Cycle : %i", vm->cycles);
 	mvprintw(7, VWRAP + 4, "Processes : %i", vm->process_count);
-	mvprintw(9, VWRAP + 4, "Cycle_To_Die : %i", vm->cycle_to_die);
+	mvprintw(9, VWRAP + 4, "Cycle_To_Die : %4i", vm->cycle_to_die);
 	attroff(0);
 	while (i < vm->num_players)
 	{

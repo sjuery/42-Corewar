@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/04 14:26:04 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 21:40:08 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 	acb = acb & 0b11;
 	if (acb == 1)
 	{
-		instr->reg_index[instr->ri] = instr->vm->core[OFF2];
+		instr->reg_index[instr->ri] = instr->vm->core[OFF2 % MEM_SIZE];
 		if (REGI > REG_NUMBER || REGI == 0)
 			return (0);
 		*l = instr->proc->regs[instr->reg_index[instr->ri]];
@@ -62,12 +62,12 @@ int	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 	}
 	else if (acb == 2)
 	{
-		*l = &instr->vm->core[OFF2];
+		*l = &instr->vm->core[OFF2 % MEM_SIZE];
 		instr->core_index += 2;
 	}
 	else if (acb == 3)
 	{
-		*l = &instr->vm->core[OPC + indirect(instr->vm, idx, instr)];
+		*l = &instr->vm->core[OPC + indirect(instr->vm, idx, instr) % MEM_SIZE];
 		instr->core_index += 2;
 	}
 	return (1);

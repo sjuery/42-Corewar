@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/05 13:03:46 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 21:49:58 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 		{
 			vis_print_debug(vm);
 			refresh();
-			// usleep(10000);
+			usleep(10000);
 		}
 		if (vm->f.d && vm->f.d == vm->cycles)
 			print_core(vm->core, -1);

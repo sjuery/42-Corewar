@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/03 18:01:18 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 21:39:33 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ int		valid_acb1(int acb, int op)
 {
 	if (g_optab[op].ptype[0] & ACB1(acb))
 		return (1);
-	ft_printf("INVALID BITCH! op[%s]\n", g_optab[op].opstr);
+	//ft_printf("INVALID BITCH! op[%s]\n", g_optab[op].opstr);
 	return (0);
 }
 
@@ -139,7 +139,7 @@ int		valid_acb2(int acb, int op)
 	if (((ACB1(acb) <= param1) && param1 & ACB1(acb))
 			&& (ACB2(acb) <= param2 && param2 & ACB2(acb)))
 		return (1);
-	ft_printf("INVALID BITCH! op[%s] valid_acb2\n", g_optab[op].opstr);
+	//ft_printf("INVALID BITCH! op[%s] valid_acb2\n", g_optab[op].opstr);
 	return (0);
 }
 
@@ -164,6 +164,6 @@ int		valid_acb3(int acb, int op)
 			&& (ACB2(acb) <= param2 && param2 & ACB2(acb))
 			&& (ACB3(acb) <= param3 && param3 ^ ACB3(acb)))
 		return (1);
-	ft_printf("INVALID BITCH! op[%s]\n", g_optab[op].opstr);
+	//ft_printf("INVALID BITCH! op[%s]\n", g_optab[op].opstr);
 	return (0);
 }
