@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/04 19:26:56 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/05 19:54:01 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,16 @@
 
 # define PC				proc->regs[0]
 
-# define PARAM1			VAL(PC)
-# define PARAM2			VAL(PC) + 1
-# define PARAM3			VAL(PC) + 2
+// # define PARAM1			VAL(PC)
+// # define PARAM2			VAL(PC) + 1
+// # define PARAM3			VAL(PC) + 2
+# define PARAM1			(VAL(PC)) % MEM_SIZE
+# define PARAM2			(VAL(PC) + 1) % MEM_SIZE
+# define PARAM3			(VAL(PC) + 2) % MEM_SIZE
+
+# define PARAM1M			(VAL(PC)) % MEM_SIZE
+# define PARAM2M			(VAL(PC) + 1) % MEM_SIZE
+# define PARAM3M			(VAL(PC) + 2) % MEM_SIZE
 
 # define OFF2			instr->core_index
 
@@ -113,15 +120,26 @@ typedef struct			s_vm
 	t_flags				f;
 }						t_vm;
 
+typedef struct			s_pos {
+	unsigned char		*l0;
+	unsigned char		*l1;
+	unsigned char		*l2;
+	unsigned char		*l3;
+}						t_pos;
+
 typedef struct			s_instr
 {
 	t_vm				*vm;
 	t_io				*proc;
 	unsigned char		acb;
-	unsigned char		*l1;
-	unsigned char		*l2;
-	unsigned char		*l3;
-	unsigned char		*s;
+	t_pos				l1;
+	t_pos				l2;
+	t_pos				l3;
+	t_pos				s;
+	//unsigned char		*l1;
+	//unsigned char		*l2;
+	//unsigned char		*l3;
+	//unsigned char		*s;
 	unsigned int		reg_index[3];
 	unsigned int		ri;
 	int					opcode_pos;
@@ -185,7 +203,7 @@ void					into_reg(unsigned int val, unsigned char *reg);
 t_instr					init_instr(t_vm *vm, t_io *proc);
 int						print_reg(unsigned char *l);
 void					copy_io(t_vm *vm, int dest, int src);
-void					reg_copy(unsigned char *dest, unsigned char *src);
+void					reg_copy(unsigned char *dest, unsigned char *src, int index);
 
 /*
 ** flags.c
@@ -221,7 +239,7 @@ void					error(void);
 void					vis_highlight_process(t_vm *vm, t_io *proc);
 void					vis_unhighlight_process(t_vm *vm, t_io *proc);
 void					vis_print_debug(t_vm *vm);
-void					vis_copy(t_vis *dest, unsigned char *src, t_io *proc);
+void					vis_copy(t_vis *dest, unsigned char *src, t_io *proc, int index);
 void					vis_update(t_vm *vm, int index);
 
 /*
@@ -234,9 +252,9 @@ void					reset_alive_all(t_vm *vm);
 ** acb.c
 */
 
-int						get_offset_index(t_instr *instr, unsigned char acb,
+void					get_offset_index(t_instr *instr, unsigned char acb,
 							unsigned char **l);
-int						get_offset(t_instr *instr, unsigned char acb,
+void					get_offset(t_instr *instr, unsigned char acb,
 							unsigned char **l);
 
 /*
