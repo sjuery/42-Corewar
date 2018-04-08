@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/05 13:03:46 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/06 11:54:16 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,11 @@ void	process_update(t_vm *vm)
 			attroff(COLOR_PAIR(vm->vis[PARAM1M].player));
 			vm->process_count--;
 			free(proc);
+			if (vm->f.noise == 0 && (vm->f.s >= 2))
+			{
+				system("afplay ./sound/death.mp3 &");
+				vm->f.noise++;
+			}
 			//ft_printf("DEAD PROCESS\n");
 			//ft_printf("process count %i proc->num %i\n", vm->process_count, proc->process);
 		}
@@ -155,6 +160,10 @@ void	process_update(t_vm *vm)
 
 void	read_bytes(t_vm *vm, int game_end, int counter)
 {
+	int c;
+
+	if (vm->f.r == 1 && vm->f.g == 1)
+		system("afplay ./sound/star.mp3 &");
 	while (1)
 	{
 		process_update(vm);
@@ -162,7 +171,23 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 		{
 			vis_print_debug(vm);
 			refresh();
-			// usleep(10000);
+			if (((c = getch()) != ERR) && vm->f.r != 1)
+			{
+				if (c == 'q' && (vm->f.delay - 10000) >= 0)
+					vm->f.delay -= 10000;
+				if (c == 'r' && (vm->f.delay + 10000) <= 1000000)
+					vm->f.delay += 10000;
+				if (c == 'w' && (vm->f.delay - 1000) >= 0)
+					vm->f.delay -= 1000;
+				if (c == 'e' && (vm->f.delay + 10000) <= 1000000)
+					vm->f.delay += 1000;
+				if (c == 27)
+				{
+					endwin();
+					exit(0);
+				}
+			}
+			usleep(vm->f.delay);
 		}
 		if (vm->f.d && vm->f.d == vm->cycles)
 			print_core(vm->core, -1);
@@ -172,6 +197,7 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 			break ;
 		vm->cycles++;
 		game_end = 1;
+		vm->f.noise = 0;
 	}
 	endwin();
 	free(vm->vis);

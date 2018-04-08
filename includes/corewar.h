@@ -26,6 +26,7 @@
 # include <inttypes.h>
 # include <ncurses.h>
 # include <curses.h>
+# include <time.h>
 # include "libft.h"
 # include "op.h"
 
@@ -34,22 +35,22 @@
 # define ACB1(a)		((a >> 6) % 4)
 # define ACB2(a)		((a >> 4) % 4)
 # define ACB3(a)		((a >> 2) % 4)
-# define VAL(a)			(a[3] + (a[2] << 8) + (a[1] << 16) + (a[0] << 24))
-# define VAL2(a)		((a[1]) + (a[0] << 8))
-# define VAL3(a)		((a[3]) + (a[2] << 8))
+# define VAL(a)			((int)((unsigned int)a[3] | ((unsigned int)a[2] << 8) | ((unsigned int)a[1] << 16) | ((unsigned int)a[0] << 24)))
+# define VAL2(a)		((short)(((unsigned int)a[1]) | ((unsigned int)a[0] << 8)))
+# define VAL3(a)		((short)(((unsigned int)a[3]) | ((unsigned int)a[2] << 8)))
 
 # define PC				proc->regs[0]
 
 // # define PARAM1			VAL(PC)
 // # define PARAM2			VAL(PC) + 1
 // # define PARAM3			VAL(PC) + 2
-# define PARAM1			(VAL(PC)) % MEM_SIZE
-# define PARAM2			(VAL(PC) + 1) % MEM_SIZE
-# define PARAM3			(VAL(PC) + 2) % MEM_SIZE
+# define PARAM1			((unsigned short)VAL(PC)) % MEM_SIZE
+# define PARAM2			((unsigned short)VAL(PC) + 1) % MEM_SIZE
+# define PARAM3			((unsigned short)VAL(PC) + 2) % MEM_SIZE
 
-# define PARAM1M			(VAL(PC)) % MEM_SIZE
-# define PARAM2M			(VAL(PC) + 1) % MEM_SIZE
-# define PARAM3M			(VAL(PC) + 2) % MEM_SIZE
+# define PARAM1M			((unsigned short)VAL(PC)) % MEM_SIZE
+# define PARAM2M			((unsigned short)VAL(PC) + 1) % MEM_SIZE
+# define PARAM3M			((unsigned short)VAL(PC) + 2) % MEM_SIZE
 
 # define OFF2			instr->core_index
 
@@ -87,6 +88,10 @@ typedef struct			s_flags
 	int					b;
 	int					v;
 	int					flags;
+	long				delay;
+	int					noise;
+	int					s;
+	int					r;
 }						t_flags;
 
 typedef struct			s_node {
@@ -297,5 +302,17 @@ t_io					*peek(t_queue *queue);
 int						isEmpty(t_queue *queue);
 int						get_priority(t_vm *vm, t_io *proc);
 void					print_queue(t_queue *queue);
+
+
+/*
+** read_utils.c
+*/
+char    read_core1(t_vm *vm, unsigned int pos);
+short   read_core2(t_vm *vm, unsigned int pos);
+int     read_core4(t_vm *vm, unsigned int pos);
+void    write_core(t_vm *vm, unsigned int pos, int value);
+int     read_reg(t_io *proc, int reg_num);
+void    write_reg(t_io *proc, int reg_num, int value);
+
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/05 19:43:34 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/08 15:32:04 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ void	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
 	}
 	else if (acb == 3)
 	{
-		*l = &instr->vm->core[OPC + indirect(instr->vm, idx, instr)];
+		*l = &instr->vm->core[(OPC + indirect(instr->vm, idx, instr)) % MEM_SIZE];
 		instr->core_index += 2;
 	}
 }
@@ -133,7 +133,7 @@ void	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 	acb = acb & 0b11;
 	if (acb == 1)
 	{
-		instr->reg_index[instr->ri] = instr->vm->core[OFF2];
+		instr->reg_index[instr->ri] = instr->vm->core[OFF2 % MEM_SIZE];
 		*l = instr->proc->regs[instr->reg_index[instr->ri]];
 		instr->core_index += 1;
 		++instr->ri;
@@ -145,7 +145,7 @@ void	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
 	}
 	else if (acb == 3)
 	{
-		*l = &instr->vm->core[OPC + indirect(instr->vm, idx, instr)];
+		*l = &instr->vm->core[(OPC + indirect(instr->vm, idx, instr)) % MEM_SIZE];
 		instr->core_index += 2;
 	}
 }
