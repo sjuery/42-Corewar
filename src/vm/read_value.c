@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/08 15:01:50 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/08 15:29:19 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/08 15:40:31 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ unsigned int     read_value(t_vm *vm, t_proc *proc, int acb)
     unsigned int value;
     unsigned int index;
 
+    value = 0;
     if (acb == 1)
     {
         reg = read_core1(vm, read_reg(proc, 0));
