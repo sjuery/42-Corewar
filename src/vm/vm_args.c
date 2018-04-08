@@ -88,7 +88,7 @@ short read_core3(t_vm *vm, unsigned int pos)
 void	vm_zjmp(t_vm *vm, t_io *proc)
 {
 	t_instr instr;
-	int		val;
+	unsigned short		val;
 
 	instr = init_instr(vm, proc);
 	instr.acb = 0;
@@ -103,6 +103,8 @@ void	vm_zjmp(t_vm *vm, t_io *proc)
 	}
 	//ft_printf("\tzjmp OK ");
 	val = read_core2(vm, read_reg(proc, 0) % MEM_SIZE) % MEM_SIZE;
+	//if (val != (val % MEM_SIZE))
+	//ft_printf("%hd %hd %hd\n", val, read_core2(vm, read_reg(proc, 0) % MEM_SIZE), read_core3(vm, read_reg(proc, 0) % MEM_SIZE));
 	// val = get_index_one(&vm->core[read_reg(proc, 0) % MEM_SIZE]);
 	// val = get_index_one(&vm->core[PARAM1]);
 	//ft_printf(" %i\n", (short)val);

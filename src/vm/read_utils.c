@@ -19,7 +19,7 @@ char    read_core1(t_vm *vm, unsigned int pos)
 
 short   read_core2(t_vm *vm, unsigned int pos)
 {
-    return ((short)(((unsigned short)vm->core[pos % MEM_SIZE] << 8) | ((unsigned short)vm->core[(pos + 1) % MEM_SIZE])));
+    return (((short)vm->core[pos % MEM_SIZE] << 8) | ((short)vm->core[(pos + 1) % MEM_SIZE]));
 }
 
 // short     read_core3(t_vm *vm, unsigned int pos)
