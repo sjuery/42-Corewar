@@ -24,6 +24,7 @@ t_instr	init_instr(t_vm *vm, t_io *proc)
 {
 	t_instr	n;
 
+	ft_bzero(&n, sizeof(t_instr));
 	n.l1 = NULL;
 	n.l2 = NULL;
 	n.l3 = NULL;

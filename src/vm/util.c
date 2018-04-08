@@ -81,7 +81,7 @@ int		valid_reg_num(int reg_offset, t_vm *vm, t_io *proc)
 {
 	int reg;
 
-	reg = vm->core[PARAM1 + reg_offset];
+	reg = vm->core[(PARAM1 + reg_offset) % MEM_SIZE];
 	if (reg >= 1 && reg <= 16)
 		return (1);
 	return (0);

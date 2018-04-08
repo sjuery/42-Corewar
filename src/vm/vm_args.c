@@ -74,6 +74,17 @@ void	vm_sti(t_vm *vm, t_io *proc)
 	vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
 }
 
+// short     read_core3(t_vm *vm, unsigned int pos)
+// {
+//     return ((((short)vm->core[(pos + 1) % MEM_SIZE]) | ((short)vm->core[pos % MEM_SIZE] << 8)) % MEM_SIZE);
+// }
+
+short read_core3(t_vm *vm, unsigned int pos)
+{
+    return (((short)vm->core[pos % MEM_SIZE] << 8) | ((short)vm->core[(pos + 1) % MEM_SIZE])) % MEM_SIZE;
+}
+
+
 void	vm_zjmp(t_vm *vm, t_io *proc)
 {
 	t_instr instr;
@@ -81,17 +92,22 @@ void	vm_zjmp(t_vm *vm, t_io *proc)
 
 	instr = init_instr(vm, proc);
 	instr.acb = 0;
-	into_reg(VAL(PC) + 1, PC);
+	// into_reg(VAL(PC) + 1, PC);
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
 	if (!proc->carry)
 	{
 		//ft_printf("\tzjmp failed\n");
-		into_reg(VAL(PC) + 2, PC);
+		write_reg(proc, 0, read_reg(proc, 0) + 2);
+		// into_reg(VAL(PC) + 2, PC);
 		return ;
 	}
 	//ft_printf("\tzjmp OK ");
-	val = get_index_one(&vm->core[PARAM1]);
+	val = read_core2(vm, read_reg(proc, 0) % MEM_SIZE) % MEM_SIZE;
+	// val = get_index_one(&vm->core[read_reg(proc, 0) % MEM_SIZE]);
+	// val = get_index_one(&vm->core[PARAM1]);
 	//ft_printf(" %i\n", (short)val);
-	into_reg((VAL(PC) + val - 1) % MEM_SIZE, PC);
+	write_reg(proc, 0, read_reg(proc, 0) + val - 1);
+	// into_reg((VAL(PC) + val - 1) % MEM_SIZE, PC);
 }
 
 void	vm_live(t_vm *vm, t_io *proc)
@@ -99,14 +115,16 @@ void	vm_live(t_vm *vm, t_io *proc)
 	int				val;
 	unsigned char	*l;
 
-	l =  &(vm->core[PARAM2]);
-	val = VAL(l);
-	//ft_printf("LIVE %i\n", val);
+	l =  &(vm->core[PARAM2 % MEM_SIZE]);
+	// val = VAL(l);
+	val = read_core4(vm, read_reg(proc, 0) + 1);
+	// ft_printf("LIVE %i\n", val);
 	if (val <= -1 && val >= (vm->num_players * -1))
 		vm->win_player = val * -1;
 	vm->live++;
 	proc->alive = 1;
-	into_reg(VAL(PC) + 5, PC);
+	write_reg(proc, 0, read_reg(proc, 0) + 5);
+	// into_reg(VAL(PC) + 5, PC);
 }
 
 void	vm_aff(t_vm *vm, t_io *proc)
