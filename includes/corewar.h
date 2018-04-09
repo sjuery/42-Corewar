@@ -40,6 +40,7 @@
 # define VAL3(a)		((short)(((unsigned int)a[3]) | ((unsigned int)a[2] << 8)))
 
 # define PC				proc->regs[0]
+# define IPC			read_reg(proc, 0)
 
 // # define PARAM1			VAL(PC)
 // # define PARAM2			VAL(PC) + 1
@@ -315,6 +316,6 @@ int     read_reg(t_io *proc, int reg_num);
 void    write_reg(t_io *proc, int reg_num, int value);
 
 
-unsigned int     read_value(t_vm *vm, t_io *proc, int acb);
+int     read_value(t_vm *vm, t_io *proc, int acb);
 
 #endif

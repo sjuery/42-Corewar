@@ -57,12 +57,12 @@ void	vis_update2(t_vm *vm, int index)
 		init_pair(11, schizo[rand() % 6], schizo[rand() % 6]);
 		init_pair(12, schizo[rand() % 6], schizo[rand() % 6]);
 		init_pair(13, schizo[rand() % 6], schizo[rand() % 6]);
+		pain++;
 	}
 	if (vm->f.r == 1)
 		attron(COLOR_PAIR(rand() % 7 + 7));
 	else
 		attron(COLOR_PAIR(vm->vis[index].player));
-	pain++;
 	mvprintw((index % MEM_SIZE / 64 + 1) % MEM_SIZE, (index * 3) % VWRAP, "%02hhx",
 		vm->vis[(index) % MEM_SIZE].byte);
 	mvprintw(((index + 1) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 1) * 3) % VWRAP, "%02hhx",
@@ -78,14 +78,9 @@ void	vis_update2(t_vm *vm, int index)
 
 void	vm_st(t_vm *vm, t_io *proc) //#27437, #642, #ctd-14
 {
-	// t_instr		instr;
-
 	int value;
 	int pos_code;
 	int acb;
-
-	// instr = init_instr(vm, proc);
-	// instr.core_index += 2;
 
 	pos_code = read_reg(proc, 0); // getting the start of the instruction
 	write_reg(proc, 0, read_reg(proc, 0) + 1); // incrementing to next byte
@@ -99,39 +94,50 @@ void	vm_st(t_vm *vm, t_io *proc) //#27437, #642, #ctd-14
 	}
 	else
 	{
-		// write_reg(proc, read_core2(vm, read_reg(proc, 0)), value); // proc, reg_num, value
 		write_core(vm, pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD), value); // vm, position on board, value
+		// vis_copy2(vm->vis, value, proc, pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD));
+		// vis_update2(vm, pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD));
 		write_reg(proc, 0, read_reg(proc, 0) + 2); // increment to end of instruction
-		// vis_copy2(vm->vis, value, proc, (pos_code + read_reg(proc, read_core2(vm, read_reg(proc, 0)))) % IDX_MOD);
-		// vis_update2(vm, (pos_code + read_reg(proc, read_core2(vm, read_reg(proc, 0)))) % IDX_MOD);
 	}
-
-
-	// get_offset(&instr, ACB1(instr.acb), &instr.l1);
-	// get_offset(&instr, ACB2(instr.acb) | 0b100, &instr.l2);
-	// if (ACB2(instr.acb) == 1)
-	// {
-	// 	reg_copy(instr.l2, instr.l1, 0);
-	// 	//instr.index = (VAL3(instr.l2) & 0xFFFF);
-	// ft_printf("first reg %i\n", VAL(instr.l1));
-	// ft_printf("second reg %i\n", VAL(instr.l2));
-	// }
-	// else
-	// {
-	// 	instr.core_index -= 2;
-	// 	instr.index = (unsigned short)(indirect(instr.vm, 1, &instr));
-	// 	instr.core_index += 2;
-	// 	reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
-	// 	vis_copy(vm->vis, instr.l1, proc, (instr.opcode_pos + instr.index) % MEM_SIZE);
-	// 	vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
-	// }
-	//ft_printf("st r%i %i cycle [%i]\n", instr.reg_index[--instr.ri], (short)instr.index, vm->cycles);
-	//ft_printf("-> with mod and pc %i\n", (instr.opcode_pos + instr.index) % MEM_SIZE);
-	// into_reg(instr.core_index, PC);
 }
 
 void	vm_sti(t_vm *vm, t_io *proc)
 {
+	// int value;
+	// int	value2;
+	// int acb;
+	// int	pos_code;
+
+	// pos_code = read_reg(proc, 0);
+	// write_reg(proc, 0, read_reg(proc, 0) + 1);
+	// acb = read_core1(vm, read_reg(proc, 0));
+	// write_reg(proc, 0, read_reg(proc, 0) + 1);
+	// value = read_value(vm, proc, ACB1(acb));
+	// // if (ACB2(acb) == 3)
+	// // {
+	// // 	value2 = read_core2(vm, read_reg(proc, 0));
+	// // }
+	// // else
+	// 	value2 = read_value(vm, proc, ACB2(acb));
+	// if (ACB3(acb) == 1)
+	// {
+	// 	if (ACB2(acb) == 3)
+	// 		write_core(vm, (pos_code + value2), value);
+	// 	else
+	// 		write_core(vm, (pos_code + value2 + read_reg(proc, read_core1(vm, 0))), value);
+	// 	ft_printf("register %u, value %u - \n", read_core1(vm, 0), read_reg(proc, read_core1(vm, 0)));
+	// 	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	// }
+	// else
+	// {
+	// 	if (ACB2(acb) == 3)
+	// 		write_core(vm, (pos_code + value2), value);
+	// 	else
+	// 		write_core(vm, (pos_code + value2 + read_core4(vm, read_reg(proc, 0))), value);
+	// 	ft_printf("read core4 %u - \n", read_core4(vm, read_reg(proc, 0)));
+	// 	write_reg(proc, 0, read_reg(proc, 0) + 4);
+	// }
+
 	t_instr		instr;
 	int			ind;
 
@@ -153,11 +159,6 @@ void	vm_sti(t_vm *vm, t_io *proc)
 			& 0xFFFF);
 	if (ind)
 		instr.index = ind;
-	//ft_printf("sti r%i cycle[%i]\n", instr.reg_index[--instr.ri], vm->cycles);
-	//ft_printf(" in reg %i\n", VAL(proc->regs[instr.reg_index[instr.ri]]));
-	//ft_printf("-> store to %i + %hi = %i", (short)VAL2(instr.l2), (short)VAL3(instr.l3), (short)(instr.index));
-	//ft_printf(" (with pc and mod %i)\n", (short)(instr.opcode_pos + instr.index) % MEM_SIZE);
-	//ft_printf("storing in %i\n", (instr.opcode_pos + instr.index) % MEM_SIZE);
 	reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
 	vis_copy(vm->vis, instr.l1, proc, instr.opcode_pos + instr.index);
 	vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
