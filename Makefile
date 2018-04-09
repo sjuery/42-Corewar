@@ -19,7 +19,7 @@ FILES	= 	main parse_file ncurses \
 			vm_args flags init util vis \
 			reg_util acb reset vm_op \
 			vm_load vm_util jumptable \
-			queue_utils read_utils
+			queue_utils read_utils read_value
 ASMFILES= 	assembler convert_to_hex op \
 			parse
 DASMFILES= 	disassembler convert_to_asmbly op \
