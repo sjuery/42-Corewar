@@ -76,7 +76,7 @@ void	vis_update2(t_vm *vm, int index)
 }
 
 
-void	vm_st(t_vm *vm, t_io *proc)
+void	vm_st(t_vm *vm, t_io *proc) //#27437, #642, #ctd-14
 {
 	// t_instr		instr;
 
@@ -87,21 +87,23 @@ void	vm_st(t_vm *vm, t_io *proc)
 	// instr = init_instr(vm, proc);
 	// instr.core_index += 2;
 
-	pos_code = read_reg(proc, 0);
-	write_reg(proc, 0, read_reg(proc, 0) + 1);
-	acb = read_core1(vm, read_reg(proc, 0));
-	write_reg(proc, 0, read_reg(proc, 0) + 1);
-	value = read_value(vm, proc, ACB1(acb)); // value of the first registry
-	if (ACB2(acb) == 1)
-		write_reg(proc, read_core1(vm, read_reg(proc, 0)), value);
+	pos_code = read_reg(proc, 0); // getting the start of the instruction
+	write_reg(proc, 0, read_reg(proc, 0) + 1); // incrementing to next byte
+	acb = read_core1(vm, read_reg(proc, 0)); // recording the value of acb
+	write_reg(proc, 0, read_reg(proc, 0) + 1); // incremeneting to first instruction
+	value = read_value(vm, proc, ACB1(acb)); // value of the first registry, auto increments byte
+	if (ACB2(acb) == 1) // is a register,  will write to reg with information in the reg
+	{
+		write_reg(proc, read_core1(vm, read_reg(proc, 0)), value); // proc, reg_num, value
+		write_reg(proc, 0, read_reg(proc, 0) + 1); // increment to end of instruction
+	}
 	else
 	{
-		write_reg(proc, read_core2(vm, read_reg(proc, 0)), value);
-		write_reg(proc, 0, read_reg(proc, 0) + 2);
-		write_core(vm, (pos_code + read_reg(proc, read_core2(vm, read_reg(proc, 0)))) % IDX_MOD, value);
-		vis_copy2(vm->vis, value, proc, (pos_code + read_reg(proc, read_core2(vm, read_reg(proc, 0)))) % IDX_MOD);
-		vis_update2(vm, (pos_code + read_reg(proc, read_core2(vm, read_reg(proc, 0)))) % IDX_MOD);
-		// vis_copy(vm->vis, INSTR, proc, asdasda);
+		// write_reg(proc, read_core2(vm, read_reg(proc, 0)), value); // proc, reg_num, value
+		write_core(vm, pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD), value); // vm, position on board, value
+		write_reg(proc, 0, read_reg(proc, 0) + 2); // increment to end of instruction
+		// vis_copy2(vm->vis, value, proc, (pos_code + read_reg(proc, read_core2(vm, read_reg(proc, 0)))) % IDX_MOD);
+		// vis_update2(vm, (pos_code + read_reg(proc, read_core2(vm, read_reg(proc, 0)))) % IDX_MOD);
 	}
 
 
