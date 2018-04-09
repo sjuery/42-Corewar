@@ -72,49 +72,48 @@ void	play_spawn(t_vm *vm)
 	}
 }
 
+
 void vm_lfork(t_vm *vm, t_io *proc)
 {
-	t_instr		instr;
 	t_io		*new_proc;
-
-	instr = init_instr(vm, proc);
-	instr.acb = 0;
-	instr.core_index++;
-	get_offset_index(&instr, 2, &instr.l1);
+	int			pos_code;
+	short			index;
+	
+	pos_code = read_reg(proc, 0);
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	index = read_core2(vm, read_reg(proc, 0));
 	new_proc = (t_io *)ft_memalloc(sizeof(t_io));
 	ft_memcpy(new_proc, proc, sizeof(t_io));
 	++vm->process_count;
 	++vm->process_num;
 	new_proc->alive = 0;
 	new_proc->process = vm->process_num - 1;
-	into_reg(instr.opcode_pos + VAL2(instr.l1) % MEM_SIZE, new_proc->regs[0]);//opcode + instr.l1?
-	new_proc->op = vm->core[((unsigned short)VAL(new_proc->regs[0])) % MEM_SIZE];
+	write_reg(new_proc, 0, (pos_code + index) % MEM_SIZE);
+	write_reg(proc, 0, read_reg(proc, 0) + 2);
+	new_proc->op = vm->core[read_reg(new_proc, 0) % MEM_SIZE];
 	set_cycle_to_execute(vm, new_proc);
-	into_reg(VAL(PC) + 3, PC);
 	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
 	play_spawn(vm);
 }
 
 void	vm_fork(t_vm *vm, t_io *proc)
 {
-	t_instr		instr;
 	t_io		*new_proc;
-
-	instr = init_instr(vm, proc);
-	instr.acb = 0;
-	instr.core_index++;
-	get_offset_index(&instr, 2, &instr.l1);
+	unsigned int			pos_code;
+	short		index;
+	
+	pos_code = read_reg(proc, 0);
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	index =  read_core2(vm, read_reg(proc, 0)) % IDX_MOD;
 	new_proc = (t_io *)ft_memalloc(sizeof(t_io));
 	ft_memcpy(new_proc, proc, sizeof(t_io));
 	++vm->process_count;
 	++vm->process_num;
 	new_proc->alive = 0;
 	new_proc->process = vm->process_num - 1;
-	//ft_printf("FORKING TO %i\n", instr.opcode_pos + (VAL2(instr.l1)  % IDX_MOD));
-	//ft_printf("DIR %i\n", (short)VAL2(instr.l1));
-	into_reg(instr.opcode_pos + ((short)VAL2(instr.l1)  % IDX_MOD), new_proc->regs[0]);
-	into_reg(VAL(PC) + 3, PC);
-	new_proc->op = vm->core[((unsigned short)VAL(new_proc->regs[0])) % MEM_SIZE];
+	write_reg(new_proc, 0, (pos_code + index) % MEM_SIZE);
+	write_reg(proc, 0, read_reg(proc, 0) + 2);
+	new_proc->op = vm->core[read_reg(new_proc, 0) % MEM_SIZE];
 	set_cycle_to_execute(vm, new_proc);
 	enqueue(vm->q, new_proc, new_proc->executing * new_proc->cycle_to_execute);
 	play_spawn(vm);

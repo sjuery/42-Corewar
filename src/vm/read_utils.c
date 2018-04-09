@@ -12,7 +12,7 @@
 
 #include <corewar.h>
 
-char    read_core1(t_vm *vm, unsigned int pos)
+unsigned char    read_core1(t_vm *vm, unsigned int pos)
 {
     return (vm->core[pos % MEM_SIZE]);
 }
@@ -21,12 +21,6 @@ short   read_core2(t_vm *vm, unsigned int pos)
 {
     return (((short)vm->core[pos % MEM_SIZE] << 8) | ((short)vm->core[(pos + 1) % MEM_SIZE]));
 }
-
-// short     read_core3(t_vm *vm, unsigned int pos)
-// {
-//     return (((short)vm->core[pos % MEM_SIZE] << 8) | (short)vm->core[(pos + 1) % MEM_SIZE]) % MEM_SIZE;
-// }
-
 
 
 int     read_core4(t_vm *vm, unsigned int pos)
