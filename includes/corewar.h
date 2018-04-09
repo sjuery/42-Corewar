@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/05 15:20:40 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/08 22:44:31 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ int						valid_acb2(int acb, int op);
 int						valid_acb3(int acb, int op);
 int						valid_register(t_vm *vm, int acb, int op, t_io *proc);
 void					modify_carry(t_io *proc, unsigned char *reg);
+void	modify_carry2(t_io *proc, unsigned char value);
 void					set_cycle_to_execute(t_vm *vm, t_io *proc);
 
 /*
@@ -315,6 +316,7 @@ int     read_reg(t_io *proc, int reg_num);
 void    write_reg(t_io *proc, int reg_num, int value);
 
 
-unsigned int     read_value(t_vm *vm, t_io *proc, int acb);
+unsigned int     read_value(t_vm *vm, t_io *proc, int acb, int bin);
+unsigned int     read_value_index(t_vm *vm, t_io *proc, int acb, int bin);
 
 #endif

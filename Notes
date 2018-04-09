@@ -128,4 +128,168 @@ array
     if bad access, realloc array and try again
 
 
-execution:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    for regular, idx_mod indirects
+    for longs, do not idx_mod indirects
+
+    live: (1 param) - FINISHED
+    	name = read_core_4(PC + 1)
+    		set_live(name)
+
+    ld: (2 param)
+    	IND/DIR: (read)
+    		DIR: value = read_core_4(PC)
+    		IND: index = read_core_2(PC)
+    			 value = read_core_4(index)
+    	REG: (write)
+    			 reg = read_core_1(PC)
+    			 write_reg(value, reg)
+
+    lld: (2 param)
+    	IND/DIR: (read)
+    		DIR: value = read_core_4(PC)
+    		IND: index = read_core_2(PC)
+    			 value = read_core_4(index)
+    	REG: (write)
+    			 reg = read_core_1(PC)
+    			 write_reg(value, reg)
+
+    ldi: (3 params)
+    	REG/DIR/IND: (read 1)
+    		IND: index = read_core_2(PC)
+    			 value = read_core_4(PC)
+    		REG: reg = read_core_1(PC)
+    	 		 value = read_reg(reg)
+    	 	DIR: value = read_core_4(PC)
+    	REG/DIR: (read 2)
+    		REG: reg = read_core_1(PC)
+    			 value_2 = read_reg(reg)
+    		DIR: value_2 = read_core_4(PC)
+    	REG: (write)
+    		value_3 = read_core_4(value + value_2 + OP_CODE_PC) [NOTE: DO NOT MOVE PC]
+    		reg = read_core_1(PC)
+    		write_reg(value_3, reg)
+
+    lldi: (3 params)
+    	REG/DIR/IND: (read 1)
+    		IND: index = read_core_2(PC)
+    			 value = read_core_4(PC)
+    		REG: reg = read_core_1(PC)
+    	 		 value = read_reg(reg)
+    	 	DIR: value = read_core_4(PC)
+    	REG/DIR: (read 2)
+    		REG: reg = read_core_1(PC)
+    			 value_2 = read_reg(reg)
+    		DIR: value_2 = read_core_4(PC)
+    	REG: (write)
+    		value_3 = read_core_4(value + value_2 + OP_CODE_PC) [NOTE: DO NOT MOVE PC]
+    		reg = read_core_1(PC)
+    		write_reg(value_3, reg)
+
+    st: (VIS UPDATED NEEDED)
+    	(2 param)
+    	REG: (read)
+    			 reg = read_core_1(PC)
+    			 value = read_reg(PC)
+    	IND/REG: (write)
+    		IND: index = read_core_2(PC)
+    			 write_core_4(value, index)
+    		REG: reg = read_core_1(PC)
+    			 write_reg(value, reg)
+
+    sti: (3 param) (VIS UPDATE NEEDED)
+    	REG: (read 1)
+    		REG: reg = read_core_1(PC)
+    			 value = read_reg(reg)
+    	REG/DIR/IND: (read 2)
+    		REG: reg = read_core_1(PC)
+    			 value_2 = read_reg(reg)
+    		DIR: value_2 = read_core_4(PC)
+    		IND: index = read_core_2(PC)
+    			 value_2 = read_core_4(index)
+    	REG/DIR: (read 3)
+    		REG: reg = read_core_1(PC)
+    			 value_3 = read_reg(reg)
+    		DIR: value_3 = read_core_4(PC)
+    	CORE: (write)
+    		write_core(value, value_2 + value_3 + PC) [NOTE: DO NOT MOVE PC]
+
+    and/or/xor: (3 param) - FINISHED
+    	REG/IND/DIR: (read 1)
+    		REG: reg = read_core_1(PC)
+    			 value = read_reg(reg)
+    		DIR: value = read_core_4(PC)
+    		IND: index = read_core_2(PC)
+    			 value = read_core_4(index)
+    	REG/IND/DIR: (read 2)
+    		REG: reg = read_core_1(PC)
+    			 value_2 = read_reg(reg)
+    		DIR: value_2 = read_core_4(PC)
+    		IND: index = read_core_2(PC)
+    			 value_2 = read_core_4(index)
+    	REG: (write)
+    			 reg = read_core_1(PC)
+    			 write_reg(op(value, value_2), reg)
+
+    add/sub: (3 params) - FINISHED
+    	REG: (read 1)
+    		 reg = read_core_1(PC)
+    		 value = read_reg(reg)
+    	REG: (read 2)
+    		 reg = read_core_1(PC)
+    		 value_2 = read_reg(reg)
+    	REG: (write)
+    		 reg = read_index(PC)
+    		 write_reg(op(value, value_2), reg)
+
+    aff: (1 param)
+    	REG: (read)
+    		REG: reg = read_core_1(PC)
+    		 	 value = read_reg(PC) % 256
+    	STDOUT: (write)
+    			 ft_putchar(value)
+
+    zjmp: (1 param) - FINISHED
+    	DIR: (read)
+    		 index = read_core_2(PC) % IDX_MOD
+    	CARRY?: (write)
+    		 write_reg(PC + index, PC)
+
+    fork: (1 param) - FINISHED
+    	DIR: (read)
+    		 index = read_core_2(PC) % IDX_MOD
+    	NEW_PC:
+    		 new_proc = copy_proc(self)
+    		 write_reg(PC + index, new_proc.pc)
+
+    lfork: (1 param) - FINISHED
+    	DIR: (read)
+    		 index = read_core_2(PC)
+    	NEW_PC:
+    		 new_proc = copy_proc(self)
+    		 write_reg(PC + index, new_proc.pc)
