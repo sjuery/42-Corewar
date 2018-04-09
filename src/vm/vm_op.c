@@ -12,72 +12,91 @@
 
 #include <corewar.h>
 
+
+void	modify_carry2(t_io *proc, unsigned char value)
+{
+	if (!value)
+		proc->carry = 1;
+	else
+		proc->carry = 0;
+}
+
 void	vm_or(t_vm *vm, t_io *proc)
 {
-	t_instr			instr;
+	unsigned int value;
+	unsigned int value2;
+	unsigned char acb;
 
-	instr = init_instr(vm, proc);
-	instr.core_index += 2;
-	get_offset(&instr, ACB1(instr.acb), &instr.l1);
-	get_offset(&instr, ACB2(instr.acb), &instr.l2);
-	get_offset(&instr, ACB3(instr.acb), &instr.l3);
-	into_reg(instr.core_index, PC);
-	reg_or(instr.l1, instr.l2, instr.l3);
-	modify_carry(proc, instr.l3);
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	acb = read_core1(vm, read_reg(proc, 0));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	value = read_value(vm, proc, ACB1(acb));
+	value2 = read_value(vm, proc, ACB2(acb));
+	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value | value2));
+	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }
 
 void	vm_xor(t_vm *vm, t_io *proc)
 {
-	t_instr			instr;
+	unsigned int value;
+	unsigned int value2;
+	unsigned char acb;
 
-	instr = init_instr(vm, proc);
-	instr.core_index += 2;
-	get_offset(&instr, ACB1(instr.acb), &instr.l1);
-	get_offset(&instr, ACB2(instr.acb), &instr.l2);
-	get_offset(&instr, ACB3(instr.acb), &instr.l3);
-	into_reg(instr.core_index, PC);
-	reg_xor(instr.l1, instr.l2, instr.l3);
-	modify_carry(proc, instr.l3);
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	acb = read_core1(vm, read_reg(proc, 0));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	value = read_value(vm, proc, ACB1(acb));
+	value2 = read_value(vm, proc, ACB2(acb));
+	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value ^ value2));
+	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }
 
 void	vm_and(t_vm *vm, t_io *proc)
 {
-	t_instr			instr;
+	unsigned int value;
+	unsigned int value2;
+	unsigned char acb;
 
-	instr = init_instr(vm, proc);
-	instr.core_index += 2;
-	get_offset(&instr, ACB1(instr.acb), &instr.l1);
-	get_offset(&instr, ACB2(instr.acb), &instr.l2);
-	get_offset(&instr, ACB3(instr.acb), &instr.l3);
-	into_reg(instr.core_index, PC);
-	reg_and(instr.l1, instr.l2, instr.l3);
-	modify_carry(proc, instr.l3);
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	acb = read_core1(vm, read_reg(proc, 0));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	value = read_value(vm, proc, ACB1(acb));
+	value2 = read_value(vm, proc, ACB2(acb));
+	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value & value2));
+	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }
 
 void	vm_sub(t_vm *vm, t_io *proc)
 {
-	t_instr			instr;
+	unsigned int			value;
+	unsigned int			value2;
+	unsigned char			acb;
 
-	instr = init_instr(vm, proc);
-	instr.core_index += 2;
-	get_offset(&instr, ACB1(instr.acb), &instr.l1);
-	get_offset(&instr, ACB2(instr.acb), &instr.l2);
-	get_offset(&instr, ACB3(instr.acb), &instr.l3);
-	into_reg(instr.core_index, PC);
-	reg_sub(instr.l1, instr.l2, instr.l3);
-	modify_carry(proc, instr.l3);
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	acb = read_core1(vm, read_reg(proc, 0));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	value = read_value(vm, proc, ACB1(acb));
+	value2 = read_value(vm, proc, ACB2(acb));
+	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value - value2));
+	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }
 
 void	vm_add(t_vm *vm, t_io *proc)
 {
-	t_instr			instr;
+	unsigned int			value;
+	unsigned int			value2;
+	unsigned char			acb;
 
-	instr = init_instr(vm, proc);
-	instr.core_index += 2;
-	get_offset(&instr, ACB1(instr.acb), &instr.l1);
-	get_offset(&instr, ACB2(instr.acb), &instr.l2);
-	get_offset(&instr, ACB3(instr.acb), &instr.l3);
-	into_reg(instr.core_index, PC);
-	reg_add(instr.l1, instr.l2, instr.l3);
-	modify_carry(proc, instr.l3);
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	acb = read_core1(vm, read_reg(proc, 0));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	value = read_value(vm, proc, ACB1(acb));
+	value2 = read_value(vm, proc, ACB2(acb));
+	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value + value2));
+	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }

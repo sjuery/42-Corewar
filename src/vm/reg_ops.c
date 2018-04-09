@@ -22,6 +22,7 @@ int		reg_add(unsigned char *reg1, unsigned char *reg2, unsigned char *reg3)
 	r2 = (reg2[3] & 0xFF) + ((reg2[2] & 0xFF) << 8) +
 		((reg2[1] & 0xFF) << 16) + ((reg2[0] & 0xFF) << 24);
 	into_reg(r1 + r2, reg3);
+	// write_reg(proc, reg3, r1 + r2);
 	return (1);
 }
 

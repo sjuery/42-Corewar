@@ -12,33 +12,122 @@
 
 #include <corewar.h>
 
-void	vm_st(t_vm *vm, t_io *proc)
-{
-	t_instr		instr;
+// void	vm_or(t_vm *vm, t_io *proc)
+// {
+// 	unsigned int value;
+// 	unsigned int value2;
+// 	unsigned char acb;
 
-	instr = init_instr(vm, proc);
-	instr.core_index += 2;
-	get_offset(&instr, ACB1(instr.acb), &instr.l1);
-	get_offset(&instr, ACB2(instr.acb) | 0b100, &instr.l2);
-	if (ACB2(instr.acb) == 1)
+// 	write_reg(proc, 0, read_reg(proc, 0) + 1);
+// 	acb = read_core1(vm, read_reg(proc, 0));
+// 	write_reg(proc, 0, read_reg(proc, 0) + 1);
+// 	value = read_value(vm, proc, ACB1(acb));
+// 	value2 = read_value(vm, proc, ACB2(acb));
+// 	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value | value2));
+// 	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+// 	write_reg(proc, 0, read_reg(proc, 0) + 1);
+// }
+
+void	vis_copy2(t_vis *dest, int src, t_io *proc, int index)
+{
+	dest[index % MEM_SIZE].byte = (src >> 24) % 0x100;
+	dest[(index + 1) % MEM_SIZE].byte = (src >> 16) % 0x100;
+	dest[(index + 2) % MEM_SIZE].byte = (src >> 8) % 0x100;
+	dest[(index + 3) % MEM_SIZE].byte = src % 0x100;
+	dest[index % MEM_SIZE].player = proc->player_int;
+	dest[(index + 1) % MEM_SIZE].player = proc->player_int;
+	dest[(index + 2) % MEM_SIZE].player = proc->player_int;
+	dest[(index + 3) % MEM_SIZE].player = proc->player_int;
+}
+
+void	vis_update2(t_vm *vm, int index)
+{
+	static short	schizo[] = {
+		COLOR_CYAN, COLOR_RED, COLOR_YELLOW, COLOR_GREEN,
+		COLOR_BLACK, COLOR_WHITE, COLOR_MAGENTA };
+
+	static long		pain;
+
+	if (vm->f.r == 1 && pain % 200 == 0)
 	{
-		reg_copy(instr.l2, instr.l1, 0);
-		//instr.index = (VAL3(instr.l2) & 0xFFFF);
-	ft_printf("first reg %i\n", VAL(instr.l1));
-	ft_printf("second reg %i\n", VAL(instr.l2));
+		init_pair(7, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(8, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(9, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(10, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(11, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(12, schizo[rand() % 6], schizo[rand() % 6]);
+		init_pair(13, schizo[rand() % 6], schizo[rand() % 6]);
+	}
+	if (vm->f.r == 1)
+		attron(COLOR_PAIR(rand() % 7 + 7));
+	else
+		attron(COLOR_PAIR(vm->vis[index].player));
+	pain++;
+	mvprintw((index % MEM_SIZE / 64 + 1) % MEM_SIZE, (index * 3) % VWRAP, "%02hhx",
+		vm->vis[(index) % MEM_SIZE].byte);
+	mvprintw(((index + 1) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 1) * 3) % VWRAP, "%02hhx",
+		vm->vis[(index + 1) % MEM_SIZE].byte);
+	mvprintw(((index + 2) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 2) * 3) % VWRAP, "%02hhx",
+		vm->vis[(index + 2) % MEM_SIZE].byte);
+	mvprintw(((index + 3) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 3) * 3) % VWRAP, "%02hhx",
+		vm->vis[(index + 3) % MEM_SIZE].byte);
+	attroff(COLOR_PAIR(vm->vis[index].player));
+	refresh();
+}
+
+
+void	vm_st(t_vm *vm, t_io *proc) //#27437, #642, #ctd-14
+{
+	// t_instr		instr;
+
+	int value;
+	int pos_code;
+	int acb;
+
+	// instr = init_instr(vm, proc);
+	// instr.core_index += 2;
+
+	pos_code = read_reg(proc, 0); // getting the start of the instruction
+	write_reg(proc, 0, read_reg(proc, 0) + 1); // incrementing to next byte
+	acb = read_core1(vm, read_reg(proc, 0)); // recording the value of acb
+	write_reg(proc, 0, read_reg(proc, 0) + 1); // incremeneting to first instruction
+	value = read_value(vm, proc, ACB1(acb)); // value of the first registry, auto increments byte
+	if (ACB2(acb) == 1) // is a register,  will write to reg with information in the reg
+	{
+		write_reg(proc, read_core1(vm, read_reg(proc, 0)), value); // proc, reg_num, value
+		write_reg(proc, 0, read_reg(proc, 0) + 1); // increment to end of instruction
 	}
 	else
 	{
-		instr.core_index -= 2;
-		instr.index = (unsigned short)(indirect(instr.vm, 1, &instr));
-		instr.core_index += 2;
-		reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
-		vis_copy(vm->vis, instr.l1, proc, (instr.opcode_pos + instr.index) % MEM_SIZE);
-		vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
+		// write_reg(proc, read_core2(vm, read_reg(proc, 0)), value); // proc, reg_num, value
+		write_core(vm, pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD), value); // vm, position on board, value
+		write_reg(proc, 0, read_reg(proc, 0) + 2); // increment to end of instruction
+		// vis_copy2(vm->vis, value, proc, (pos_code + read_reg(proc, read_core2(vm, read_reg(proc, 0)))) % IDX_MOD);
+		// vis_update2(vm, (pos_code + read_reg(proc, read_core2(vm, read_reg(proc, 0)))) % IDX_MOD);
 	}
+
+
+	// get_offset(&instr, ACB1(instr.acb), &instr.l1);
+	// get_offset(&instr, ACB2(instr.acb) | 0b100, &instr.l2);
+	// if (ACB2(instr.acb) == 1)
+	// {
+	// 	reg_copy(instr.l2, instr.l1, 0);
+	// 	//instr.index = (VAL3(instr.l2) & 0xFFFF);
+	// ft_printf("first reg %i\n", VAL(instr.l1));
+	// ft_printf("second reg %i\n", VAL(instr.l2));
+	// }
+	// else
+	// {
+	// 	instr.core_index -= 2;
+	// 	instr.index = (unsigned short)(indirect(instr.vm, 1, &instr));
+	// 	instr.core_index += 2;
+	// 	reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
+	// 	vis_copy(vm->vis, instr.l1, proc, (instr.opcode_pos + instr.index) % MEM_SIZE);
+	// 	vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
+	// }
 	//ft_printf("st r%i %i cycle [%i]\n", instr.reg_index[--instr.ri], (short)instr.index, vm->cycles);
 	//ft_printf("-> with mod and pc %i\n", (instr.opcode_pos + instr.index) % MEM_SIZE);
-	into_reg(instr.core_index, PC);
+	// into_reg(instr.core_index, PC);
 }
 
 void	vm_sti(t_vm *vm, t_io *proc)
@@ -74,16 +163,6 @@ void	vm_sti(t_vm *vm, t_io *proc)
 	vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
 }
 
-// short     read_core3(t_vm *vm, unsigned int pos)
-// {
-//     return ((((short)vm->core[(pos + 1) % MEM_SIZE]) | ((short)vm->core[pos % MEM_SIZE] << 8)) % MEM_SIZE);
-// }
-
-short read_core3(t_vm *vm, unsigned int pos)
-{
-    return (((short)vm->core[pos % MEM_SIZE] << 8) | ((short)vm->core[(pos + 1) % MEM_SIZE])) % MEM_SIZE;
-}
-
 
 void	vm_zjmp(t_vm *vm, t_io *proc)
 {
@@ -92,24 +171,14 @@ void	vm_zjmp(t_vm *vm, t_io *proc)
 
 	instr = init_instr(vm, proc);
 	instr.acb = 0;
-	// into_reg(VAL(PC) + 1, PC);
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 	if (!proc->carry)
 	{
-		//ft_printf("\tzjmp failed\n");
 		write_reg(proc, 0, read_reg(proc, 0) + 2);
-		// into_reg(VAL(PC) + 2, PC);
 		return ;
 	}
-	//ft_printf("\tzjmp OK ");
 	val = read_core2(vm, read_reg(proc, 0) % MEM_SIZE) % MEM_SIZE;
-	//if (val != (val % MEM_SIZE))
-	//ft_printf("%hd %hd %hd\n", val, read_core2(vm, read_reg(proc, 0) % MEM_SIZE), read_core3(vm, read_reg(proc, 0) % MEM_SIZE));
-	// val = get_index_one(&vm->core[read_reg(proc, 0) % MEM_SIZE]);
-	// val = get_index_one(&vm->core[PARAM1]);
-	//ft_printf(" %i\n", (short)val);
 	write_reg(proc, 0, read_reg(proc, 0) + val - 1);
-	// into_reg((VAL(PC) + val - 1) % MEM_SIZE, PC);
 }
 
 void	vm_live(t_vm *vm, t_io *proc)
@@ -118,15 +187,12 @@ void	vm_live(t_vm *vm, t_io *proc)
 	unsigned char	*l;
 
 	l =  &(vm->core[PARAM2 % MEM_SIZE]);
-	// val = VAL(l);
 	val = read_core4(vm, read_reg(proc, 0) + 1);
-	// ft_printf("LIVE %i\n", val);
 	if (val <= -1 && val >= (vm->num_players * -1))
 		vm->win_player = val * -1;
 	vm->live++;
 	proc->alive = 1;
 	write_reg(proc, 0, read_reg(proc, 0) + 5);
-	// into_reg(VAL(PC) + 5, PC);
 }
 
 void	vm_aff(t_vm *vm, t_io *proc)
