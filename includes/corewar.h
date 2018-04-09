@@ -316,6 +316,6 @@ int     read_reg(t_io *proc, int reg_num);
 void    write_reg(t_io *proc, int reg_num, int value);
 
 
-unsigned int     read_value(t_vm *vm, t_io *proc, int acb);
+int     read_value(t_vm *vm, t_io *proc, int acb);
 
 #endif

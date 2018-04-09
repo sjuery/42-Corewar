@@ -57,12 +57,12 @@ void	vis_update2(t_vm *vm, int index)
 		init_pair(11, schizo[rand() % 6], schizo[rand() % 6]);
 		init_pair(12, schizo[rand() % 6], schizo[rand() % 6]);
 		init_pair(13, schizo[rand() % 6], schizo[rand() % 6]);
+		pain++;
 	}
 	if (vm->f.r == 1)
 		attron(COLOR_PAIR(rand() % 7 + 7));
 	else
 		attron(COLOR_PAIR(vm->vis[index].player));
-	pain++;
 	mvprintw((index % MEM_SIZE / 64 + 1) % MEM_SIZE, (index * 3) % VWRAP, "%02hhx",
 		vm->vis[(index) % MEM_SIZE].byte);
 	mvprintw(((index + 1) % MEM_SIZE / 64 + 1) % MEM_SIZE, ((index + 1) * 3) % VWRAP, "%02hhx",
@@ -103,65 +103,65 @@ void	vm_st(t_vm *vm, t_io *proc) //#27437, #642, #ctd-14
 
 void	vm_sti(t_vm *vm, t_io *proc)
 {
-	int value;
-	int	value2;
-	int acb;
-	int	pos_code;
+	// int value;
+	// int	value2;
+	// int acb;
+	// int	pos_code;
 
-	pos_code = read_reg(proc, 0);
-	write_reg(proc, 0, read_reg(proc, 0) + 1);
-	acb = read_core1(vm, read_reg(proc, 0));
-	write_reg(proc, 0, read_reg(proc, 0) + 1);
-	value = read_value(vm, proc, ACB1(acb));
-	// if (ACB2(acb) == 3)
+	// pos_code = read_reg(proc, 0);
+	// write_reg(proc, 0, read_reg(proc, 0) + 1);
+	// acb = read_core1(vm, read_reg(proc, 0));
+	// write_reg(proc, 0, read_reg(proc, 0) + 1);
+	// value = read_value(vm, proc, ACB1(acb));
+	// // if (ACB2(acb) == 3)
+	// // {
+	// // 	value2 = read_core2(vm, read_reg(proc, 0));
+	// // }
+	// // else
+	// 	value2 = read_value(vm, proc, ACB2(acb));
+	// if (ACB3(acb) == 1)
 	// {
-	// 	value2 = read_core2(vm, read_reg(proc, 0));
+	// 	if (ACB2(acb) == 3)
+	// 		write_core(vm, (pos_code + value2), value);
+	// 	else
+	// 		write_core(vm, (pos_code + value2 + read_reg(proc, read_core1(vm, 0))), value);
+	// 	ft_printf("register %u, value %u - \n", read_core1(vm, 0), read_reg(proc, read_core1(vm, 0)));
+	// 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 	// }
 	// else
-		value2 = read_value(vm, proc, ACB2(acb));
-	if (ACB3(acb) == 1)
-	{
-		if (ACB2(acb) == 3)
-			write_core(vm, (pos_code + value2), value);
-		else
-			write_core(vm, (pos_code + value2 + read_reg(proc, read_core1(vm, 0))), value);
-		ft_printf("register %u, value %u - \n", read_core1(vm, 0), read_reg(proc, read_core1(vm, 0)));
-		write_reg(proc, 0, read_reg(proc, 0) + 1);
-	}
-	else
-	{
-		if (ACB2(acb) == 3)
-			write_core(vm, (pos_code + value2), value);
-		else
-			write_core(vm, (pos_code + value2 + read_core4(vm, read_reg(proc, 0))), value);
-		ft_printf("read core4 %u - \n", read_core4(vm, read_reg(proc, 0)));
-		write_reg(proc, 0, read_reg(proc, 0) + 4);
-	}
-
-	// t_instr		instr;
-	// int			ind;
-
-	// ind = 0;
-	// instr = init_instr(vm, proc);
-	// instr.core_index += 2;
-	// get_offset_index(&instr, ACB1(instr.acb), &instr.l1);
-	// get_offset_index(&instr, ACB2(instr.acb), &instr.l2);
-	// if(ACB2(instr.acb) == 3)
 	// {
-	// 	instr.core_index -= 2;
-	// 	ind = indirect(instr.vm, 0, &instr);
-	// 	instr.core_index += 2;
+	// 	if (ACB2(acb) == 3)
+	// 		write_core(vm, (pos_code + value2), value);
+	// 	else
+	// 		write_core(vm, (pos_code + value2 + read_core4(vm, read_reg(proc, 0))), value);
+	// 	ft_printf("read core4 %u - \n", read_core4(vm, read_reg(proc, 0)));
+	// 	write_reg(proc, 0, read_reg(proc, 0) + 4);
 	// }
-	// get_offset_index(&instr, ACB3(instr.acb), &instr.l3);
-	// into_reg(instr.core_index, PC);
-	// instr.index = (((ACB2(instr.acb) == 1 ? VAL3(instr.l2) : VAL2(instr.l2)) +
-	// 			(ACB3(instr.acb) == 1 ? VAL3(instr.l3) : VAL2(instr.l3)))
-	// 		& 0xFFFF);
-	// if (ind)
-	// 	instr.index = ind;
-	// reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
-	// vis_copy(vm->vis, instr.l1, proc, instr.opcode_pos + instr.index);
-	// vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
+
+	t_instr		instr;
+	int			ind;
+
+	ind = 0;
+	instr = init_instr(vm, proc);
+	instr.core_index += 2;
+	get_offset_index(&instr, ACB1(instr.acb), &instr.l1);
+	get_offset_index(&instr, ACB2(instr.acb), &instr.l2);
+	if(ACB2(instr.acb) == 3)
+	{
+		instr.core_index -= 2;
+		ind = indirect(instr.vm, 0, &instr);
+		instr.core_index += 2;
+	}
+	get_offset_index(&instr, ACB3(instr.acb), &instr.l3);
+	into_reg(instr.core_index, PC);
+	instr.index = (((ACB2(instr.acb) == 1 ? VAL3(instr.l2) : VAL2(instr.l2)) +
+				(ACB3(instr.acb) == 1 ? VAL3(instr.l3) : VAL2(instr.l3)))
+			& 0xFFFF);
+	if (ind)
+		instr.index = ind;
+	reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
+	vis_copy(vm->vis, instr.l1, proc, instr.opcode_pos + instr.index);
+	vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
 }
 
 
