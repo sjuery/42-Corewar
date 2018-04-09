@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/25 09:00:00 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/08 22:44:31 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/09 15:01:05 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define VAL3(a)		((short)(((unsigned int)a[3]) | ((unsigned int)a[2] << 8)))
 
 # define PC				proc->regs[0]
+# define IPC			read_reg(proc, 0)
 
 // # define PARAM1			VAL(PC)
 // # define PARAM2			VAL(PC) + 1
@@ -316,7 +317,10 @@ int     read_reg(t_io *proc, int reg_num);
 void    write_reg(t_io *proc, int reg_num, int value);
 
 
-unsigned int     read_value(t_vm *vm, t_io *proc, int acb, int bin);
-unsigned int     read_value_index(t_vm *vm, t_io *proc, int acb, int bin);
+int     read_value(t_vm *vm, t_io *proc, int acb);
+int     read_value_index(t_vm *vm, t_io *proc, int acb);
+
+//int     read_value(t_vm *vm, t_io *proc, int acb, int bin);
+//int     read_value_index(t_vm *vm, t_io *proc, int acb, int bin);
 
 #endif

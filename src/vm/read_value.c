@@ -6,17 +6,18 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/04/08 15:01:50 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/09 14:29:13 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/09 15:00:35 by anazar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <corewar.h>
 
-unsigned int     read_value(t_vm *vm, t_io *proc, int acb, int bin)
+//int     read_value(t_vm *vm, t_io *proc, int acb, int bin)
+int     read_value(t_vm *vm, t_io *proc, int acb)
 {
-    unsigned int reg;
-    unsigned int value;
-    unsigned int index;
+    int reg;
+    int value;
+    int index;
 
     value = 0;
     if (acb == 1)
@@ -33,14 +34,15 @@ unsigned int     read_value(t_vm *vm, t_io *proc, int acb, int bin)
     else if (acb == 3)
     {
         index = read_core2(vm, read_reg(proc, 0));
-        value = read_core4(vm, index % (bin ? IDX_MOD : MEM_SIZE));
+        value = read_core4(vm, index);
         write_reg(proc, 0, read_reg(proc, 0) + 2);
     }
     return (value);
 }
 
 
-unsigned int     read_value_index(t_vm *vm, t_io *proc, int acb, int bin)
+//int     read_value_index(t_vm *vm, t_io *proc, int acb, int bin)
+int     read_value_index(t_vm *vm, t_io *proc, int acb)
 {
     unsigned int reg;
     unsigned int value;
@@ -61,7 +63,7 @@ unsigned int     read_value_index(t_vm *vm, t_io *proc, int acb, int bin)
     else if (acb == 3)
     {
         index = read_core2(vm, read_reg(proc, 0));
-        value = read_core4(vm, index % (bin ? IDX_MOD : MEM_SIZE));
+        value = read_core4(vm, index);
         write_reg(proc, 0, read_reg(proc, 0) + 2);
     }
     return (value);

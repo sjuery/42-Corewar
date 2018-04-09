@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/06/05 10:14:28 by anazar            #+#    #+#             */
-/*   Updated: 2018/03/03 19:17:07 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/04/07 23:05:52 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -308,7 +308,10 @@ void				save_signs(t_format *format, char c);
 
 void				save_flag(t_format *format, char *str);
 
-char		*ft_itoa_base(unsigned long long int value, int base, int lowercase);
+char				*ft_itoa_base(unsigned long long int value, int base,
+		int lowercase);
+
+void				char_conv_fd(t_format *format, unsigned char c);
 
 /*
 **	Get_next_line
