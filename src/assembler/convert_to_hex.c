@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 19:55:29 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/09 12:35:09 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/09 14:32:21 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,13 +59,15 @@ static void	set_label_addresses(t_assembler *st)
 	t_label		*tmp_label;
 	int			ref;
 	char		*str;
+	int			flag;
 
-	tmp_label = st->label;
 	ref = 0;
-	while (tmp_label)
+	tmp = st->label_ref;
+	while (tmp)
 	{
-		tmp = st->label_ref;
-		while (tmp)
+		tmp_label = st->label;
+		flag = 0;
+		while (tmp_label)
 		{
 			if (ft_strequ(tmp->name, tmp_label->name))
 			{
@@ -73,10 +75,13 @@ static void	set_label_addresses(t_assembler *st)
 				str = ft_itoa(ref);
 				st->arr[tmp->instruct_num]->params[tmp->param_num] = tmp->dir ? ft_strjoin("%", str) : ft_itoa(ref);
 				free(str);
+				flag = 1;
 			}
-			tmp = tmp->next;
+			tmp_label = tmp_label->next;
 		}
-		tmp_label = tmp_label->next;
+		if (!flag)
+			handle_error("Error: Referencing non-existing label\n", st);
+		tmp = tmp->next;
 	}
 }
 
