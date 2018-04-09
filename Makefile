@@ -21,7 +21,7 @@ FILES	= 	main parse_file ncurses \
 			vm_load vm_util jumptable \
 			queue_utils read_utils read_value
 ASMFILES= 	main convert_to_hex op \
-			parse print_binary
+			parse print_binary save_label check_params
 DASMFILES= 	disassembler convert_to_asmbly op \
 			parse
 #ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
