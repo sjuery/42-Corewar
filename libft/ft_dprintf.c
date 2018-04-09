@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_printf_fd.c                                     :+:      :+:    :+:   */
+/*   ft_dprintf.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ihodge <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/08/04 12:06:54 by ihodge            #+#    #+#             */
-/*   Updated: 2018/02/25 17:23:28 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/07 23:17:50 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	write_arg_fd(va_list ap, t_format *format, char conv)
 		ft_putstr_fd(string, format->fd);
 		free(string);
 	}
-	if (conv == 'c' || conv == 'C')//char currently doesn't print to fd
-		char_conv(format, ((unsigned char)va_arg(ap, int)));
+	if (conv == 'c' || conv == 'C')
+		char_conv_fd(format, ((unsigned char)va_arg(ap, int)));
 	if (conv == 's' || conv == 'S')
 	{
 		string = string_conv(format, va_arg(ap, char *));

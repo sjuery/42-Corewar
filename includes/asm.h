@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/03/04 20:25:14 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/09 12:32:15 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,11 @@ t_op						g_optab[17];
 void						parse_instructions(t_assembler *st);
 int			                convert_to_hex(t_assembler *st);
 int							check_param_type(char *param, int i, int param_num);
+void						print_sp_nl(t_assembler *st, int *y);
+void						break_shit_up(t_assembler *st, int size, int res,
+		int *y);
+void						print_header(t_assembler *st, int *y);
+void						print_parameters(t_assembler *st, int i, int *y);
 void						print_shit(t_assembler *st);
 void						handle_error(char *error_type, t_assembler *st);
 #endif
