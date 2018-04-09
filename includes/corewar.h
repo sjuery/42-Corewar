@@ -40,6 +40,7 @@
 # define VAL3(a)		((short)(((unsigned int)a[3]) | ((unsigned int)a[2] << 8)))
 
 # define PC				proc->regs[0]
+# define IPC			read_reg(proc, 0)
 
 // # define PARAM1			VAL(PC)
 // # define PARAM2			VAL(PC) + 1

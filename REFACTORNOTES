@@ -55,7 +55,7 @@ lldi: (3 params)
 		reg = read_core_1(PC)
 		write_reg(value_3, reg)
 
-st: (VIS UPDATED NEEDED)
+st: FINISHED BUT - (VIS UPDATED NEEDED)
 	(2 param)
 	REG: (read)
 			 reg = read_core_1(PC)
