@@ -309,7 +309,7 @@ void					print_queue(t_queue *queue);
 /*
 ** read_utils.c
 */
-unsigned char    read_core1(t_vm *vm, unsigned int pos);
+char    read_core1(t_vm *vm, unsigned int pos);
 short   read_core2(t_vm *vm, unsigned int pos);
 int     read_core4(t_vm *vm, unsigned int pos);
 void    write_core(t_vm *vm, unsigned int pos, int value);
@@ -319,6 +319,7 @@ void    write_reg(t_io *proc, int reg_num, int value);
 
 int     read_value(t_vm *vm, t_io *proc, int acb);
 int     read_value_index(t_vm *vm, t_io *proc, int acb);
+short     read_reg2(t_io *proc, int reg_num);
 
 //int     read_value(t_vm *vm, t_io *proc, int acb, int bin);
 //int     read_value_index(t_vm *vm, t_io *proc, int acb, int bin);

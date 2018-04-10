@@ -76,28 +76,26 @@ void	vis_update2(t_vm *vm, int index)
 }
 
 
-void	vm_st(t_vm *vm, t_io *proc) //#27437, #642, #ctd-14
+void	vm_st(t_vm *vm, t_io *proc)
 {
 	int value;
 	int pos_code;
 	int acb;
 
-	pos_code = read_reg(proc, 0); // getting the start of the instruction
-	write_reg(proc, 0, read_reg(proc, 0) + 1); // incrementing to next byte
-	acb = read_core1(vm, read_reg(proc, 0)); // recording the value of acb
-	write_reg(proc, 0, read_reg(proc, 0) + 1); // incremeneting to first instruction
-	value = read_value(vm, proc, ACB1(acb)); // value of the first registry, auto increments byte
-	if (ACB2(acb) == 1) // is a register,  will write to reg with information in the reg
+	pos_code = read_reg(proc, 0);
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	acb = read_core1(vm, read_reg(proc, 0));
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	value = read_value(vm, proc, ACB1(acb));
+	if (ACB2(acb) == 1)
 	{
-		write_reg(proc, read_core1(vm, read_reg(proc, 0)), value); // proc, reg_num, value
-		write_reg(proc, 0, read_reg(proc, 0) + 1); // increment to end of instruction
+		write_reg(proc, read_core1(vm, read_reg(proc, 0)), value);
+		write_reg(proc, 0, read_reg(proc, 0) + 1);
 	}
 	else
 	{
-		write_core(vm, pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD), value); // vm, position on board, value
-		// vis_copy2(vm->vis, value, proc, pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD));
-		// vis_update2(vm, pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD));
-		write_reg(proc, 0, read_reg(proc, 0) + 2); // increment to end of instruction
+		write_core(vm, pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD), value);
+		write_reg(proc, 0, read_reg(proc, 0) + 2);
 	}
 }
 
@@ -105,6 +103,7 @@ void	vm_sti(t_vm *vm, t_io *proc)
 {
 	int value;
 	int	value2;
+	int value3;
 	int acb;
 	int	pos_code;
 
@@ -112,66 +111,17 @@ void	vm_sti(t_vm *vm, t_io *proc)
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 	acb = read_core1(vm, read_reg(proc, 0));
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
-	value = read_value(vm, proc, ACB1(acb));
-	// if (ACB2(acb) == 3)
-	// {
-	// 	value2 = read_core2(vm, read_reg(proc, 0));
-	// }
-	// else
-		value2 = read_value(vm, proc, ACB2(acb));
-	if (ACB3(acb) == 1)
-	{
-		// if (ACB2(acb) == 3)
-		// 	write_core(vm, (pos_code + (value2 % IDX_MOD)), value);
-		// else
-			write_core(vm, (pos_code + ((value2 + read_reg(proc, read_core1(vm, 0))) % IDX_MOD)), value);
-		ft_printf("register %u, value %u - \n", read_core1(vm, 0), read_reg(proc, read_core1(vm, 0)));
-		write_reg(proc, 0, read_reg(proc, 0) + 1);
-	}
-	else
-	{
-		// if (ACB2(acb) == 3)
-		// 	write_core(vm, (pos_code + (value2 % IDX_MOD)), value);
-		// else
-			write_core(vm, (pos_code + (value2 % IDX_MOD) + (read_core4(vm, read_reg(proc, 0)) % IDX_MOD)), value);
-		// ft_printf("read core4 %u - \n", read_core4(vm, read_reg(proc, 0)));
-		write_reg(proc, 0, read_reg(proc, 0) + 4);
-	}
-
-	// t_instr		instr;
-	// int			ind;
-
-	// ind = 0;
-	// instr = init_instr(vm, proc);
-	// instr.core_index += 2;
-	// get_offset_index(&instr, ACB1(instr.acb), &instr.l1);
-	// get_offset_index(&instr, ACB2(instr.acb), &instr.l2);
-	// if(ACB2(instr.acb) == 3)
-	// {
-	// 	instr.core_index -= 2;
-	// 	ind = indirect(instr.vm, 0, &instr);
-	// 	instr.core_index += 2;
-	// }
-	// get_offset_index(&instr, ACB3(instr.acb), &instr.l3);
-	// into_reg(instr.core_index, PC);
-	// instr.index = (((ACB2(instr.acb) == 1 ? VAL3(instr.l2) : VAL2(instr.l2)) +
-	// 			(ACB3(instr.acb) == 1 ? VAL3(instr.l3) : VAL2(instr.l3)))
-	// 		& 0xFFFF);
-	// if (ind)
-	// 	instr.index = ind;
-	// reg_copy(vm->core, instr.l1, instr.opcode_pos + instr.index);
-	// vis_copy(vm->vis, instr.l1, proc, instr.opcode_pos + instr.index);
-	// vis_update(vm, (instr.opcode_pos + instr.index) % MEM_SIZE);
+	value = read_value_index(vm, proc, ACB1(acb));
+	value2 = read_value_index(vm, proc, ACB2(acb));
+	value3 = read_value_index(vm, proc, ACB3(acb));
+	write_core(vm, pos_code + ((value2 + value3) % IDX_MOD), value);
 }
 
 
 void	vm_zjmp(t_vm *vm, t_io *proc)
 {
-	t_instr instr;
 	unsigned short		val;
 
-	instr = init_instr(vm, proc);
-	instr.acb = 0;
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 	if (!proc->carry)
 	{

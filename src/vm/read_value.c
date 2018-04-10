@@ -34,7 +34,7 @@ int     read_value(t_vm *vm, t_io *proc, int acb)
     else if (acb == 3)
     {
         index = read_core2(vm, read_reg(proc, 0));
-        value = read_core4(vm, index);
+        value = read_core4(vm, index + read_reg(proc, 0));
         write_reg(proc, 0, read_reg(proc, 0) + 2);
     }
     return (value);
@@ -44,9 +44,9 @@ int     read_value(t_vm *vm, t_io *proc, int acb)
 //int     read_value_index(t_vm *vm, t_io *proc, int acb, int bin)
 int     read_value_index(t_vm *vm, t_io *proc, int acb)
 {
-    unsigned int reg;
-    unsigned int value;
-    unsigned int index;
+    int reg;
+    int value;
+    int index;
 
     value = 0;
     if (acb == 1)
@@ -63,7 +63,7 @@ int     read_value_index(t_vm *vm, t_io *proc, int acb)
     else if (acb == 3)
     {
         index = read_core2(vm, read_reg(proc, 0));
-        value = read_core4(vm, index);
+        value = read_core4(vm, index + read_reg(proc, 0));
         write_reg(proc, 0, read_reg(proc, 0) + 2);
     }
     return (value);
