@@ -17,11 +17,11 @@ void	check_executing_processes(t_vm *vm, int *game_end)
 {
 	t_io *tmp;
 
-	if (!isEmpty(vm->q) && vm->cycle_to_die >= 0)
+	if (!is_empty(vm->q) && vm->cycle_to_die >= 0)
 		*game_end = 0;
 	else
 	{
-		while (!isEmpty(vm->q))
+		while (!is_empty(vm->q))
 		{
 			tmp = dequeue(vm->q);
 			free(tmp);

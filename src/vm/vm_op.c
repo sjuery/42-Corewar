@@ -12,20 +12,11 @@
 
 #include <corewar.h>
 
-
-void	modify_carry2(t_io *proc, unsigned char value)
-{
-	if (!value)
-		proc->carry = 1;
-	else
-		proc->carry = 0;
-}
-
 void	vm_or(t_vm *vm, t_io *proc)
 {
-	unsigned int value;
-	unsigned int value2;
-	unsigned char acb;
+	unsigned int	value;
+	unsigned int	value2;
+	unsigned char	acb;
 
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 	acb = read_core1(vm, read_reg(proc, 0));
@@ -33,15 +24,15 @@ void	vm_or(t_vm *vm, t_io *proc)
 	value = read_value(vm, proc, ACB1(acb));
 	value2 = read_value(vm, proc, ACB2(acb));
 	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value | value2));
-	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+	modify_carry(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }
 
 void	vm_xor(t_vm *vm, t_io *proc)
 {
-	unsigned int value;
-	unsigned int value2;
-	unsigned char acb;
+	unsigned int	value;
+	unsigned int	value2;
+	unsigned char	acb;
 
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 	acb = read_core1(vm, read_reg(proc, 0));
@@ -49,15 +40,15 @@ void	vm_xor(t_vm *vm, t_io *proc)
 	value = read_value(vm, proc, ACB1(acb));
 	value2 = read_value(vm, proc, ACB2(acb));
 	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value ^ value2));
-	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+	modify_carry(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }
 
 void	vm_and(t_vm *vm, t_io *proc)
 {
-	unsigned int value;
-	unsigned int value2;
-	unsigned char acb;
+	unsigned int	value;
+	unsigned int	value2;
+	unsigned char	acb;
 
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 	acb = read_core1(vm, read_reg(proc, 0));
@@ -65,7 +56,7 @@ void	vm_and(t_vm *vm, t_io *proc)
 	value = read_value(vm, proc, ACB1(acb));
 	value2 = read_value(vm, proc, ACB2(acb));
 	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value & value2));
-	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+	modify_carry(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }
 
@@ -81,7 +72,7 @@ void	vm_sub(t_vm *vm, t_io *proc)
 	value = read_value(vm, proc, ACB1(acb));
 	value2 = read_value(vm, proc, ACB2(acb));
 	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value - value2));
-	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+	modify_carry(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }
 
@@ -97,6 +88,6 @@ void	vm_add(t_vm *vm, t_io *proc)
 	value = read_value(vm, proc, ACB1(acb));
 	value2 = read_value(vm, proc, ACB2(acb));
 	write_reg(proc, read_core1(vm, read_reg(proc, 0)), (value + value2));
-	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
+	modify_carry(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }

@@ -12,7 +12,7 @@
 
 #include <corewar.h>
 
-void			queue_process(t_queue *queue, t_node *new, t_io *num, int priority)
+void		queue_process(t_queue *queue, t_node *new, t_io *num, int priority)
 {
 	t_node *tmp;
 
@@ -23,7 +23,7 @@ void			queue_process(t_queue *queue, t_node *new, t_io *num, int priority)
 		queue->min_p = queue->min_p->next;
 	}
 	else if (PRIORITY(QMAX, priority) || (priority == QMAX &&
-			 num->process > queue->max_p->data->process))
+			num->process > queue->max_p->data->process))
 	{
 		new->next = queue->max_p;
 		queue->max_p = new;
@@ -32,14 +32,14 @@ void			queue_process(t_queue *queue, t_node *new, t_io *num, int priority)
 	{
 		tmp = queue->max_p;
 		while (tmp->next && (PRIORITY(priority, QTMP) ||
-	(priority == QTMP &&  num->process < tmp->next->data->process)))
+			(priority == QTMP && num->process < tmp->next->data->process)))
 			tmp = tmp->next;
 		new->next = tmp->next;
 		tmp->next = new;
 	}
 }
 
-void			enqueue(t_queue *queue, t_io *num, int priority)
+void		enqueue(t_queue *queue, t_io *num, int priority)
 {
 	t_node	*new;
 
@@ -52,10 +52,10 @@ void			enqueue(t_queue *queue, t_io *num, int priority)
 		queue_process(queue, new, num, priority);
 }
 
-t_io			*dequeue(t_queue *queue)
+t_io		*dequeue(t_queue *queue)
 {
-	t_node	*tmp;
-	t_io			*tmp_num;
+	t_node		*tmp;
+	t_io		*tmp_num;
 
 	if (!queue->max_p)
 		return (NULL);
@@ -69,7 +69,7 @@ t_io			*dequeue(t_queue *queue)
 	return (tmp_num);
 }
 
-t_queue     *init_queue(void)
+t_queue		*init_queue(void)
 {
 	t_queue	*new;
 
@@ -79,13 +79,13 @@ t_queue     *init_queue(void)
 	return (new);
 }
 
-t_node      *init_node(t_io *data, int priority)
+t_node		*init_node(t_io *data, int priority)
 {
-    t_node  *new;
+	t_node	*new;
 
-    new = (t_node *)malloc(sizeof(t_node));
-    new->data = data;
-    new->priority = priority;
-    new->next = NULL;
-    return (new);
+	new = (t_node *)malloc(sizeof(t_node));
+	new->data = data;
+	new->priority = priority;
+	new->next = NULL;
+	return (new);
 }

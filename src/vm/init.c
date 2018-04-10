@@ -23,28 +23,30 @@ void	zero_flags(t_vm *vm)
 	vm->f.flags = 1;
 }
 
-void	init_vm(t_vm *vm)
+void	init_proc(t_vm *vm, t_io *proc, int i)
 {
-	int				i;
-	int				x;
+	proc->executing = 1;
+	proc->player_int = i + 1;
+	vm->process_count++;
+	vm->process_num++;
+	proc->head = &vm->head[i];
+}
+
+void	init_vm(t_vm *vm, int i, int x)
+{
 	int				fd;
 	unsigned char	*reg;
 	t_io			*proc;
 
-	i = -1;
-	x = 0;
 	vm->cycle_to_die = CYCLE_TO_DIE;
-	vm->q = init_queue();;
-	vm->core = (unsigned char*)ft_memalloc(sizeof(unsigned char) * (MEM_SIZE + 4));
+	vm->q = init_queue();
+	vm->core = (unsigned char*)ft_memalloc(sizeof(unsigned char)
+		* (MEM_SIZE + 4));
 	vm->vis = (t_vis*)ft_memalloc(sizeof(t_vis) * MEM_SIZE);
 	while (++i < vm->num_players)
 	{
 		proc = (t_io*)ft_memalloc(sizeof(t_io));
-		proc->executing = 1;
-		proc->player_int = i + 1;
-		vm->process_count++;
-		vm->process_num++;
-		proc->head = &vm->head[i];
+		init_proc(vm, proc, i);
 		fd = open(vm->players[i], O_RDONLY);
 		write_info(vm, fd, &x, i);
 		into_reg(i * (MEM_SIZE / vm->num_players), PC);

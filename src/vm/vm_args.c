@@ -14,14 +14,11 @@
 
 void	vm_st(t_vm *vm, t_io *proc)
 {
-	int value;
-	int pos_code;
-	unsigned char acb;
+	int				value;
+	int				pos_code;
+	unsigned char	acb;
 
-	pos_code = read_reg(proc, 0);
-	write_reg(proc, 0, read_reg(proc, 0) + 1);
-	acb = read_core1(vm, read_reg(proc, 0));
-	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	read_acb_info(vm, proc, &pos_code, &acb);
 	value = read_value(vm, proc, ACB1(acb));
 	if (ACB2(acb) == 1)
 	{
@@ -30,41 +27,44 @@ void	vm_st(t_vm *vm, t_io *proc)
 	}
 	else
 	{
-		write_core(vm, pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD), value);
-		vis_copy(vm->vis, value, proc, (unsigned short)(pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD)));
-		vis_update(vm, (unsigned short)(pos_code + (read_core2(vm, read_reg(proc, 0)) % IDX_MOD)));
+		write_core(vm, pos_code +
+			(read_core2(vm, read_reg(proc, 0)) % IDX_MOD), value);
+		vis_copy(vm->vis, value, proc, (unsigned short)(pos_code +
+			(read_core2(vm, read_reg(proc, 0)) % IDX_MOD)));
+		vis_update(vm, (unsigned short)(pos_code +
+			(read_core2(vm, read_reg(proc, 0)) % IDX_MOD)));
 		write_reg(proc, 0, read_reg(proc, 0) + 2);
 	}
 }
 
 void	vm_sti(t_vm *vm, t_io *proc)
 {
-	int value;
-	int	value2;
-	int value3;
-	unsigned char acb;
-	int	pos_code;
+	int				value;
+	int				value2;
+	int				value3;
+	unsigned char	acb;
+	int				pos_code;
 
-	pos_code = read_reg(proc, 0);
-	write_reg(proc, 0, read_reg(proc, 0) + 1);
-	acb = read_core1(vm, read_reg(proc, 0));
-	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	read_acb_info(vm, proc, &pos_code, &acb);
 	value = read_value_index(vm, proc, ACB1(acb));
 	value2 = read_value_index(vm, proc, ACB2(acb));
 	value3 = read_value_index(vm, proc, ACB3(acb));
 	write_core(vm, pos_code + ((value2 + value3) % IDX_MOD), value);
 	if (ACB3(acb) == 1)
 	{
-		vis_copy(vm->vis, value, proc, (unsigned short)(pos_code + ((value2 + value3) % IDX_MOD)));
-		vis_update(vm, (unsigned short)(pos_code + ((value2 + value3) % IDX_MOD)));
+		vis_copy(vm->vis, value, proc, (unsigned short)(pos_code +
+			((value2 + value3) % IDX_MOD)));
+		vis_update(vm, (unsigned short)(pos_code +
+			((value2 + value3) % IDX_MOD)));
 	}
 	else
 	{
-		vis_copy(vm->vis, value, proc, (unsigned short)(pos_code + ((value2 + value3) % IDX_MOD)));
-		vis_update(vm, (unsigned short)(pos_code + ((value2 + value3) % IDX_MOD)));
+		vis_copy(vm->vis, value, proc, (unsigned short)(pos_code +
+			((value2 + value3) % IDX_MOD)));
+		vis_update(vm, (unsigned short)(pos_code +
+			((value2 + value3) % IDX_MOD)));
 	}
 }
-
 
 void	vm_zjmp(t_vm *vm, t_io *proc)
 {
@@ -85,7 +85,7 @@ void	vm_live(t_vm *vm, t_io *proc)
 	int				val;
 	unsigned char	*l;
 
-	l =  &(vm->core[PARAM2 % MEM_SIZE]);
+	l = &(vm->core[PARAM2 % MEM_SIZE]);
 	val = read_core4(vm, read_reg(proc, 0) + 1);
 	if (val <= -1 && val >= (vm->num_players * -1))
 		vm->win_player = val * -1;

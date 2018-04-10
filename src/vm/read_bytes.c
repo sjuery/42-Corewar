@@ -15,7 +15,7 @@
 
 void	gui_interaction(t_vm *vm, int c)
 {
-	vis_print_debug(vm);
+	vis_print_debug(vm, 0);
 	refresh();
 	if (((c = getch()) != ERR) && vm->f.r != 1)
 	{
@@ -59,7 +59,7 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 	free(vm->vis);
 	free(vm->core);
 	free(vm->q);
-	ft_printf("\nContestant %i, \"%s\", has won ! CTD[%i] cycle[%i] process_count[%i]\n", 
-		vm->win_player, vm->head[vm->win_player - 1].prog_name, 
+	ft_printf("\nContestant %i, \"%s\", has won! CTD[%i] Cycle[%i] PC[%i]\n",
+		vm->win_player, vm->head[vm->win_player - 1].prog_name,
 		vm->cycle_to_die, vm->cycles, vm->process_count);
 }

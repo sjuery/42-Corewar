@@ -12,33 +12,34 @@
 
 #include <corewar.h>
 
-void print_proc(t_io *proc)
+void	print_proc(t_io *proc)
 {
-    ft_printf("[proc: %d op: %d CTE: %d]| -> ", 
-    	proc->process + 1, proc->op, proc->cycle_to_execute);
+	ft_printf("[proc: %d op: %d CTE: %d]| -> ",
+		proc->process + 1, proc->op, proc->cycle_to_execute);
 }
 
-void print_queue(t_queue *queue)
+void	print_queue(t_queue *queue)
 {
-    t_node  *tmp;
+	t_node *tmp;
 
-    tmp = queue->max_p;
-    while (tmp) {
+	tmp = queue->max_p;
+	while (tmp)
+	{
 		ft_printf("priority[%i] ", tmp->priority);
-        print_proc(tmp->data);
-        tmp = tmp->next;
-    }
+		print_proc(tmp->data);
+		tmp = tmp->next;
+	}
 	ft_printf("\n");
 }
 
-t_io			*peek(t_queue *queue)
+t_io	*peek(t_queue *queue)
 {
 	if (!queue->max_p)
 		return (NULL);
 	return (queue->max_p->data);
 }
 
-int				isEmpty(t_queue *queue)
+int		is_empty(t_queue *queue)
 {
 	return (!queue->max_p && !queue->min_p);
 }

@@ -78,8 +78,8 @@ void	process_update(t_vm *vm)
 		op = proc->op;
 		if ((op > 0 && op < 17) && proc->cycle_to_execute == vm->cycles &&
 				((g_optab[op - 1].acb &&
-				  valid_acb(op - 1, vm->core[PARAM2], vm, proc)) ||
-				 !g_optab[op - 1].acb) && proc->executing)
+				valid_acb(op - 1, vm->core[PARAM2], vm, proc)) ||
+				!g_optab[op - 1].acb) && proc->executing)
 			process_one(vm, 0, proc, op);
 		else if (op > 0 && op < 17 && proc->cycle_to_execute
 				== vm->cycles && proc->executing)
