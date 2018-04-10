@@ -15,11 +15,12 @@ ASMNAME = asm
 DASMNAME = dasm
 
 FILES	= 	main parse_file ncurses \
-			read_bytes reg_ops op \
+			read_bytes op vis_highlight \
 			vm_args flags init util vis \
-			reg_util acb reset vm_op \
+			reg_util cycle reset vm_op \
 			vm_load vm_util jumptable \
-			queue_utils read_utils read_value
+			queue_utils read_utils read_value \
+			process_update queue acb write_utils
 ASMFILES= 	main convert_to_hex op \
 			parse print_binary save_label check_params
 DASMFILES= 	disassembler convert_to_asmbly op \

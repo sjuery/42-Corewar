@@ -20,7 +20,6 @@ void	reset_alive_all(t_vm *vm)
 	tmp = vm->q->max_p;
 	while (tmp)
 	{
-		//ft_printf("reseting alive\n");
 		if (!tmp->data->alive)
 		{
 			tmp->data->executing = 0;

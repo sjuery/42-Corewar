@@ -69,6 +69,5 @@ void	print_curses(t_vm *vm, int i, int x, int y)
 		attroff(COLOR_PAIR(vm->vis[i].player));
 	}
 	refresh();
-	// usleep(50000);
 	endwin();
 }

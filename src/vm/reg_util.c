@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <corewar.h>
+#include "asm.h"
 
 void	into_reg(unsigned int val, unsigned char *reg)
 {
@@ -20,37 +21,56 @@ void	into_reg(unsigned int val, unsigned char *reg)
 	reg[0] = (val >> 24) & 0xFF;
 }
 
-t_instr	init_instr(t_vm *vm, t_io *proc)
+void	play_spawn(t_vm *vm)
 {
-	t_instr	n;
-
-	ft_bzero(&n, sizeof(t_instr));
-	n.l1 = NULL;
-	n.l2 = NULL;
-	n.l3 = NULL;
-	n.s = NULL;
-	n.vm = vm;
-	n.proc = proc;
-	n.acb = vm->core[PARAM2];
-	n.opcode_pos = VAL(PC);
-	n.reg_index[0] = 0;
-	n.reg_index[1] = 0;
-	n.reg_index[2] = 0;
-	n.ri = 0;
-	n.index = 0;
-	n.core_index = VAL(PC);
-	return (n);
+	if (vm->f.noise == 0 && (vm->f.s == 1 || vm->f.s == 3))
+	{
+		system("afplay ./sound/spawn.wav &");
+		vm->f.noise++;
+	}
 }
 
-int		print_reg(unsigned char *l)
+int		valid_reg_num(int reg_offset, t_vm *vm, t_io *proc)
 {
-	return (VAL(l));
+	int reg;
+
+	reg = vm->core[(PARAM1 + reg_offset) % MEM_SIZE];
+	if (reg >= 1 && reg <= 16)
+		return (1);
+	return (0);
 }
 
-void	reg_copy(unsigned char *dest, unsigned char *src, int index)
+void	add_to_reg_offset(int *reg_offset, int acb, int op)
 {
-	dest[index % MEM_SIZE] = src[0];
-	dest[(index + 1) % MEM_SIZE] = src[1];
-	dest[(index + 2) % MEM_SIZE] = src[2];
-	dest[(index + 3) % MEM_SIZE] = src[3];
+	*reg_offset += 2;
+	if (acb == 2 && !g_optab[op].index)
+		*reg_offset += 2;
+}
+
+int		valid_register(t_vm *vm, int acb, int op, t_io *proc)
+{
+	int	reg_offset;
+
+	reg_offset = 2;
+	if (ACB1(acb) == 1)
+	{
+		if (valid_reg_num(reg_offset, vm, proc))
+			reg_offset++;
+		else
+			return (0);
+	}
+	else
+		add_to_reg_offset(&reg_offset, ACB1(acb), op);
+	if (ACB2(acb) == 1)
+	{
+		if (valid_reg_num(reg_offset, vm, proc))
+			reg_offset++;
+		else
+			return (0);
+	}
+	else
+		add_to_reg_offset(&reg_offset, ACB2(acb), op);
+	if (g_optab[op].params == 3 && ACB3(acb) == 1)
+		return (valid_reg_num(reg_offset, vm, proc) ? 1 : 0);
+	return (1);
 }

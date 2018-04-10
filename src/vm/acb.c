@@ -11,142 +11,63 @@
 /* ************************************************************************** */
 
 #include <corewar.h>
+#include "asm.h"
 
-// t_pos	set_reg(unsigned char *l1)
-// {
-// 	t_pos	p;
-
-// 	p.l0 = &l1[0];
-// 	p.l1 = &l1[1];
-// 	p.l2 = &l1[2];
-// 	p.l3 = &l1[3];
-// 	return (p);
-// }
-
-// t_pos	set_pos(t_instr *instr)
-// {
-// 	t_pos p;
-
-// 	p.l0 = &instr->vm->core[(OFF2) % MEM_SIZE];
-// 	p.l1 = &instr->vm->core[(OFF2 + 1) % MEM_SIZE];
-// 	p.l2 = &instr->vm->core[(OFF2 + 2) % MEM_SIZE];
-// 	p.l3 = &instr->vm->core[(OFF2 + 3) % MEM_SIZE];
-// 	return (p);
-// }
-
-// t_pos	set_ind(t_instr *instr)
-// {
-// 	t_pos p;
-
-// 	p.l0 = &instr->vm->core[(OPC + indirect(instr->vm, idx, instr)) % MEM_SIZE];
-// 	p.l1 = &instr->vm->core[(OPC + 1 + indirect(instr->vm, idx, instr)) % MEM_SIZE];
-// 	p.l2 = &instr->vm->core[(OPC + 2 + indirect(instr->vm, idx, instr)) % MEM_SIZE];
-// 	p.l3 = &instr->vm->core[(OPC + 3 + indirect(instr->vm, idx, instr)) % MEM_SIZE];
-// 	return (p);
-// }
-
-// void	get_offset(t_instr *instr, unsigned char acb, t_pos *l)
-// {
-// 	int	idx;
-
-// 	*l = NULL;
-// 	idx = ((acb & 0b100) != 0);
-// 	acb = acb & 0b11;
-// 	if (acb == 1)
-// 	{
-// 		instr->reg_index[instr->ri] = instr->vm->core[(OFF2) % MEM_SIZE];
-// 		*l = set_reg(instr->proc->regs[instr->reg_index[instr->ri]]);
-// 		instr->core_index += 1;
-// 		++instr->ri;
-// 	}
-// 	else if (acb == 2)
-// 	{
-// 		*l = set_pos(instr);
-// 		instr->core_index += 4;
-// 	}
-// 	else if (acb == 3)
-// 	{
-// 		*l = set_ind(instr);
-// 		instr->core_index += 2;
-// 	}
-// }
-
-// void	get_offset_index(t_instr *instr, unsigned char acb, t_pos *l)
-// {
-// 	int	idx;
-
-// 	*l = NULL;
-// 	idx = ((acb & 0b100) != 0);
-// 	acb = acb & 0b11;
-// 	if (acb == 1)
-// 	{
-// 		instr->reg_index[instr->ri] = instr->vm->core[(OFF2) % MEM_SIZE];
-// 		*l = set_reg(instr->proc->regs[instr->reg_index[instr->ri]]);
-// 		instr->core_index += 1;
-// 		++instr->ri;
-// 	}
-// 	else if (acb == 2)
-// 	{
-// 		*l = set_pos(instr);
-// 		instr->core_index += 2;
-// 	}
-// 	else if (acb == 3)
-// 	{
-// 		*l = set_ind(instr);
-// 		instr->core_index += 2;
-// 	}
-// }
-
-
-void	get_offset(t_instr *instr, unsigned char acb, unsigned char **l)
+int		valid_acb(int op, int acb, t_vm *vm, t_io *proc)
 {
-	int	idx;
+	int params;
 
-	*l = NULL;
-	idx = ((acb & 0b100) != 0);
-	acb = acb & 0b11;
-	if (acb == 1)
-	{
-		instr->reg_index[instr->ri] = instr->vm->core[(OFF2) % MEM_SIZE];
-		*l = instr->proc->regs[instr->reg_index[instr->ri]];
-		instr->core_index += 1;
-		++instr->ri;
-	}
-	else if (acb == 2)
-	{
-		*l = &instr->vm->core[(OFF2) % MEM_SIZE];
-		instr->core_index += 4;
-	}
-	else if (acb == 3)
-	{
-		*l = &instr->vm->core[(OPC + indirect(instr->vm, idx, instr)) % MEM_SIZE];
-		instr->core_index += 2;
-	}
+	params = g_optab[op].params;
+	if (params == 1)
+		return (valid_acb1(acb, op));
+	if (params == 2)
+		return (valid_acb2(acb, op) & valid_register(vm, acb, op, proc));
+	if (params == 3)
+		return (valid_acb3(acb, op) & valid_register(vm, acb, op, proc));
+	return (0);
 }
 
-void	get_offset_index(t_instr *instr, unsigned char acb, unsigned char **l)
+int		valid_acb1(int acb, int op)
 {
-	int	idx;
-
-	*l = NULL;
-	idx = ((acb & 0b100) != 0);
-	acb = acb & 0b11;
-	if (acb == 1)
-	{
-		instr->reg_index[instr->ri] = instr->vm->core[OFF2 % MEM_SIZE];
-		*l = instr->proc->regs[instr->reg_index[instr->ri]];
-		instr->core_index += 1;
-		++instr->ri;
-	}
-	else if (acb == 2)
-	{
-		*l = &instr->vm->core[OFF2 % MEM_SIZE];
-		instr->core_index += 2;
-	}
-	else if (acb == 3)
-	{
-		*l = &instr->vm->core[(OPC + indirect(instr->vm, idx, instr)) % MEM_SIZE];
-		instr->core_index += 2;
-	}
+	if (g_optab[op].ptype[0] & ACB1(acb))
+		return (1);
+	return (0);
 }
 
+int		valid_acb2(int acb, int op)
+{
+	int	param1;
+	int	param2;
+
+	param1 = g_optab[op].ptype[0];
+	param2 = g_optab[op].ptype[1];
+	if (((ACB1(acb) <= param1) && param1 & ACB1(acb))
+			&& (ACB2(acb) <= param2 && param2 & ACB2(acb)))
+		return (1);
+	return (0);
+}
+
+int		valid_acb3(int acb, int op)
+{
+	int	param1;
+	int	param2;
+	int	param3;
+
+	param1 = g_optab[op].ptype[0];
+	param2 = g_optab[op].ptype[1];
+	param3 = g_optab[op].ptype[2];
+	if ((ACB1(acb) <= param1 && param1 & ACB1(acb)) &&
+			(ACB2(acb) <= param2 && param2 & ACB2(acb)) &&
+			(ACB3(acb) <= param3 && param3 & ACB3(acb)))
+		return (1);
+	else if ((op == 9 || op == 13) &&
+		(ACB1(acb) <= param1 && param1 & ACB1(acb))
+			&& (ACB2(acb) <= param2 && param2 ^ ACB2(acb))
+			&& (ACB3(acb) <= param3 && param3 & ACB3(acb)))
+		return (1);
+	else if (op == 10 && (ACB1(acb) <= param1 && param1 & ACB1(acb))
+			&& (ACB2(acb) <= param2 && param2 & ACB2(acb))
+			&& (ACB3(acb) <= param3 && param3 ^ ACB3(acb)))
+		return (1);
+	return (0);
+}

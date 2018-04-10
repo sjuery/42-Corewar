@@ -12,23 +12,21 @@
 
 #include <corewar.h>
 
-// if op - 1 == 1, 2, 8, 9, 11 || op == 2, 3, 9, 10, 12
-
-void    (*g_jt[16])(t_vm *vm, t_io *proc) = {
-    vm_live,
-    vm_ld,
-    vm_st,
-    vm_add,
-    vm_sub,
-    vm_and,
-    vm_or,
-    vm_xor,
-    vm_zjmp,
-    vm_ldi,
-    vm_sti,
-    vm_fork,
-    vm_lld,
-    vm_lldi,
-    vm_lfork,
-    vm_aff
+void	(*g_jt[16])(t_vm *vm, t_io *proc) = {
+	vm_live,
+	vm_ld,
+	vm_st,
+	vm_add,
+	vm_sub,
+	vm_and,
+	vm_or,
+	vm_xor,
+	vm_zjmp,
+	vm_ldi,
+	vm_sti,
+	vm_fork,
+	vm_lld,
+	vm_lldi,
+	vm_lfork,
+	vm_aff
 };
