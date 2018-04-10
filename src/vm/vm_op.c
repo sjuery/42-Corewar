@@ -62,9 +62,9 @@ void	vm_and(t_vm *vm, t_io *proc)
 
 void	vm_sub(t_vm *vm, t_io *proc)
 {
-	unsigned int			value;
-	unsigned int			value2;
-	unsigned char			acb;
+	int					value;
+	int					value2;
+	unsigned char		acb;
 
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 	acb = read_core1(vm, read_reg(proc, 0));
@@ -78,9 +78,9 @@ void	vm_sub(t_vm *vm, t_io *proc)
 
 void	vm_add(t_vm *vm, t_io *proc)
 {
-	unsigned int			value;
-	unsigned int			value2;
-	unsigned char			acb;
+	int					value;
+	int					value2;
+	unsigned char		acb;
 
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 	acb = read_core1(vm, read_reg(proc, 0));

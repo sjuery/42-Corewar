@@ -40,15 +40,15 @@ void	introduce_players_v(t_vm *vm)
 	system("cat ./src/extra/entrance.txt");
 	system("say -v Mei-Jia Introducing the corewar contestants!");
 	ft_printf("Introducing contestants...\n");
-	voice = ft_strjoin(voice, ft_strdup("say -v Mei-Jia Player "));
+	voice = ft_strjoinfree(voice, ft_strdup("say -v Mei-Jia Player "));
 	while (i < vm->num_players)
 	{
-		voice = ft_strjoin(voice, ft_strdup(vm->head[i].prog_name));
-		voice = ft_strjoin(voice, ft_strdup(" weighing in at "));
-		voice = ft_strjoin(voice, ft_itoa(vm->head[i].prog_size));
-		voice = ft_strjoin(voice, ft_strdup(" bytes, their motto is "));
-		voice = ft_strjoin(voice, ft_strdup(vm->head[i].comment));
-		voice = ft_strjoin(voice, ft_strdup("."));
+		voice = ft_strjoinfree(voice, ft_strdup(vm->head[i].prog_name));
+		voice = ft_strjoinfree(voice, ft_strdup(" weighing in at "));
+		voice = ft_strjoinfree(voice, ft_itoa(vm->head[i].prog_size));
+		voice = ft_strjoinfree(voice, ft_strdup(" bytes, their motto is "));
+		voice = ft_strjoinfree(voice, ft_strdup(vm->head[i].comment));
+		voice = ft_strjoinfree(voice, ft_strdup("."));
 		ft_printf("* Player %i, weighing %i bytes, \"%s\" (\"%s\") !\n", i + 1,
 			vm->head[i].prog_size, vm->head[i].prog_name, vm->head[i].comment);
 		i++;

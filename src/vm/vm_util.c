@@ -46,7 +46,6 @@ void	vm_lfork(t_vm *vm, t_io *proc)
 	ft_memcpy(new_proc, proc, sizeof(t_io));
 	++vm->process_count;
 	++vm->process_num;
-	new_proc->alive = 0;
 	new_proc->process = vm->process_num - 1;
 	write_reg(new_proc, 0, (pos_code + index) % MEM_SIZE);
 	write_reg(proc, 0, read_reg(proc, 0) + 2);
@@ -69,7 +68,6 @@ void	vm_fork(t_vm *vm, t_io *proc)
 	ft_memcpy(new_proc, proc, sizeof(t_io));
 	++vm->process_count;
 	++vm->process_num;
-	new_proc->alive = 0;
 	new_proc->process = vm->process_num - 1;
 	write_reg(new_proc, 0, (pos_code + index) % MEM_SIZE);
 	write_reg(proc, 0, read_reg(proc, 0) + 2);
