@@ -193,9 +193,11 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 			print_core(vm->core, -1);
 		cycle_scheduler(vm, &counter);
 		check_executing_processes(vm, &game_end);
+		vm->cycles++;
 		if (game_end)
 			break ;
-		vm->cycles++;
+		//ft_putnbr(vm->cycles);
+		//ft_putchar('\n');
 		game_end = 1;
 		vm->f.noise = 0;
 	}

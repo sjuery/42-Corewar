@@ -164,6 +164,7 @@ void	vm_live(t_vm *vm, t_io *proc)
 
 void	vm_aff(t_vm *vm, t_io *proc)
 {
+	/*
 	t_instr		instr;
 
 	instr = init_instr(vm, proc);
@@ -171,4 +172,15 @@ void	vm_aff(t_vm *vm, t_io *proc)
 	get_offset(&instr, ACB1(instr.acb), &instr.l1);
 	ft_printf("%c\n",  VAL(instr.l1) % 256);
 	into_reg(instr.core_index, PC);
+	*/
+	char		aff_val;
+
+	write_reg(proc, 0, read_reg(proc, 0) + 2);
+	aff_val = (read_reg(proc, read_core1(vm, read_reg(proc, 0)))) % 256;
+	if (!vm->f.g)
+	{
+		ft_putchar(aff_val);
+		ft_putchar('\n');
+	}
+	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }
