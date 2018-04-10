@@ -12,15 +12,63 @@
 
 #include "corewar.h"
 
+void	countdown()
+{
+	ft_printf("\nCorewar will begin in...\n");
+	system ("say -v Mei-Jia Corewar will begin in 3");
+	system("cat ./src/extra/3.txt");
+	sleep(1);
+	system ("say -v Mei-Jia 2");
+	system("cat ./src/extra/2.txt");
+	sleep(1);
+	system ("say -v Mei-Jia 1");
+	system("cat ./src/extra/1.txt");
+	sleep(1);
+	system ("say -v Mei-Jia Go!");
+	system("cat ./src/extra/go.txt");
+	sleep(3);
+}
+
+void	introduce_players_v(t_vm *vm)
+{
+	int i;
+	char *voice;
+
+	i = 0;
+	voice = ft_memalloc(sizeof(char));
+	system("clear");
+	system("cat ./src/extra/entrance.txt");
+	system("say -v Mei-Jia Introducing the corewar contestants!");
+	ft_printf("Introducing contestants...\n");
+	voice = ft_strjoin(voice, ft_strdup("say -v Mei-Jia Player "));
+	while (i < vm->num_players)
+	{
+		voice = ft_strjoin(voice, ft_strdup(vm->head[i].prog_name));
+		voice = ft_strjoin(voice, ft_strdup(" weighing in at "));
+		voice = ft_strjoin(voice, ft_itoa(vm->head[i].prog_size)) ;
+		voice = ft_strjoin(voice, ft_strdup(" bytes, their motto is "));
+		voice = ft_strjoin(voice, ft_strdup(vm->head[i].comment));
+		voice = ft_strjoin(voice, ft_strdup("."));
+		ft_printf("* Player %i, weighing %i bytes, \"%s\" (\"%s\") !\n", i + 1,
+			vm->head[i].prog_size, vm->head[i].prog_name, vm->head[i].comment);
+		i++;
+	}
+	system(voice);
+	free(voice);
+	countdown();
+}
+
 void	introduce_players(t_vm *vm)
 {
 	int i;
 
 	i = 0;
+	system("clear");
+	system("cat ./src/extra/entrance.txt");
 	ft_printf("Introducing contestants...\n");
 	while (i < vm->num_players)
 	{
-		ft_printf("* Player %i, wieghing %i bytes, \"%s\" (\"%s\") !\n", i + 1,
+		ft_printf("* Player %i, weighing %i bytes, \"%s\" (\"%s\") !\n", i + 1,
 			vm->head[i].prog_size, vm->head[i].prog_name, vm->head[i].comment);
 		i++;
 	}
@@ -37,6 +85,10 @@ int		main(int ac, char **av)
 	vm =(t_vm *)ft_memalloc(sizeof(t_vm));
 	init_players(ac, av, vm);
 	init_vm(vm);
+	if (vm->f.i == 1)
+		introduce_players_v(vm);
+	else
+		introduce_players(vm);
 	if (vm->f.g)
 	{
 		init_curses();
@@ -44,8 +96,6 @@ int		main(int ac, char **av)
    		nodelay(stdscr, TRUE);
 		print_curses(vm, -1, 0, 0);
 	}
-	else
-		introduce_players(vm);
 	read_bytes(vm, 1, 1);
 	free(vm);
 	return (0);

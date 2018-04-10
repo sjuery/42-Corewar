@@ -93,6 +93,7 @@ typedef struct			s_flags
 	int					noise;
 	int					s;
 	int					r;
+	int					i;
 }						t_flags;
 
 typedef struct			s_node {

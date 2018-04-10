@@ -86,6 +86,9 @@ void	check_flags(t_vm *vm, char **av, int *i)
 		*i = *i + 2;
 		vm->f.flags = 0;
 	}
+	else if ((!ft_strcmp(av[*i], "-intro") || !ft_strcmp(av[*i], "-i"))
+			&& vm->f.flags == 1 && vm->f.i == 0)
+		vm->f.i = 1;
 	else
 		check_more_flags(vm, av, i);
 }

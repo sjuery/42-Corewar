@@ -16,7 +16,7 @@
 void	error(void)
 {
 	ft_printf("Corewar Usage\n");
-	ft_printf("./corewar { d <value> | g | b | r | s <value> }");
+	ft_printf("./corewar { d <value> | g | b | r | s <value> | i }");
 	ft_printf(" { n <value> | champion.cor }\n");
 	ft_printf("-dump, -d			dump mode\n");
 	ft_printf("-graphic, -g			graphic mode\n");
@@ -24,6 +24,7 @@ void	error(void)
 	ft_printf("-rainbow, -r			special rainbow mode (only in graphic)\n");
 	ft_printf("-sound, -s			sound on (1 for spawn, 2 for death, 3 for all)\n");
 	ft_printf("-number, -n			designate champ slot (valid 1-4)\n");
+	ft_printf("-intro, -i			toggle voice intro\n");
 	exit(0);
 }
 
