@@ -108,15 +108,47 @@ void	vm_ldi(t_vm *vm, t_io *proc)
 	
 }
 
+int     read_value_load(t_vm *vm, t_io *proc, int acb)
+{
+    int reg;
+    int value;
+    int index;
+
+    value = 0;
+    if (acb == 1)
+    {
+        reg = read_core1(vm, read_reg(proc, 0));
+        value = read_reg(proc, reg);
+        write_reg(proc, 0, read_reg(proc, 0) + 1);
+    }
+    else if (acb == 2)
+    {
+        value = read_core4(vm, read_reg(proc, 0));
+        write_reg(proc, 0, read_reg(proc, 0) + 4);
+    }
+    else if (acb == 3)
+    {
+        index = read_core2(vm, read_reg(proc, 0)) % IDX_MOD;
+        value = read_core4(vm, index + read_reg(proc, 0));
+        write_reg(proc, 0, read_reg(proc, 0) + 2);
+    }
+    return (value);
+}
+
+
 void	vm_ld(t_vm *vm, t_io *proc)
 {
 	int	value;
-	int	acb;
+	unsigned char	acb;
 
+	// ft_printf("%hhx -> ", read_reg(proc, 0));
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
+	// ft_printf("%hhx -> ", read_reg(proc, 0));
 	acb = read_core1(vm, read_reg(proc, 0));
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
-	value = read_value(vm, proc, ACB1(acb));
+	// ft_printf("[%hhd]%hhx -> ", ACB1(acb), read_reg(proc, 0));
+	value = read_value_load(vm, proc, ACB1(acb));
+	// ft_printf("%hhx\n", read_reg(proc, 0));
 	write_reg(proc, read_core1(vm, read_reg(proc, 0)), value);
 	modify_carry2(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
