@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 19:55:29 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/09 14:32:21 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/09 23:08:01 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int			convert_to_hex(t_assembler *st)
 		{
 			line = ft_strtrim(st->line);
 			if (line[0] != '\0')
-				parse_instructions(st);
+				parse_instructions(st, line);//pass line as arg
 			free(line);
 		}
 		free(st->line);

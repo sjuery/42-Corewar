@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 18:03:50 by ihodge            #+#    #+#             */
-/*   Updated: 2018/04/09 13:06:51 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/10 14:14:51 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ static void	convert_instruction(char **instruction, t_assembler *st)
 			break ;
 		i++;
 	}
+	ft_printf("instruction: %s\n", instruction[0]);
 	if (!g_optab[i].opcode)
 		handle_error("Error: Instruction does not exist\n", st);
 	st->arr[st->instruct_num] = ft_memalloc(sizeof(t_instruction));
@@ -102,44 +103,55 @@ static void	convert_instruction(char **instruction, t_assembler *st)
 	st->instruct_num++;
 }
 
-void	parse_instructions(t_assembler *st)
+void	verify_save_label(t_assembler *st, char *line)
 {
-	char **instruction;
-	char *name;
 	int i;
 
 	i = 0;
-	name = NULL;
-	if (!ft_iswhitespace(st->line[0]))
+	while (line[i] != LABEL_CHAR)
 	{
-		while (st->line[i] != LABEL_CHAR)
-		{
-			if (st->line[i] == COMMENT_CHAR)
-				return ;
-			if (!ft_islower(st->line[i]) && !ft_isdigit(st->line[i])
-					&& st->line[i] != '_')
-				handle_error("Error: Invalid label name\n", st);
-			else if (st->line[i] == '\n')
-				handle_error("Error: Wtf is this?\n", st);
-			i++;
-		}
-		name = ft_strsub(st->line, 0, i);
+		if (!ft_islower(st->line[i]) && !ft_isdigit(st->line[i])
+				&& st->line[i] != '_')
+			handle_error("Error: Invalid label name\n", st);
 		i++;
 	}
-	while (ft_iswhitespace(st->line[i]))
-		i++;
-	if (st->line[i] == COMMENT_CHAR)
-		return ;
-	instruction = ft_split_by_delims(st->line + i, "\t ,");
-	if (name)
-		save_labels(&st->label, name, st->offset);
-	convert_instruction(instruction, st);
+	save_labels(&st->label, ft_strsub(line, 0, i), st->offset);
+}
+
+void	parse_instructions(t_assembler *st, char *line)
+{
+	char **instruction;
+	int i;
+
+	instruction = NULL;
 	i = 0;
-	while (instruction[i])
+	while (!ft_iswhitespace(line[i]) && line[i] != COMMENT_CHAR &&
+				line[i] != LABEL_CHAR && line[i] != '\0')
+		i++;
+	if (line[i] == COMMENT_CHAR || line[i] == '\0' || line[i] == '\n')
+		return ;
+	else if (line[i] == LABEL_CHAR)
+	{
+		verify_save_label(st, line);
+		i++;
+	}
+	else
+		i = 0;
+	while (ft_iswhitespace(line[i]))
+		i++;
+	if (line[i] == COMMENT_CHAR || line[i] == '\0' || line[i] == '\n')
+		return ;
+	else
+	{
+		instruction = ft_split_by_delims(st->line + i, "\t ,");
+		convert_instruction(instruction, st);
+	}
+	i = 0;
+	while (instruction && instruction[i])
 	{
 		free(instruction[i]);
 		i++;
 	}
-	free(instruction);
+	instruction ? free(instruction) : 0;
 	st->final_offset = st->offset;
 }
