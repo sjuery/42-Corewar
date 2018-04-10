@@ -12,8 +12,6 @@
 
 #include <corewar.h>
 
-// if op - 1 == 1, 2, 8, 9, 11 || op == 2, 3, 9, 10, 12
-
 void    (*g_jt[16])(t_vm *vm, t_io *proc) = {
     vm_live,
     vm_ld,

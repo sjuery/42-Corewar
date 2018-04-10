@@ -19,7 +19,8 @@ char    read_core1(t_vm *vm, unsigned int pos)
 
 short   read_core2(t_vm *vm, unsigned int pos)
 {
-    return (((short)vm->core[pos % MEM_SIZE] << 8) | ((short)vm->core[(pos + 1) % MEM_SIZE]));
+    return (((short)vm->core[pos % MEM_SIZE] << 8) | 
+        ((short)vm->core[(pos + 1) % MEM_SIZE]));
 }
 
 
@@ -54,5 +55,6 @@ void    write_core(t_vm *vm, unsigned int pos, int value)
 
 short     read_reg2(t_io *proc, int reg_num)
 {
-    return (((unsigned int)proc->regs[reg_num][3]) | ((unsigned int)proc->regs[reg_num][2] << 8));
+    return (((unsigned int)proc->regs[reg_num][3]) | 
+        ((unsigned int)proc->regs[reg_num][2] << 8));
 }

@@ -49,9 +49,9 @@
 # define PARAM2			((unsigned short)VAL(PC) + 1) % MEM_SIZE
 # define PARAM3			((unsigned short)VAL(PC) + 2) % MEM_SIZE
 
-# define PARAM1M			((unsigned short)VAL(PC)) % MEM_SIZE
-# define PARAM2M			((unsigned short)VAL(PC) + 1) % MEM_SIZE
-# define PARAM3M			((unsigned short)VAL(PC) + 2) % MEM_SIZE
+# define QMIN			queue->min_p->priority
+# define QMAX			queue->max_p->priority
+# define QTMP			tmp->next->priority
 
 # define OFF2			instr->core_index
 
@@ -127,24 +127,7 @@ typedef struct			s_vm
 	t_flags				f;
 }						t_vm;
 
-typedef struct			s_instr
-{
-	t_vm				*vm;
-	t_io				*proc;
-	unsigned char		acb;
-	unsigned char		*l1;
-	unsigned char		*l2;
-	unsigned char		*l3;
-	unsigned char		*s;
-	unsigned int		reg_index[3];
-	unsigned int		ri;
-	int					opcode_pos;
-	int					index;
-	int					core_index;
-}						t_instr;
-
 void    (*g_jt[16])(t_vm *vm, t_io *proc);
-t_instr					init_instr(t_vm *vm, t_io *proc);
 
 void					print_core(unsigned char *test, int i);
 
@@ -173,34 +156,28 @@ void					init_curses(void);
 /*
 ** read_bytes.c
 */
-
-int						*read_acb(unsigned char a);
+void	gui_interaction(t_vm *vm, int c);
 void					read_bytes(t_vm *vm, int game_end, int counter);
 
 /*
-** reg_ops.c
+** process_update.c
 */
+void	process_update(t_vm *vm);
 
-int						reg_add(unsigned char *reg1,
-							unsigned char *reg2, unsigned char *reg3);
-int						reg_sub(unsigned char *reg1,
-							unsigned char *reg2, unsigned char *reg3);
-int						reg_xor(unsigned char *reg1,
-							unsigned char *reg2, unsigned char *reg3);
-int						reg_or(unsigned char *reg1,
-							unsigned char *reg2, unsigned char *reg3);
-int						reg_and(unsigned char *reg1,
-							unsigned char *reg2, unsigned char *reg3);
+/*
+** cycle.c
+*/
+void	check_executing_processes(t_vm *vm, int *game_end);
+void	add_acb_bytes(int op, int *acb_val, int acb);
+void	update_pc(t_io *proc, int op, int acb);
+void	cycle_scheduler(t_vm *vm, int *counter);
+void	set_cycle_to_execute(t_vm *vm, t_io *proc);
 
 /*
 ** reg_util.c
 */
 
 void					into_reg(unsigned int val, unsigned char *reg);
-t_instr					init_instr(t_vm *vm, t_io *proc);
-int						print_reg(unsigned char *l);
-void					copy_io(t_vm *vm, int dest, int src);
-void					reg_copy(unsigned char *dest, unsigned char *src, int index);
 
 /*
 ** flags.c
@@ -236,23 +213,14 @@ void					error(void);
 void					vis_highlight_process(t_vm *vm, t_io *proc);
 void					vis_unhighlight_process(t_vm *vm, t_io *proc);
 void					vis_print_debug(t_vm *vm);
-void					vis_copy(t_vis *dest, unsigned char *src, t_io *proc, int index);
-void					vis_update(t_vm *vm, int index);
+void	vis_update(t_vm *vm, int index);
+void	vis_copy(t_vis *dest, int src, t_io *proc, int index);
 
 /*
 ** reset.c
 */
 
 void					reset_alive_all(t_vm *vm);
-
-/*
-** acb.c
-*/
-
-void					get_offset_index(t_instr *instr, unsigned char acb,
-							unsigned char **l);
-void					get_offset(t_instr *instr, unsigned char acb,
-							unsigned char **l);
 
 /*
 ** vm_op.c
@@ -276,10 +244,10 @@ void					vm_ld(t_vm *vm, t_io *proc);
 /*
 ** vm_util.c
 */
-int						indirect(t_vm *vm, unsigned char opcode,
-		t_instr *instr);
+// int						indirect(t_vm *vm, unsigned char opcode,
+// 		t_instr *instr);
 int						get_index_one(unsigned char *l);
-int						get_index_two(t_instr instr);
+// int						get_index_two(t_instr instr);
 void					vm_lfork(t_vm *vm, t_io *proc);
 void					vm_fork(t_vm *vm, t_io *proc);
 
@@ -296,16 +264,17 @@ void					vm_aff(t_vm *vm, t_io *proc);
 /*
 **	queue_utils.c
 */
-
-t_queue 			    *init_queue(void);
-t_node					*init_node(t_io *data, int priority);
-void					enqueue(t_queue *queue, t_io *num, int priority);
-t_io					*dequeue(t_queue *queue);
 t_io					*peek(t_queue *queue);
 int						isEmpty(t_queue *queue);
-int						get_priority(t_vm *vm, t_io *proc);
 void					print_queue(t_queue *queue);
 
+/*
+** queue.c
+*/
+void					enqueue(t_queue *queue, t_io *num, int priority);
+t_io					*dequeue(t_queue *queue);
+t_queue 			    *init_queue(void);
+t_node					*init_node(t_io *data, int priority);
 
 /*
 ** read_utils.c

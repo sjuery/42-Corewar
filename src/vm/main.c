@@ -31,8 +31,8 @@ void	countdown()
 
 void	introduce_players_v(t_vm *vm)
 {
-	int i;
-	char *voice;
+	int		i;
+	char	*voice;
 
 	i = 0;
 	voice = ft_memalloc(sizeof(char));

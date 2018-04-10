@@ -12,7 +12,6 @@
 
 #include <corewar.h>
 
-//int     read_value(t_vm *vm, t_io *proc, int acb, int bin)
 int     read_value(t_vm *vm, t_io *proc, int acb)
 {
     int reg;
@@ -40,8 +39,6 @@ int     read_value(t_vm *vm, t_io *proc, int acb)
     return (value);
 }
 
-
-//int     read_value_index(t_vm *vm, t_io *proc, int acb, int bin)
 int     read_value_index(t_vm *vm, t_io *proc, int acb)
 {
     int reg;

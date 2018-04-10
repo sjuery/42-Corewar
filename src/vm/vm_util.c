@@ -12,15 +12,15 @@
 
 #include <corewar.h>
 
-int		indirect(t_vm *vm, unsigned char opcode, t_instr *instr)
-{
-	if (opcode)
-		return ((short)(vm->core[(OFF2) % MEM_SIZE] * 0x100 +
-				vm->core[(OFF2 + 1) % MEM_SIZE]) % IDX_MOD);
-	else
-		return ((vm->core[(OFF2) % MEM_SIZE] * 0x100 +
-				vm->core[(OFF2 + 1) % MEM_SIZE]) % MEM_SIZE);
-}
+// int		indirect(t_vm *vm, unsigned char opcode, t_instr *instr)
+// {
+// 	if (opcode)
+// 		return ((short)(vm->core[(OFF2) % MEM_SIZE] * 0x100 +
+// 				vm->core[(OFF2 + 1) % MEM_SIZE]) % IDX_MOD);
+// 	else
+// 		return ((vm->core[(OFF2) % MEM_SIZE] * 0x100 +
+// 				vm->core[(OFF2 + 1) % MEM_SIZE]) % MEM_SIZE);
+// }
 
 int		get_index_one(unsigned char *l)
 {
@@ -30,25 +30,25 @@ int		get_index_one(unsigned char *l)
 	return (val);
 }
 
-int		get_index_two(t_instr instr)
-{
-	int	out1;
-	int	out2;
+// int		get_index_two(t_instr instr)
+// {
+// 	int	out1;
+// 	int	out2;
 
-	out1 = 0;
-	out2 = 0;
-	if (ACB1(instr.acb) == 1)
-		out1 = VAL3(instr.l1);
-	else if (ACB1(instr.acb) == 2)
-		out1 = VAL2(instr.l1);
-	else if (ACB1(instr.acb) == 3)
-		out1 = VAL(instr.l1);
-	if (ACB2(instr.acb) == 1)
-		out2 = VAL3(instr.l2);
-	else if (ACB2(instr.acb) == 2)
-		out2 = VAL2(instr.l2);
-	return (out1 + out2);
-}
+// 	out1 = 0;
+// 	out2 = 0;
+// 	if (ACB1(instr.acb) == 1)
+// 		out1 = VAL3(instr.l1);
+// 	else if (ACB1(instr.acb) == 2)
+// 		out1 = VAL2(instr.l1);
+// 	else if (ACB1(instr.acb) == 3)
+// 		out1 = VAL(instr.l1);
+// 	if (ACB2(instr.acb) == 1)
+// 		out2 = VAL3(instr.l2);
+// 	else if (ACB2(instr.acb) == 2)
+// 		out2 = VAL2(instr.l2);
+// 	return (out1 + out2);
+// }
 
 void	modify_carry(t_io *proc, unsigned char *reg)
 {
