@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 16:52:00 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/01 20:51:49 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/09 21:40:00 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ int		read_input(int fd, t_header *head, char *body)
 	if (read(fd, header, 2192) <= 0)
 		return (0);
 	convert_header(head, header, 3, -1);
-	if ((head->prog_size = read(fd, body, CHAMP_MAX_SIZE)) <= 0)
+	if ((head->prog_size = read(fd, body, CHAMP_MAX_SIZE + 1)) <= 0)
+		return (0);
+	if (head->prog_size > CHAMP_MAX_SIZE)
 		return (0);
 	body[head->prog_size] = 0;
 	free(header);

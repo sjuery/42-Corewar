@@ -6,7 +6,7 @@
 /*   By: mlu <mlu@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by mlu               #+#    #+#             */
-/*   Updated: 2018/04/06 11:54:16 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/09 20:56:51 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,9 +193,9 @@ void	read_bytes(t_vm *vm, int game_end, int counter)
 			print_core(vm->core, -1);
 		cycle_scheduler(vm, &counter);
 		check_executing_processes(vm, &game_end);
+		vm->cycles++;
 		if (game_end)
 			break ;
-		vm->cycles++;
 		game_end = 1;
 		vm->f.noise = 0;
 	}

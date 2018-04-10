@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/09 13:02:37 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/09 23:08:29 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ typedef struct				s_op
 }							t_op;
 
 t_op						g_optab[17];
-void						parse_instructions(t_assembler *st);
+void						parse_instructions(t_assembler *st, char *line);
 int			                convert_to_hex(t_assembler *st);
 void						save_labels(t_label **labels, char *name, int offset);
 t_label_ref					*save_label_refs(t_label_ref **label_ref);

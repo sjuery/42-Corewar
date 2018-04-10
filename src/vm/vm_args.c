@@ -6,7 +6,7 @@
 /*   By: anazar <anazar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/17 20:59:44 by anazar            #+#    #+#             */
-/*   Updated: 2018/04/09 15:00:40 by anazar           ###   ########.fr       */
+/*   Updated: 2018/04/09 20:51:55 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,10 @@ void	vm_live(t_vm *vm, t_io *proc)
 void	vm_aff(t_vm *vm, t_io *proc)
 {
 	t_instr		instr;
+	//int			reg;
 
+	//write_reg(proc, 0, read_reg(proc, 0) + 1);
+	//reg = 
 	instr = init_instr(vm, proc);
 	instr.core_index += 2;
 	get_offset(&instr, ACB1(instr.acb), &instr.l1);
