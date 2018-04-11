@@ -12,7 +12,7 @@
 
 NAME	= corewar
 ASMNAME = asm
-DASMNAME = dasm
+ASMSNAME = asms
 
 FILES	= 	main parse_file ncurses \
 			read_bytes op vis_highlight \
@@ -23,18 +23,15 @@ FILES	= 	main parse_file ncurses \
 			process_update queue acb write_utils
 ASMFILES= 	main convert_to_hex op \
 			parse print_binary save_label check_params
-DASMFILES= 	disassembler convert_to_asmbly op \
-			parse
+ASMSFILES 	=	main op disassembler/dasm disassembler/print_instructions
 #ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
 #ASMOBJ 	= $(addprefix ./objects/, $(ASMSRC:.c=.o))
-#DASMSRC	= $(patsubst %, %.c, $(DASMFILES))
-#DASMOBJ = $(addprefix ./objects/, $(DASMSRC:.c=.o))
 SRC		= $(addprefix ./src/vm/, $(patsubst %, %.c, $(FILES)))
 OBJ 	= $(addprefix ./objects/vm/, $(patsubst %, %.o, $(FILES)))
+ASMSSRC	= $(addprefix ./src/assemblers/, $(patsubst %, %.c, $(ASMSFILES)))
 ASMSRC	= $(addprefix ./src/assembler/, $(patsubst %, %.c, $(ASMFILES)))
 ASMOBJ 	= $(addprefix ./objects/assembler/, $(patsubst %, %.o, $(ASMFILES)))
-DASMSRC		= $(addprefix ./src/dassembler/, $(patsubst %, %.c, $(DASMFILES)))
-DASMOBJ 	= $(addprefix ./objects/dassembler/, $(patsubst %, %.o, $(DASMFILES)))
+ASMSOBJ = $(addprefix ./objects/assemblers/, $(patsubst %, %.o, $(ASMSFILES)))
 CFLAGS	= -Wall -Wextra -Werror -g
 #CFLAGS	= -g
 IFLAGS	= -I libft/includes -I includes
@@ -43,7 +40,7 @@ LFLAGS = -L libft -lft -lcurses
 
 .SILENT:
 
-all: $(ASMNAME) $(NAME) $(DASMNAME)
+all: $(ASMNAME) $(ASMSNAME) $(NAME) $(DASMNAME)
 
 $(DASMNAME): $(DASMOBJ)
 	make -C libft/
@@ -55,6 +52,11 @@ $(ASMNAME): $(ASMOBJ)
 	gcc $(CFLAGS) $(LFLAGS) $(IFLAGS) $^ -o $(ASMNAME)
 	printf '\033[32m[ ✔ ] %s\n\033[0m' "Created ASM"
 
+$(ASMSNAME): $(ASMSOBJ)
+	make -C libft/
+	gcc $(CFLAGS) $(LFLAGS) $(IFLAGS) $^ -o $(ASMSNAME)
+	printf '\033[32m[ ✔ ] %s\n\033[0m' "Created ASMS"
+
 $(NAME): $(OBJ)
 	make -C libft/
 	gcc $(CFLAGS) $(LFLAGS) $(IFLAGS) $^ -o $(NAME)
@@ -64,7 +66,8 @@ $(NAME): $(OBJ)
 	mkdir -p objects
 	mkdir -p objects/vm
 	mkdir -p objects/assembler
-	mkdir -p objects/dassembler
+	mkdir -p objects/assemblers
+	mkdir -p objects/assemblers/disassembler
 	gcc $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 clean:
@@ -72,7 +75,7 @@ clean:
 	/bin/rm -f *.o
 	/bin/rm -rf ./objects/*.o
 	/bin/rm -rf ./objects/assembler/*.o
-	/bin/rm -rf ./objects/dassembler/*.o
+	/bin/rm -rf ./objects/assembler/assembler/*.o
 	/bin/rm -rf ./objects/vm/*.o
 	printf '\033[31m[ ✔ ] %s\n\033[0m' "Cleaned Corewar & ASM"
 
