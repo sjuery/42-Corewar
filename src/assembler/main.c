@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/11 11:31:29 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/11 15:52:33 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,11 @@ int		main(int argc, char **argv)
 {
 	t_assembler *st;
 
-	st = ft_memalloc(sizeof(t_assembler));
-	st->arr = ft_memalloc(sizeof(t_instruction*) * CHAMP_MAX_SIZE);
+	st = (t_assembler *)ft_memalloc(sizeof(t_assembler));
+	st->arr = (t_instruction **)ft_memalloc(sizeof(t_instruction*) * 
+			(CHAMP_MAX_SIZE * 2));
+	st->prog_name = (int*)ft_memalloc(sizeof(int) * PROG_NAME_LENGTH);
+	st->comment = (int*)ft_memalloc(sizeof(int) * COMMENT_LENGTH);
 	if (argc == 2 || argc == 3)
 	{
 		if ((st->sfile = open(argv[argc - 1], O_RDONLY)) < 0 ||

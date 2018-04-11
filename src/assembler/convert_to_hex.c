@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 19:55:29 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/11 12:13:45 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/11 15:46:54 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ static void	convert_name(t_assembler *st)
 
 	i = 0;
 	name_len = 1;
-	st->prog_name = ft_memalloc(sizeof(int) * PROG_NAME_LENGTH);
 	while (st->line[st->i] != '"')
 		st->i++;
 	st->i++;
@@ -40,7 +39,6 @@ static void	convert_description(t_assembler *st)
 	i = 0;
 	desc_len = 1;
 	st->i = 0;
-	st->comment = ft_memalloc(sizeof(int) * COMMENT_LENGTH);
 	while (st->line[st->i] != '"')
 		st->i++;
 	st->i++;
@@ -84,6 +82,8 @@ int			convert_to_hex(t_assembler *st)
 {
 	char	*line;
 
+	line = NULL;
+	st->line = NULL;
 	while (get_next_line(st->sfile, &st->line))
 	{
 		if (ft_strstr(st->line, NAME_CMD_STRING))
