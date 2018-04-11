@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 18:03:50 by ihodge            #+#    #+#             */
-/*   Updated: 2018/04/11 12:14:50 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/11 15:47:48 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,9 @@ void		parse_instructions(t_assembler *st, char *line, int i,
 {
 	while (!ft_iswhitespace(line[i]) && line[i] != COMMENT_CHAR &&
 				line[i] != LABEL_CHAR && line[i] != '\0')
+	{
 		i++;
+	}
 	if (line[i] == COMMENT_CHAR || line[i] == '\0' || line[i] == '\n')
 		return ;
 	else if (line[i++] == LABEL_CHAR)

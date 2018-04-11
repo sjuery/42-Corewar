@@ -6,7 +6,7 @@
 /*   By: sjuery <ihodge@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 19:55:29 by ihodge            #+#    #+#             */
-/*   Updated: 2018/04/11 11:49:39 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/11 15:30:49 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ void		print_header(t_assembler *st, int i, int j)
 			ft_dprintf(st->corefile, "%c", (char)(st->final_offset >> 8));
 			ft_dprintf(st->corefile, "%c", (char)st->final_offset);
 		}
-		else if (1 < PROG_NAME_LENGTH + 7 - i)
+		else if (1 <= PROG_NAME_LENGTH + 8 - i)
 			ft_dprintf(st->corefile, "%c", 0);
 	}
 	while (++j < COMMENT_LENGTH)
 		ft_dprintf(st->corefile, "%c", (char)st->comment[j]);
-	while (++j < COMMENT_LENGTH + 4)
+	while (++j < COMMENT_LENGTH + 5)
 		ft_dprintf(st->corefile, "%c", 0);
 }
 
