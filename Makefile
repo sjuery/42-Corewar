@@ -12,7 +12,7 @@
 
 NAME	= corewar
 ASMNAME = asm
-ASMSNAME = asms
+DASMNAME = dasm
 
 FILES	= 	main parse_file ncurses \
 			read_bytes op vis_highlight \
@@ -23,15 +23,15 @@ FILES	= 	main parse_file ncurses \
 			process_update queue acb write_utils
 ASMFILES= 	main convert_to_hex op \
 			parse print_binary save_label check_params
-ASMSFILES 	=	main op disassembler/dasm disassembler/print_instructions
+DASMFILES 	=	main op disassembler/dasm disassembler/print_instructions
 #ASMSRC	= $(patsubst %, %.c, $(ASMFILES))
 #ASMOBJ 	= $(addprefix ./objects/, $(ASMSRC:.c=.o))
 SRC		= $(addprefix ./src/vm/, $(patsubst %, %.c, $(FILES)))
 OBJ 	= $(addprefix ./objects/vm/, $(patsubst %, %.o, $(FILES)))
-ASMSSRC	= $(addprefix ./src/assemblers/, $(patsubst %, %.c, $(ASMSFILES)))
+DASMSRC	= $(addprefix ./src/assemblers/, $(patsubst %, %.c, $(DASMFILES)))
 ASMSRC	= $(addprefix ./src/assembler/, $(patsubst %, %.c, $(ASMFILES)))
 ASMOBJ 	= $(addprefix ./objects/assembler/, $(patsubst %, %.o, $(ASMFILES)))
-ASMSOBJ = $(addprefix ./objects/assemblers/, $(patsubst %, %.o, $(ASMSFILES)))
+DASMOBJ = $(addprefix ./objects/assemblers/, $(patsubst %, %.o, $(DASMFILES)))
 CFLAGS	= -Wall -Wextra -Werror -g
 #CFLAGS	= -g
 IFLAGS	= -I libft/includes -I includes
@@ -51,11 +51,6 @@ $(ASMNAME): $(ASMOBJ)
 	make -C libft/
 	gcc $(CFLAGS) $(LFLAGS) $(IFLAGS) $^ -o $(ASMNAME)
 	printf '\033[32m[ ✔ ] %s\n\033[0m' "Created ASM"
-
-$(ASMSNAME): $(ASMSOBJ)
-	make -C libft/
-	gcc $(CFLAGS) $(LFLAGS) $(IFLAGS) $^ -o $(ASMSNAME)
-	printf '\033[32m[ ✔ ] %s\n\033[0m' "Created ASMS"
 
 $(NAME): $(OBJ)
 	make -C libft/

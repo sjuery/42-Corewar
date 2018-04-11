@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 19:19:56 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/11 15:09:36 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/04/11 15:36:42 by sjuery           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,6 @@ void			disassembler(char *input_name, char *output_name)
 	header = (t_header *)data;
 	if (translater(header->magic) != COREWAR_EXEC_MAGIC)
 		handle_errors("Invalid magic number");
-	if (sizeof(t_header) + translater(header->prog_size) != size)
-		handle_errors("Invalid file size");
 	if ((fd = open(output_name, O_WRONLY | O_CREAT, 0644)) == -1)
 		handle_errors("Couldn't create .s file");
 	ft_dprintf(fd, "%s \"%s\"\n", NAME_CMD_STRING, header->prog_name);
