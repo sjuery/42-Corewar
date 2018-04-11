@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/09 23:08:29 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/11 11:35:16 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,9 @@ t_label_ref					*save_label_refs(t_label_ref **label_ref);
 int							check_param_type(char *param, int i, int param_num);
 void						check_lexical_errors(t_assembler *st, char *param);
 void						print_sp_nl(t_assembler *st, int *y);
-void						break_shit_up(t_assembler *st, int size, int res,
-		int *y);
-void						print_header(t_assembler *st, int *y);
-void						print_parameters(t_assembler *st, int i, int *y);
+void						break_shit_up(t_assembler *st, int size, int res);
+void						print_header(t_assembler *st, int i, int j);
+void						print_parameters(t_assembler *st, int i, int j);
 void						print_shit(t_assembler *st);
 void						handle_error(char *error_type, t_assembler *st);
 #endif

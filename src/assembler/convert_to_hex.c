@@ -6,62 +6,58 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 19:55:29 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/09 23:08:01 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/11 11:11:26 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-static void convert_name(t_assembler *st)
+static void	convert_name(t_assembler *st)
 {
-    int name_len;
-	int i = 0;
+	int	name_len;
+	int	i;
 
-    name_len = 1;
+	i = 0;
+	name_len = 1;
 	st->prog_name = ft_memalloc(sizeof(int) * PROG_NAME_LENGTH);
-    while(st->line[st->i] != '"')
-        st->i++;
-    st->i++;
-    while(st->line[st->i] != '"' && i < PROG_NAME_LENGTH)
-    {
+	while (st->line[st->i] != '"')
+		st->i++;
+	st->i++;
+	while (st->line[st->i] != '"' && i < PROG_NAME_LENGTH)
+	{
 		st->prog_name[i] = (int)st->line[st->i];
 		i++;
 		st->i++;
-        name_len++;
-    }
+		name_len++;
+	}
 }
 
-static void convert_description(t_assembler *st)
+static void	convert_description(t_assembler *st)
 {
-    int desc_len;
-	int i = 0;
+	int desc_len;
+	int i;
 
-    desc_len = 1;
-    st->i = 0;
+	i = 0;
+	desc_len = 1;
+	st->i = 0;
 	st->comment = ft_memalloc(sizeof(int) * COMMENT_LENGTH);
-    while(st->line[st->i] != '"')
-        st->i++;
-    st->i++;
-    while(st->line[st->i] != '"' && i < COMMENT_LENGTH)
-    {
+	while (st->line[st->i] != '"')
+		st->i++;
+	st->i++;
+	while (st->line[st->i] != '"' && i < COMMENT_LENGTH)
+	{
 		st->comment[i] = (int)st->line[st->i];
 		i++;
 		st->i++;
-        desc_len++;
-    }
+		desc_len++;
+	}
 }
 
-//am I accounting for labels with instructions on the same line and next line?
-
-static void	set_label_addresses(t_assembler *st)
+static void	set_label_addresses(t_assembler *st, int ref, int flag)
 {
 	t_label_ref *tmp;
 	t_label		*tmp_label;
-	int			ref;
-	char		*str;
-	int			flag;
 
-	ref = 0;
 	tmp = st->label_ref;
 	while (tmp)
 	{
@@ -72,9 +68,8 @@ static void	set_label_addresses(t_assembler *st)
 			if (ft_strequ(tmp->name, tmp_label->name))
 			{
 				ref = tmp_label->offset - tmp->instruct_offset;
-				str = ft_itoa(ref);
-				st->arr[tmp->instruct_num]->params[tmp->param_num] = tmp->dir ? ft_strjoin("%", str) : ft_itoa(ref);
-				free(str);
+				st->arr[tmp->instruct_num]->params[tmp->param_num] = tmp->dir ?
+					ft_strjoinfree(ft_strdup("%"), ft_itoa(ref)) : ft_itoa(ref);
 				flag = 1;
 			}
 			tmp_label = tmp_label->next;
@@ -88,22 +83,23 @@ static void	set_label_addresses(t_assembler *st)
 int			convert_to_hex(t_assembler *st)
 {
 	char	*line;
-	while(get_next_line(st->sfile, &st->line))
+
+	while (get_next_line(st->sfile, &st->line))
 	{
 		if (ft_strstr(st->line, NAME_CMD_STRING))
 			convert_name(st);
-        else if (ft_strstr(st->line, COMMENT_CMD_STRING))
-            convert_description(st);
+		else if (ft_strstr(st->line, COMMENT_CMD_STRING))
+			convert_description(st);
 		else
 		{
 			line = ft_strtrim(st->line);
 			if (line[0] != '\0')
-				parse_instructions(st, line);//pass line as arg
+				parse_instructions(st, line);
 			free(line);
 		}
 		free(st->line);
-        st->i++;
+		st->i++;
 	}
-	set_label_addresses(st);
+	set_label_addresses(st, 0, 0);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 18:03:50 by ihodge            #+#    #+#             */
-/*   Updated: 2018/04/10 14:14:51 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/10 17:16:45 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,9 @@
 
 static int	parameter_type(char *param, int i, int param_num, t_assembler *st)
 {
-	int param_type;
-	t_label_ref *label_ref;
+	int			param_type;
+	t_label_ref	*label_ref;
 
-	param_type = 0;
 	label_ref = NULL;
 	if (!param)
 		handle_error("Error: Instruction does not have enough params\n", st);
@@ -29,7 +28,7 @@ static int	parameter_type(char *param, int i, int param_num, t_assembler *st)
 		if (param[0] == LABEL_CHAR || param[1] == LABEL_CHAR)
 		{
 			label_ref = save_label_refs(&st->label_ref);
-			label_ref->name = param[0] == DIRECT_CHAR ? ft_strdup(param + 2): ft_strdup(param + 1);
+			label_ref->name = param[0] == DIRECT_CHAR ? ft_strdup(param + 2) : ft_strdup(param + 1);
 			param[0] == DIRECT_CHAR ? label_ref->dir = 1 : 0;
 			label_ref->param_num = param_num;
 			label_ref->instruct_num = st->instruct_num;
@@ -45,12 +44,15 @@ static int	parameter_type(char *param, int i, int param_num, t_assembler *st)
 
 static void	create_acb(char **instruction, int i, t_assembler *st)
 {
-	int j = 1;
-	int	acb = 0;
-	int param_type = 0;
+	int j;
+	int	acb;
+	int param_type;
 	int k;
 
 	k = 0;
+	j = 1;
+	acb = 0;
+	param_type = 0;
 	st->offset++;
 	while (j <= g_optab[i].params)
 	{
@@ -62,7 +64,7 @@ static void	create_acb(char **instruction, int i, t_assembler *st)
 			param_type++;
 		j == 1 ? acb = param_type << 6 : 0;
 		j == 2 ? acb = param_type << 4 | acb : 0;
-		j == 3 ? acb = param_type << 2 | acb: 0;
+		j == 3 ? acb = param_type << 2 | acb : 0;
 		j++;
 	}
 	if (j != g_optab[i].params + 1)
@@ -74,8 +76,9 @@ static void	create_acb(char **instruction, int i, t_assembler *st)
 
 static void	convert_instruction(char **instruction, t_assembler *st)
 {
-	int i = 0;
+	int i;
 
+	i = 0;
 	while (g_optab[i].opcode)
 	{
 		if (ft_strequ(g_optab[i].opstr, instruction[0]))
@@ -103,7 +106,7 @@ static void	convert_instruction(char **instruction, t_assembler *st)
 	st->instruct_num++;
 }
 
-void	verify_save_label(t_assembler *st, char *line)
+void		verify_save_label(t_assembler *st, char *line)
 {
 	int i;
 
@@ -118,10 +121,10 @@ void	verify_save_label(t_assembler *st, char *line)
 	save_labels(&st->label, ft_strsub(line, 0, i), st->offset);
 }
 
-void	parse_instructions(t_assembler *st, char *line)
+void		parse_instructions(t_assembler *st, char *line)
 {
-	char **instruction;
-	int i;
+	char	**instruction;
+	int		i;
 
 	instruction = NULL;
 	i = 0;
@@ -130,11 +133,8 @@ void	parse_instructions(t_assembler *st, char *line)
 		i++;
 	if (line[i] == COMMENT_CHAR || line[i] == '\0' || line[i] == '\n')
 		return ;
-	else if (line[i] == LABEL_CHAR)
-	{
+	else if (line[i++] == LABEL_CHAR)
 		verify_save_label(st, line);
-		i++;
-	}
 	else
 		i = 0;
 	while (ft_iswhitespace(line[i]))
@@ -148,10 +148,7 @@ void	parse_instructions(t_assembler *st, char *line)
 	}
 	i = 0;
 	while (instruction && instruction[i])
-	{
-		free(instruction[i]);
-		i++;
-	}
+		free(instruction[i++]);
 	instruction ? free(instruction) : 0;
 	st->final_offset = st->offset;
 }

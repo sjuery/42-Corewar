@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/09 11:24:13 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/11 11:31:29 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,28 @@ void	handle_error(char *error_type, t_assembler *st)
 	exit(0);
 }
 
+void	free_instruct(t_assembler *st)
+{
+	int	i;
+
+	i = 0;
+	while (i < st->instruct_num)
+	{
+		st->arr[i]->params[0] ? free(st->arr[i]->params[0]) : 0;
+		st->arr[i]->params[1] ? free(st->arr[i]->params[1]) : 0;
+		st->arr[i]->params[2] ? free(st->arr[i]->params[2]) : 0;
+		st->arr[i]->params[3] ? free(st->arr[i]->params[3]) : 0;
+		free(st->arr[i]->params);
+		free(st->arr[i]);
+		i++;
+	}
+}
+
 void	free_shit(t_assembler *st)
 {
 	t_label		*tmp;
 	t_label_ref *tmp_ref;
-	int			i;
 
-	i = 0;
 	while (st->label)
 	{
 		tmp = st->label->next;
@@ -41,29 +56,30 @@ void	free_shit(t_assembler *st)
 		free(st->label_ref);
 		st->label_ref = tmp_ref;
 	}
-	while (i < st->instruct_num)
-	{
-		st->arr[i]->params[0] ? free(st->arr[i]->params[0]) : 0;
-		st->arr[i]->params[1] ? free(st->arr[i]->params[1]) : 0;
-		st->arr[i]->params[2] ? free(st->arr[i]->params[2]) : 0;
-		st->arr[i]->params[3] ? free(st->arr[i]->params[3]) : 0;
-		free(st->arr[i]->params);
-		free(st->arr[i]);
-		i++;
-	}
+	free_instruct(st);
 	free(st->arr);
 	free(st->prog_name);
 	free(st->comment);
+	free(st);
+}
+
+void	create_file(t_assembler *st, int argc, char **argv)
+{
+	char		*file_name;
+	char		*cor_file;
+
+	file_name = ft_strsub(argv[argc - 1], 0, ft_strlen(argv[argc - 1]) - 1);
+	cor_file = ft_strjoin(file_name, "cor");
+	if ((st->corefile = open(cor_file, O_CREAT | O_WRONLY, S_IRWXU)) < 0)
+		handle_error("Error: Cor file couldn't be created", st);
+	free(file_name);
+	free(cor_file);
 }
 
 int		main(int argc, char **argv)
 {
 	t_assembler *st;
-	char		*file_name;
-	char		*cor_file;
 
-	file_name = NULL;
-	cor_file = NULL;
 	st = ft_memalloc(sizeof(t_assembler));
 	st->arr = ft_memalloc(sizeof(t_instruction*) * CHAMP_MAX_SIZE);
 	if (argc == 2 || argc == 3)
@@ -74,22 +90,14 @@ int		main(int argc, char **argv)
 			handle_error("Error: Couldn't read given file", st);
 		if (!convert_to_hex(st))
 			handle_error("Error: Couldn't finish writting to Cor file", st);
-		file_name = ft_strsub(argv[argc - 1], 0, ft_strlen(argv[argc - 1]) - 1);
-		cor_file = ft_strjoin(file_name, "cor");
-		if ((st->corefile = open(cor_file, O_CREAT | O_WRONLY, S_IRWXU)) < 0)
-			handle_error("Error: Cor file couldn't be created", st);
+		create_file(st, argc, argv);
 		print_shit(st);
 		close(st->corefile);
 		close(st->sfile);
 	}
 	else
-		handle_error("Usage: ./st [-a] <sourcefile.s>\n\t"
-		"-a : Instead of creating a .cor file, outputs a stripped"
-		" and annotated version of the code to the standard output", st);
+		handle_error("Usage: ./asm <sourcefile.s>\n\t", st);
 	ft_printf("Writing to .cor file\n");
-	free(file_name);
-	free(cor_file);
 	free_shit(st);
-	free(st);
 	return (1);
 }
