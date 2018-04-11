@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 18:03:50 by ihodge            #+#    #+#             */
-/*   Updated: 2018/04/10 17:16:45 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/11 12:14:50 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static int	parameter_type(char *param, int i, int param_num, t_assembler *st)
 	int			param_type;
 	t_label_ref	*label_ref;
 
-	label_ref = NULL;
 	if (!param)
 		handle_error("Error: Instruction does not have enough params\n", st);
 	param_type = check_param_type(param, i, param_num);
@@ -28,7 +27,8 @@ static int	parameter_type(char *param, int i, int param_num, t_assembler *st)
 		if (param[0] == LABEL_CHAR || param[1] == LABEL_CHAR)
 		{
 			label_ref = save_label_refs(&st->label_ref);
-			label_ref->name = param[0] == DIRECT_CHAR ? ft_strdup(param + 2) : ft_strdup(param + 1);
+			label_ref->name = param[0] == DIRECT_CHAR ? ft_strdup(param + 2) :
+				ft_strdup(param + 1);
 			param[0] == DIRECT_CHAR ? label_ref->dir = 1 : 0;
 			label_ref->param_num = param_num;
 			label_ref->instruct_num = st->instruct_num;
@@ -47,12 +47,9 @@ static void	create_acb(char **instruction, int i, t_assembler *st)
 	int j;
 	int	acb;
 	int param_type;
-	int k;
 
-	k = 0;
 	j = 1;
 	acb = 0;
-	param_type = 0;
 	st->offset++;
 	while (j <= g_optab[i].params)
 	{
@@ -68,28 +65,25 @@ static void	create_acb(char **instruction, int i, t_assembler *st)
 		j++;
 	}
 	if (j != g_optab[i].params + 1)
-		handle_error("Error: Instruction does not have enough parameters\n", st);
+		handle_error("Error: Instruction does not have enough params\n", st);
 	st->arr[st->instruct_num]->acb = acb;
 	if (instruction[j] && instruction[j][0] != COMMENT_CHAR)
 		handle_error("Error: Instruction has too many parameters\n", st);
 }
 
-static void	convert_instruction(char **instruction, t_assembler *st)
+static void	convert_instruction(char **instruction, t_assembler *st, int i)
 {
-	int i;
-
-	i = 0;
 	while (g_optab[i].opcode)
 	{
 		if (ft_strequ(g_optab[i].opstr, instruction[0]))
 			break ;
 		i++;
 	}
-	ft_printf("instruction: %s\n", instruction[0]);
 	if (!g_optab[i].opcode)
 		handle_error("Error: Instruction does not exist\n", st);
 	st->arr[st->instruct_num] = ft_memalloc(sizeof(t_instruction));
-	st->arr[st->instruct_num]->params = ft_memalloc(sizeof(char*) * MAX_ARGS_NUMBER);
+	st->arr[st->instruct_num]->params = ft_memalloc(sizeof(char*) *
+			MAX_ARGS_NUMBER);
 	st->arr[st->instruct_num]->op = g_optab[i].opcode;
 	st->instruct_offset = st->offset;
 	st->offset++;
@@ -121,13 +115,9 @@ void		verify_save_label(t_assembler *st, char *line)
 	save_labels(&st->label, ft_strsub(line, 0, i), st->offset);
 }
 
-void		parse_instructions(t_assembler *st, char *line)
+void		parse_instructions(t_assembler *st, char *line, int i,
+		char **instruction)
 {
-	char	**instruction;
-	int		i;
-
-	instruction = NULL;
-	i = 0;
 	while (!ft_iswhitespace(line[i]) && line[i] != COMMENT_CHAR &&
 				line[i] != LABEL_CHAR && line[i] != '\0')
 		i++;
@@ -144,7 +134,7 @@ void		parse_instructions(t_assembler *st, char *line)
 	else
 	{
 		instruction = ft_split_by_delims(st->line + i, "\t ,");
-		convert_instruction(instruction, st);
+		convert_instruction(instruction, st, 0);
 	}
 	i = 0;
 	while (instruction && instruction[i])
