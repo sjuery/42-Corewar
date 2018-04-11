@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 19:19:56 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/11 15:36:42 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/04/11 15:53:22 by mlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int		translater(int x)
 static void		disassemble(char *data, int size, int fd)
 {
 	int				i;
-	unsigned long 	j;
+	unsigned long	j;
 
 	i = 0;
 	while (i < size)
@@ -46,27 +46,27 @@ static void		disassemble(char *data, int size, int fd)
 	}
 }
 
-static int	    get_size(char *filename)
+static int		get_size(char *filename)
 {
 	int		fd;
-	int	    file_size;
+	int		file_size;
 	int		amount_read;
 	char	buff;
 
 	if ((fd = open(filename, O_RDONLY)))
-    {
-        file_size = 0;
-        while ((amount_read = read(fd, &buff, 1)) == 1)
-		    file_size++;
-	    close(fd);
-	    if (amount_read == 0)
-		    return (file_size);
-    }
-    handle_errors("Couldn't read the whole file");
+	{
+		file_size = 0;
+		while ((amount_read = read(fd, &buff, 1)) == 1)
+			file_size++;
+		close(fd);
+		if (amount_read == 0)
+			return (file_size);
+	}
+	handle_errors("Couldn't read the whole file");
 	return (0);
 }
 
-void		*read_file(char *filename, int *size)
+void			*read_file(char *filename, int *size)
 {
 	int				amount_read;
 	int				fd;
