@@ -76,8 +76,8 @@ void	vm_zjmp(t_vm *vm, t_io *proc)
 		write_reg(proc, 0, read_reg(proc, 0) + 2);
 		return ;
 	}
-	val = read_core2(vm, read_reg(proc, 0) % MEM_SIZE) % MEM_SIZE;
-	write_reg(proc, 0, read_reg(proc, 0) + val - 1);
+	val = read_core2(vm, read_reg(proc, 0) % MEM_SIZE) % IDX_MOD;
+	write_reg(proc, 0, (read_reg(proc, 0) + val - 1) % MEM_SIZE);
 }
 
 void	vm_live(t_vm *vm, t_io *proc)

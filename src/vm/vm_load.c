@@ -62,7 +62,6 @@ void	vm_ldi(t_vm *vm, t_io *proc)
 	value2 = read_value_index(vm, proc, ACB2(acb));
 	value3 = read_core4(vm, pos + ((value + value2) % IDX_MOD));
 	write_reg(proc, read_core1(vm, read_reg(proc, 0)), value3);
-	modify_carry(proc, read_reg(proc, read_core1(vm, read_reg(proc, 0))));
 	write_reg(proc, 0, read_reg(proc, 0) + 1);
 }
 
