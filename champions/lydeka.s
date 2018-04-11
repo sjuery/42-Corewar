@@ -2,7 +2,8 @@
 .comment	"Tuturuu ~"
 
 start:
-	ld		%0, r10
+	ld		%0, r9
+	sti		r1, %:def, %1
 	zjmp	%:fall
 
 def:
@@ -37,7 +38,59 @@ affspam:
 	ld		%117, r11		# u
 	ld		%116, r12		# t
 	ld		%114, r13		# r
-	ld		%126, r14		#	~
+	ld		%126, r14		# ~
+	aff		r10
+	aff		r11
+	aff		r12
+	aff		r11
+	aff		r13
+	aff		r11
+	aff		r11
+	aff		r14
+	ld		%84, r10		# T
+	ld		%117, r11		# u
+	ld		%116, r12		# t
+	ld		%114, r13		# r
+	ld		%126, r14		#~
+	aff		r10
+	aff		r11
+	aff		r12
+	aff		r11
+	aff		r13
+	aff		r11
+	aff		r11
+	aff		r14
+	ld		%84, r10		# T
+	ld		%117, r11		# u
+	ld		%116, r12		# t
+	ld		%114, r13		# r
+	ld		%126, r14		# ~
+	aff		r10
+	aff		r11
+	aff		r12
+	aff		r11
+	aff		r13
+	aff		r11
+	aff		r11
+	aff		r14
+	ld		%84, r10		# T
+	ld		%117, r11		# u
+	ld		%116, r12		# t
+	ld		%114, r13		# r
+	ld		%126, r14		# ~
+	aff		r10
+	aff		r11
+	aff		r12
+	aff		r11
+	aff		r13
+	aff		r11
+	aff		r11
+	aff		r14
+	ld		%84, r10		# T
+	ld		%117, r11		# u
+	ld		%116, r12		# t
+	ld		%114, r13		# r
+	ld		%126, r14		# ~
 	aff		r10
 	aff		r11
 	aff		r12
@@ -47,6 +100,13 @@ affspam:
 	aff		r11
 	aff		r14
 	aff		r10
+	aff		r11
+	aff		r12
+	aff		r11
+	aff		r13
+	aff		r11
+	aff		r11
+	aff		r14
 	aff		r10
 	aff		r11
 	aff		r12
@@ -75,7 +135,7 @@ affspam:
 	zjmp	%:affspam
 
 fall:
-	st		r1, :start
+	sti		r1, %:def, %1
 	fork	%:def
 	live	%0
 	fork	%:forkmore
@@ -94,29 +154,29 @@ forkmore:
 	fork	%:effect
 
 rain:
-    live    %2
+    live    %0
     fork    %:tsunami
     or      r2, %4, r2
 
 storm:
-    live    %2
+    live    %0
     fork    %:hail
     or      r2, %16, r2
 
 hail:
-    live    %2
+    live    %0
     fork    %:rain
     or      r2, %8, r2
 
 tsunami:
-    ldi     %:effect, r2, r16
-    ld      %0, r15
+    ldi     %:effect, r2, r1
+    ld      %0, r9
 
 effect:
     live    %0
-    sti     r16, %354, r2
-    sti     r16, %402, r2
-    sti     r16, %448, r2
+    sti     r1, %354, r2
+    sti     r1, %402, r2
+    sti     r1, %448, r2
     zjmp    %442
     live    %0
     zjmp	%:raindown
