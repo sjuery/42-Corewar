@@ -42,6 +42,7 @@ int				main(int argc, char **argv)
 			handle_errors("Couldn't read given file");
 		disassembler(argv[1], output);
 	}
-	handle_errors("usage: ./dasm \"file.cor\"");
+	else
+		handle_errors("usage: ./dasm \"file.cor\"");
 	return (1);
 }
