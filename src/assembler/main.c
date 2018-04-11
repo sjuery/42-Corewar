@@ -81,8 +81,7 @@ int		main(int argc, char **argv)
 	t_assembler *st;
 
 	st = (t_assembler *)ft_memalloc(sizeof(t_assembler));
-	st->arr = (t_instruction **)ft_memalloc(sizeof(t_instruction*) * 
-			(CHAMP_MAX_SIZE * 2));
+	st->arr = (t_instruction **)ft_memalloc(sizeof(t_instruction*) * 1365);
 	st->prog_name = (int*)ft_memalloc(sizeof(int) * PROG_NAME_LENGTH);
 	st->comment = (int*)ft_memalloc(sizeof(int) * COMMENT_LENGTH);
 	if (argc == 2 || argc == 3)

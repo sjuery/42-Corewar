@@ -12,7 +12,7 @@
 
 #ifndef ASM_H
 # define ASM_H
-#define LINE_SIZE	39
+# define LINE_SIZE	39
 
 # include <stdlib.h>
 # include <sys/types.h>
@@ -31,11 +31,11 @@
 
 typedef struct				s_assembler
 {
-    int                     i;
+	int						i;
 	int						sfile;
-    int                     corefile;
-    char                    *line;
-    int                     ls;
+	int						corefile;
+	char					*line;
+	int						ls;
 	int						offset;
 	int						instruct_offset;
 	int						instruct_num;
@@ -87,11 +87,12 @@ t_op						g_optab[17];
 void						assembler(char *input_name, char *output_name);
 void						disassembler(char *input_name, char *output_name);
 int							print_instructions(char *data, t_op op, int fd);
-void            			handle_errors(char *error_message);
-
-void						parse_instructions(t_assembler *st, char *line, int i, char **instruction);
-int			                convert_to_hex(t_assembler *st);
-void						save_labels(t_label **labels, char *name, int offset);
+void						handle_errors(char *error_message);
+void						parse_instructions(t_assembler *st,
+								char *line, int i, char **instruction);
+int							convert_to_hex(t_assembler *st);
+void						save_labels(t_label **labels, char *name,
+								int offset);
 t_label_ref					*save_label_refs(t_label_ref **label_ref);
 int							check_param_type(char *param, int i, int param_num);
 void						check_lexical_errors(t_assembler *st, char *param);

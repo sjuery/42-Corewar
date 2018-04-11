@@ -6,13 +6,13 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/07 15:07:48 by sjuery            #+#    #+#             */
-/*   Updated: 2018/03/05 13:19:24 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/04/11 16:24:36 by mlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ASM_H
-# define ASM_H
-#define LINE_SIZE	39
+#ifndef DASM_H
+# define DASM_H
+# define LINE_SIZE 39
 
 # include <stdlib.h>
 # include <sys/types.h>
@@ -31,11 +31,11 @@
 
 typedef struct				s_disassembler
 {
-    int                     i;
+	int						i;
 	int						sfile;
-    int                     corefile;
-    char                    *line;
-    int                     ls;
+	int						corefile;
+	char					*line;
+	int						ls;
 	int						offset;
 	int						instruct_offset;
 	int						instruct_num;
@@ -85,8 +85,9 @@ typedef struct				s_op
 
 t_op						g_optab[17];
 void						parse_instructions(t_disassembler *st);
-int			                convert_to_hex(t_disassembler *st);
+int							convert_to_hex(t_disassembler *st);
 int							check_param_type(char *param, int i, int param_num);
 void						print_shit(t_disassembler *st);
 void						handle_error(char *error_type, t_disassembler *st);
+
 #endif

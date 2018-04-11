@@ -6,7 +6,7 @@
 /*   By: sjuery <sjuery@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/19 20:13:32 by sjuery            #+#    #+#             */
-/*   Updated: 2018/04/11 15:09:42 by sjuery           ###   ########.fr       */
+/*   Updated: 2018/04/11 15:55:02 by mlu              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,21 @@ static short	short_trans(char *array)
 	return (translation);
 }
 
-static int				acb_loop(char *data, t_op op, int fd)
+static void		print_check_index(int fd, int index, char *data, int *j)
+{
+	if (index == 1)
+	{
+		ft_dprintf(fd, "%c%d", DIRECT_CHAR, short_trans(&data[*j]));
+		*j = *j + 2;
+	}
+	else
+	{
+		ft_dprintf(fd, "%c%d", DIRECT_CHAR, int_trans(&data[*j]));
+		*j = *j + 4;
+	}
+}
+
+static int		acb_loop(char *data, t_op op, int fd)
 {
 	int	i;
 	int	j;
@@ -42,28 +56,14 @@ static int				acb_loop(char *data, t_op op, int fd)
 	while (i < op.params)
 	{
 		if (((data[1] >> (6 - (i * 2))) & 3) == REG_CODE)
-		{
-			ft_dprintf(fd, "r%d", data[j]);
-			j += 1;
-		}
+			ft_dprintf(fd, "r%d", data[j++]);
 		else if (((data[1] >> (6 - (i * 2))) & 3) == IND_CODE)
 		{
 			ft_dprintf(fd, "%d", short_trans(&data[j]));
 			j += 2;
 		}
 		else if (((data[1] >> (6 - (i * 2))) & 3) == DIR_CODE)
-		{
-			if (op.index == 1)
-			{
-				ft_dprintf(fd, "%c%d", DIRECT_CHAR, short_trans(&data[j]));
-				j += 2;
-			}
-			else
-			{
-				ft_dprintf(fd, "%c%d", DIRECT_CHAR, int_trans(&data[j]));
-				j += 4;
-			}
-		}
+			print_check_index(fd, op.index, data, &j);
 		if (++i < op.params)
 			ft_dprintf(fd, ", ");
 		else
@@ -72,7 +72,7 @@ static int				acb_loop(char *data, t_op op, int fd)
 	return (j);
 }
 
-int	print_instructions(char *data, t_op op, int fd)
+int				print_instructions(char *data, t_op op, int fd)
 {
 	ft_dprintf(fd, "%s\t", op.opstr);
 	if (op.acb)
