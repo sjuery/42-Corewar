@@ -6,7 +6,7 @@
 /*   By: ihodge <ihodge@student.42.us.org>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/12 18:03:50 by ihodge            #+#    #+#             */
-/*   Updated: 2018/04/10 15:21:18 by ihodge           ###   ########.fr       */
+/*   Updated: 2018/04/11 16:47:05 by ihodge           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int			check_param_type(char *param, int i, int param_num)
 		return (REG_CODE);
 	else if (param[0] == DIRECT_CHAR && g_optab[i].ptype[param_num] & DIR_CODE)
 		return (DIR_CODE);
-	else if (g_optab[i].ptype[param_num] & IND_CODE)
+	else if (param[0] != DIRECT_CHAR && param[0] != 'r' &&
+			g_optab[i].ptype[param_num] & IND_CODE)
 		return (IND_SIZE);
 	return (0);
 }
