@@ -2,7 +2,7 @@
 .comment	"Tuturuu ~"
 
 start:
-	ld		%0, r10
+	ld		%0, r9
 	sti		r1, %:def, %1
 	zjmp	%:fall
 
@@ -170,7 +170,7 @@ hail:
 
 tsunami:
     ldi     %:effect, r2, r1
-    ld      %0, r10
+    ld      %0, r9
 
 effect:
     live    %0
