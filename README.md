@@ -13,6 +13,9 @@ The project is one of the capstone project for 42. Project design was as followe
 5) multiple refactoring of the project was done in order to optimize and improve the VM
 
 isahodge https://github.com/isahodge
+
 aneeshnazar https://github.com/aneeshnazar
+
 sjuery https://github.com/sjuery
+
 mlu https://github.com/lunairi
