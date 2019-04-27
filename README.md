@@ -1,6 +1,6 @@
 # 42-Corewar
 
-Corewar is a project where we have to design an assembler (to compile champions to fight in the game), the virtual machine (the arena memory space where champions fight), and a champion (because why not?) to battle it out in a virtual space of memory for all the cookies in the world. 
+Corewar is a project where we have to design an assembler (to compile champions to fight in the game), the virtual machine (the arena memory space where champions fight), and a champion (because why not?) to battle it out in a virtual space of memory
 
 ## Corewar with Visualizer
 
